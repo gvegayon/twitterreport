@@ -1,6 +1,8 @@
 rm(list=ls())
 library(stringr)
 library(rgexf)
+library(dplyr)
+
 load("data/lovewins.RData")
 load("data/tweets_congress.RData")
 
@@ -47,26 +49,41 @@ tw_extracti <- function(txt, obj = c("email", "mention", "hashtag", "url")) {
 #' @title Creates conversation graph (directed)
 #' @param from Vector of screen_name
 #' @param to List of vectors of mentions (output from tw_extract)
-tw_conversation <- function(from,to,reduce=TRUE) {
+tw_conversation <- function(from,to,onlyFrom=FALSE) {
+  oldstasf <- options()$stringsAsFactors
+  options(stringsAsFactors = FALSE)
   n <- length(from)
 
   # Create edges
-  tmp <- do.call(rbind,lapply(1:n, function(i,...) {
+  tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
     cbind(from=rep(from[[i]],length(to[[i]])),to=to[[i]])
-  }))
-  
+  })))
+
+  # Frequency
+  tmp <- group_by(tmp, from, to)
+  tmp <- as.data.frame(summarise(tmp,n=n()))
+
   # Encoding edges
   ne <- nrow(tmp)
-  tmp <- as.factor(c(tmp[,1],tmp[,2]))
-  edges <- data.frame(from=tmp[1:(ne/2)],to=tmp[(ne/2+1):ne])
-  nodes <- unique(unlist(edges))
+  tmp2 <- as.factor(c(tmp$from,tmp$to))
+  edges <- data.frame(from=tmp2[1:ne],to=tmp2[(ne+1):(ne*2)],n=tmp$n)
+  nodes <- unique(unlist(edges[,-3]))
+
+  original <- unique(as.numeric(edges$from))
   
   # Returning output
-  list(
+  out <- list(
     edges=edges,
-    nodes=data.frame(id=as.numeric(nodes),label=as.character(nodes),
-                     stringsAsFactors = FALSE)
+    nodes=data.frame(id=as.numeric(nodes),label=as.character(nodes))
     )
+  
+  # Reducing edges list
+  if (onlyFrom) {
+    out$nodes <- out$nodes[which(out$nodes$id %in% original),]
+    out$edges <- out$edges[which(as.numeric(out$edges$to) %in% original),]
+  }
+  options(stringsAsFactors = oldstasf)
+  return(out)
 }
 # x <- tw_extract(tweets$text)
 # conv <- tw_conversation(tweets$screen_name,lapply(x,"[[","mention"))
@@ -82,5 +99,6 @@ tw_table <- function(txt) {
 }
 x <- tw_extract(tweets_congress$text)
 conv <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"))
+conv2 <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"),onlyFrom = TRUE)
 mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
 tw_table(unlist(lapply(x,"[[","hashtag"),recursive = TRUE))
