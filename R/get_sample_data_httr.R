@@ -17,9 +17,61 @@ myapp <- oauth_app("r-twitt",
 twitter_token <- oauth1.0_token(oauth_endpoints("twitter"), myapp)
 
 # 4. Use API
-req <- GET("https://api.twitter.com/1.1/search/tweets.json?q=lovewins&result_type=mixed&count=500",
-           config(token = twitter_token))
-stop_for_status(req)
+# req <- GET("https://stream.twitter.com/1.1/statuses/sample.json",
+#            config(token = twitter_token))
+# stop_for_status(req)
+load("data/congress.RData")
+tw_get_user <- function(usr,count=100,...) {
+  usr <- gsub("^@","",usr)
+  
+  # API CALL
+  GET(paste0(
+    "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=",usr,"&count=",count),
+      config(token=twitter_token))
+}
+
+tw_process_api <- function(req) {
+  # Processing
+  tweets <-as.data.frame(do.call(rbind,lapply(content(req), function(x) {
+    c(x[c("id","text","retweet_count")],
+      screen_name=x$user$screen_name,
+      friends_count=x$user$friends_count,
+      followers_count=x$user$followers_count,
+      favourites_count=x$user$favourites_count,
+      verified=x$user$verified,
+      location=x$user$location,
+      name=x$user$name,
+      created_at=x$user$created_at,
+      description=x$user$description,
+      #url=x$user$url,
+      protected=x$user$protected,
+      #utc_offset=x$user$utc_offset,
+      statuses_count=x$user$statuses_count,
+      id_str=x$user$id_str, recursive=TRUE
+      #entities=x$user$entities
+    )
+  })), stringsAsFactors=FALSE
+  )
+  
+  # Fixing data types 
+  tweets$id <- as.numeric(tweets$id)
+  tweets$friends_count <- as.numeric(tweets$friends_count)
+  tweets$followers_count<- as.numeric(tweets$followers_count)
+  tweets$favourites_count<- as.numeric(tweets$favourites_count)
+  tweets$statuses_count<- as.numeric(tweets$statuses_count)
+  tweets
+}
+
+# Getting the data and processing it
+tweets_congress_raw <- lapply(congress$screen_name,tw_get_user)
+status <- sapply(tweets_congress_raw,status_code)
+tweets_congress <- tweets_congress_raw[which(status==200)]
+tweets_congress <- lapply(tweets_congress,tw_process_api)
+
+# Data frame
+tweets_congress <-  do.call(rbind,tweets_congress)
+save(tweets_congress,tweets_congress_raw,file="data/tweets_congress.RData")
+
 # content(req)
 
 # > names(content(req)$statuses[[1]]$user)
@@ -43,32 +95,32 @@ stop_for_status(req)
 # [35] "has_extended_profile"               "default_profile"                   
 # [37] "default_profile_image"              "following"                         
 # [39] "follow_request_sent"                "notifications"     
-tweets <-as.data.frame(do.call(rbind,lapply(content(req)$statuses, function(x) {
-  c(x[c("id","text","retweet_count")],
-        screen_name=x$user$screen_name,
-        friends_count=x$user$friends_count,
-        followers_count=x$user$followers_count,
-        favourites_count=x$user$favourites_count,
-        verified=x$user$verified,
-        location=x$user$location,
-        name=x$user$name,
-        created_at=x$user$created_at,
-        description=x$user$description,
-        #url=x$user$url,
-        protected=x$user$protected,
-        #utc_offset=x$user$utc_offset,
-        statuses_count=x$user$statuses_count,
-        id_str=x$user$id_str, recursive=TRUE
-        #entities=x$user$entities
-        )
-  })), stringsAsFactors=FALSE
-  )
-
-# Fixing data types 
-tweets$id <- as.numeric(tweets$id)
-tweets$friends_count <- as.numeric(tweets$friends_count)
-tweets$followers_count<- as.numeric(tweets$followers_count)
-tweets$favourites_count<- as.numeric(tweets$favourites_count)
-tweets$statuses_count<- as.numeric(tweets$statuses_count)
-
-save(tweets,file = "data/lovewins.RData")
+# tweets <-as.data.frame(do.call(rbind,lapply(content(req), function(x) {
+#   c(x[c("id","text","retweet_count")],
+#         screen_name=x$user$screen_name,
+#         friends_count=x$user$friends_count,
+#         followers_count=x$user$followers_count,
+#         favourites_count=x$user$favourites_count,
+#         verified=x$user$verified,
+#         location=x$user$location,
+#         name=x$user$name,
+#         created_at=x$user$created_at,
+#         description=x$user$description,
+#         #url=x$user$url,
+#         protected=x$user$protected,
+#         #utc_offset=x$user$utc_offset,
+#         statuses_count=x$user$statuses_count,
+#         id_str=x$user$id_str, recursive=TRUE
+#         #entities=x$user$entities
+#         )
+#   })), stringsAsFactors=FALSE
+#   )
+# 
+# # Fixing data types 
+# tweets$id <- as.numeric(tweets$id)
+# tweets$friends_count <- as.numeric(tweets$friends_count)
+# tweets$followers_count<- as.numeric(tweets$followers_count)
+# tweets$favourites_count<- as.numeric(tweets$favourites_count)
+# tweets$statuses_count<- as.numeric(tweets$statuses_count)
+# nrow(tweets)
+# save(tweets,file = "data/lovewins.RData")

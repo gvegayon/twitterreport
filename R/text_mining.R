@@ -1,3 +1,9 @@
+rm(list=ls())
+library(stringr)
+library(rgexf)
+load("data/lovewins.RData")
+load("data/tweets_congress.RData")
+
 #' @title Extract info from tweets
 #' @aliases 
 #' @description Extract email accounts, mentions, hashtags and urls from tweets
@@ -41,7 +47,7 @@ tw_extracti <- function(txt, obj = c("email", "mention", "hashtag", "url")) {
 #' @title Creates conversation graph (directed)
 #' @param from Vector of screen_name
 #' @param to List of vectors of mentions (output from tw_extract)
-tw_conversation <- function(from,to) {
+tw_conversation <- function(from,to,reduce=TRUE) {
   n <- length(from)
 
   # Create edges
@@ -71,6 +77,10 @@ tw_table <- function(txt) {
   # Cleaning text
   txt <- tolower(txt)
   words <- as.data.frame(table(txt))
+  words <- words[order(-words$Freq),]
   words
 }
+x <- tw_extract(tweets_congress$text)
+conv <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"))
+mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
 tw_table(unlist(lapply(x,"[[","hashtag"),recursive = TRUE))

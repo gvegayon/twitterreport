@@ -23,7 +23,7 @@ user_mentions <- user_mentions[order(-user_mentions$n),]
 user_mentions3 <- subset(user_mentions,subset=n>=3)
 
 # Gay marriage
-tweets <- searchTwitter("#LoveWins",until ="2015-06-23",n = 500,since="2015-06-20")
+tweets <- searchTwitter("#LoveWins",until ="2015-06-25",n = 500,since="2015-06-20")
 tweets <- twListToDF(tweets)
 
 

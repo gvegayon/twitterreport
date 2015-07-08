@@ -2,10 +2,17 @@ library(RCurl)
 library(XML)
 library(stringr) 
 
-get_verified <- function(uri="https://twitter.com/verified/lists/us-congress/members") {
-  getURLContent(url=uri,)
+# Getting the info
+get_verified <- function(uri="https://twitter.com/verified/lists/us-congress/members?scrolled&set=1") {
+  getURLContent(url=uri)
 }
 
-accounts <- getURLContent(url="https://twitter.com/verified/lists/us-congress/members")
+# Parsing info
+accounts <- getURL(url="https://twitter.com/verified/lists/us-congress/members?scrolled&set=1")
 accounts <- htmlParse(accounts)
-xpathSApply(accounts,path = '//*[starts-with(@class,"user-actions btn-group")]',xmlGetAttr,'data-name')
+
+# Getting the data
+congress<- data.frame(name=xpathSApply(accounts,path = '//*[starts-with(@class,"user-actions btn-group")]',xmlGetAttr,'data-name'))
+congress$screen_name <- xpathSApply(accounts,path = '//*[starts-with(@class,"username js")]',getChildrenStrings)
+
+save(congress,file="data/congress.RData")
