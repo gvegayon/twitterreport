@@ -87,7 +87,7 @@ tw_conversation <- function(from,to,onlyFrom=FALSE) {
 }
 # x <- tw_extract(tweets$text)
 # conv <- tw_conversation(tweets$screen_name,lapply(x,"[[","mention"))
-# mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
+# mygraph <- write.gexf(conv2$nodes,conv2$edges[,-3],keepFactors = TRUE)
 
 #' @title Create table (and plot graph bar if needed)
 tw_table <- function(txt) {
