@@ -15,7 +15,6 @@ library(stringr)
 # Getting the table
 representatives <- readHTMLTable("http://www.house.gov/representatives/",stringsAsFactors=FALSE)
 representatives <- do.call(rbind, representatives)
-row.names(representatives) <- 1:nrow(representatives)
 
 # Getting the info (URLS)
 house <- getURLContent("http://www.house.gov/representatives/")
@@ -27,9 +26,14 @@ urls <- sapply(representatives$Name, function(x,...) {
 representatives <- cbind(representatives,website=urls)
 
 # Looking for state names
-states <- str_extract_all(house,"(?<=state\\_[a-z]{2}.{2})([a-zA-Z]{2,})")[[1]]
+states <- str_extract_all(house,"(?<=state\\_[a-z]{2}.{2})([a-zA-Z ]{2,})")[[1]]
+tmp <- str_detect(representatives$District,paste0(states,collapse="|"))
+representatives <- representatives[tmp,]
+representatives$state <- str_match(representatives$District,paste0(states,collapse="|"))
+representatives$DistrictNum <- as.numeric(str_match(representatives$District,'[0-9]+(?=[a-z]{2} District)'))
+rm(tmp)
 
-# Retrieving info no districts
+row.names(representatives) <- 1:nrow(representatives)
 
 ################################################################################
 # Getting twitter accounts
@@ -115,3 +119,4 @@ for (s in 1:n) {
   message(sprintf("%03d of %03d",s,n)," Congressman ",representatives$Name[s]," done...")
 }
 save.image("data/congress_info.RData")
+  
