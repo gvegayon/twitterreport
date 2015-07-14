@@ -1,20 +1,14 @@
 library(httr)
 
 source("R/verify.R")
+source("R/text_mining.R")
 
 # 4. Use API
 # req <- GET("https://stream.twitter.com/1.1/statuses/sample.json",
 #            config(token = twitter_token))
 # stop_for_status(req)
 load("data/congress.RData")
-tw_get_user <- function(usr,count=100,...) {
-  usr <- gsub("^@","",usr)
-  
-  # API CALL
-  GET(paste0(
-    "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=",usr,"&count=",count),
-      config(token=twitter_token))
-}
+
 
 tw_process_api <- function(req) {
   # Processing
@@ -52,7 +46,7 @@ tw_process_api <- function(req) {
 tweets_congress_raw <- lapply(congress$screen_name,tw_get_user)
 status <- sapply(tweets_congress_raw,status_code)
 tweets_congress <- tweets_congress_raw[which(status==200)]
-tweets_congress <- lapply(tweets_congress,tw_process_api)
+tweets_congress <- lapply(tweets_congress,tw_api_get_timeline)
 
 # Data frame
 tweets_congress <-  do.call(rbind,tweets_congress)

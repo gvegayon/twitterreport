@@ -2,6 +2,9 @@ rm(list=ls())
 library(stringr)
 library(rgexf)
 library(dplyr)
+library(RCurl)
+library(XML)
+source("R/verify.R")
 
 #' @title Extract info from tweets
 #' @aliases 
@@ -94,13 +97,6 @@ tw_table <- function(txt) {
   words <- words[order(-words$Freq),]
   words
 }
-# load("data/lovewins.RData")
-# load("data/tweets_congress.RData")
-# x <- tw_extract(tweets_congress$text)
-# conv <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"))
-# conv2 <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"),onlyFrom = TRUE)
-# mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
-# tw_table(unlist(lapply(x,"[[","hashtag"),recursive = TRUE))
 
 #' @description  Function to enter the website and get the twitter account
 tw_get_tw_account <- function(uri, redirect=TRUE) {
@@ -136,53 +132,104 @@ tw_api_wait <- function(minutes=1) {
   message('done\nTrying again...')
 }
 
-#' @title Get user information
-tw_api_get_usr_profile <- function(x,...) { 
-  if (is.na(x)) return(NULL)
-  else { 
-    # Query
-    query <- paste0(
-      "https://api.twitter.com/1.1/users/show.json?screen_name=",x)
-    
-    status <- 0
-    while (status!=200) {
-      # Making the call
-      req <- GET(query, config(token=twitter_token))
-      status <- status_code(req)
-      if (status!=200) print(req)
-      if (status==429) {
-        message('(409) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application’s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.
-                will try in 15min (current user ',x,')...')
-        tw_api_wait()
-      }
-      else if (status==401) {
-        message("(401) Unauthorized: Authentication credentials were missing or incorrect. Also returned in other circumstances, for example all calls to API v1 endpoints now return 401 (use API v1.1 instead).")
-        status<-200
-      }
-      else if (status==404) {
-        message("(404) Not found: The URI requested is invalid or the resource requested, such as a user, does not exists. Also returned when the requested format is not supported by the requested method.")
-        return(NULL)
-      }
-      else if (status==502) {
-        message('(502) Bad Gateway: Twitter is down or being upgraded.
-                will try in 15min (current user ',x,')...')
-        tw_api_wait(5)
-      }
-      else if (status!=200) {
-        message('Error, see response ',status)
-        return(NULL)
-      }
+.tw_api_get <- function(query,minutes,...) {
+  status <- 0
+  while (status!=200) {
+    # Making the call
+    req <- GET(query, config(token=twitter_token))
+    status <- status_code(req)
+    if (status!=200) print(req)
+    if (status==429) {
+      message('(409) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application’s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
+      tw_api_wait(minutes)
+    }
+    else if (status==401) {
+      message("(401) Unauthorized: Authentication credentials were missing or incorrect. Also returned in other circumstances, for example all calls to API v1 endpoints now return 401 (use API v1.1 instead).")
+      status<-200
+    }
+    else if (status==404) {
+      message("(404) Not found: The URI requested is invalid or the resource requested, such as a user, does not exists. Also returned when the requested format is not supported by the requested method.")
+      return(NULL)
+    }
+    else if (status==502) {
+      message('(502) Bad Gateway: Twitter is down or being upgraded.')
+      tw_api_wait(minutes)
+    }
+    else if (status!=200) {
+      message('Error, see response ',status)
+      return(NULL)
     }
   }
+  return(req)
+}
+
+#' @title Get user information
+tw_api_get_usr_profile <- function(usr,...) { 
+  if (is.na(usr)) return(NULL)
+  else 
+    req <- .tw_api_get(
+      paste0(
+        "https://api.twitter.com/1.1/users/show.json?screen_name=",usr),
+      minutes=5)
+  
+  # Checking if everything went fine
+  if (is.null(req) | status_code(req)!=200) return(NULL)
   
   # If it works, then process the data
-  message("Success, info of user ",x,' correctly retrieved')
-  return(content(req))
-}
-
-#' @title Remove common accounts
-#'
-tw_rm_common_accounts <- function(accounts) {
+  req <- content(req)
+  req <- req[which(!(names(req) %in% c('status','entities') ))]
   
+  req <- as.data.frame(do.call(cbind,req),stringsAsFactors=FALSE)
+  
+  # Setting the proper class
+  # Source https://dev.twitter.com/overview/api/users
+  var <- c('contributors_enabled','default_profile_image','default_profile',
+                   'geo_enabled','is_translator','notifications','protected','verified')
+  req[,var] <- as.logical(req[,var])
+  req$created_at <- strptime(req$created_at,'%a %b %d %T +0000 %Y')
+  
+  message('Success, info of user ',usr,' correctly retrieved')
+  return(req)
 }
 
+#' @description Gets tweets from a user up to 1000 statuses
+tw_api_get_timeline <- function(usr,count=100,...) {
+  usr <- gsub("^@","",usr)
+  
+  # API CALL
+  req <- .tw_api_get(
+    paste0(
+    "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=",usr,
+    "&count=",count,'&include_entities=false'),
+    minutes = 5
+    )
+  
+  # Checking if everything went fine
+  if (is.null(req) | status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+  
+  req <- lapply(req, function(x) {
+    cbind(
+      created_at=x$created_at,
+      id=x$id, text=x$text, source=x$source,truncated=x$truncated,
+      is_quote_status=x$is_quote_status,retweet_count=x$retweet_count,
+      favorite_count=x$favorite_count,favorited=x$favorited,retweeted=x$retweeted,
+      coordinates=x$coordinates
+    )
+  })
+  message('Success, timeline of user ',usr,' correctly retrieved')
+#   req <- bind_rows(lapply(req,as.data.frame,stringsAsFactors=FALSE))
+#   return(as.data.frame(req))
+  req
+}
+
+
+# load("data/lovewins.RData")
+# load("data/tweets_congress.RData")
+# x <- tw_extract(tweets_congress$text)
+# conv <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"))
+# conv2 <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"),onlyFrom = TRUE)
+# mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
+# tw_table(unlist(lapply(x,"[[","hashtag"),recursive = TRUE))
