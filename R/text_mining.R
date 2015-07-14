@@ -140,7 +140,7 @@ tw_api_wait <- function(minutes=1) {
     status <- status_code(req)
     if (status!=200) print(req)
     if (status==429) {
-      message('(409) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application’s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
+      message('(429) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application’s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
       tw_api_wait(minutes)
     }
     else if (status==401) {
@@ -205,26 +205,40 @@ tw_api_get_timeline <- function(usr,count=100,...) {
     )
   
   # Checking if everything went fine
-  if (is.null(req) | status_code(req)!=200) return(NULL)
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
   
   # If it works, then process the data
   req <- content(req)
   
-  req <- lapply(req, function(x) {
-    cbind(
-      created_at=x$created_at,
+  req <- lapply(req, function(x,...) {
+    # Nullable characters
+    coords  <- paste0(x$coordinates$coordinates,collapse=":")
+    replyto <- x$in_reply_to_screen_name
+    nfav    <- x$favorite_count
+    isfav   <- x$favorited
+    data.frame(
+      screen_name=x$user$screen_name, 
+      in_reply_to_screen_name=ifelse(is.null(replyto),NA,replyto),
+      user_id=x$user$id,created_at=x$created_at,
       id=x$id, text=x$text, source=x$source,truncated=x$truncated,
-      is_quote_status=x$is_quote_status,retweet_count=x$retweet_count,
-      favorite_count=x$favorite_count,favorited=x$favorited,retweeted=x$retweeted,
-      coordinates=x$coordinates
+      retweet_count=x$retweet_count,
+      favorite_count=ifelse(is.null(nfav),NA,nfav),
+      favorited=ifelse(is.null(isfav),FALSE,isfav),retweeted=x$retweeted,
+      coordinates=ifelse(coords=='',NA,coords),stringsAsFactors=FALSE
     )
   })
   message('Success, timeline of user ',usr,' correctly retrieved')
-#   req <- bind_rows(lapply(req,as.data.frame,stringsAsFactors=FALSE))
-#   return(as.data.frame(req))
-  req
+  return(as.data.frame(bind_rows(req)))
 }
 
+# Designing class
+# - Hasthtag table
+# - Accounts table
+# - Tweets table (most retweeted)
+# - statuses update time
+# - Most frequent URLs
 
 # load("data/lovewins.RData")
 # load("data/tweets_congress.RData")

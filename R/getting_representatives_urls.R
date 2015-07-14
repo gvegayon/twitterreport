@@ -88,4 +88,8 @@ for (i in which(error)) twitter_profiles_congress[[i]] <- emptyvec
 representatives_profile <- as.data.frame(do.call(rbind, twitter_profiles_congress),stringsAsFactors = FALSE)
 colnames(representatives_profile) <- paste0('tw_',colnames(representatives_profile))
 
+# Removing unrelevant objects
+rm(list=ls(pattern = '^tw_'))
+rm(twitter_token)
+
 save.image("data/congress_info.RData")
