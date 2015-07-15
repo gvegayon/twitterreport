@@ -11,18 +11,21 @@ source("R/verify.R")
 #' @description Extract email accounts, mentions, hashtags and urls from tweets
 #' @param txt Character
 #' @param obj List of objects to extract
+#' @param normalize bool whether or not to normalize emails, hashtags and mentions (to lower)
 #' @return List
 #' @examples  
 #' head(tw_extract(tweets$text))
 #' #lapply(x,"[[","mention")
-tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url")) {
-  if (length(txt)>1) output <- lapply(txt, tw_extracti, obj)
-  else output <- tw_extrati(txt,obj)
+tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
+                       normalize=TRUE) {
+  if (length(txt)>1) output <- lapply(txt, tw_extracti, obj, normalize)
+  else output <- tw_extracti(txt,obj,normalize)
   return(output)
 }
 
 #' @describeIn tw_extract
-tw_extracti <- function(txt, obj = c("email", "mention", "hashtag", "url")) {
+tw_extracti <- function(txt, obj = c("email", "mention", "hashtag", "url"),
+                        normalize=TRUE) {
   # patterns
   p.email <- "([a-zA-Z0-9_]-?\\.?)+@([a-zA-Z0-9_]-?)+\\.[a-zA-Z]+"
   p.hashtag <- "#[[:graph:]]+"
@@ -43,45 +46,62 @@ tw_extracti <- function(txt, obj = c("email", "mention", "hashtag", "url")) {
   else if ("hashtag" %in% obj)
     output$mention <- str_replace_all(output$hashtag,"^#","")
   
+  if (normalize) {
+    output$mention <- str_to_lower(output$mention)
+    output$hashtag <- str_to_lower(output$hashtag)
+    output$email <- str_to_lower(output$email)
+  }
+  
   return(output)
 }
 
 #' @title Creates conversation graph (directed)
-#' @param from Vector of screen_name
-#' @param to List of vectors of mentions (output from tw_extract)
-tw_conversation <- function(from,to,onlyFrom=FALSE) {
+#' @param source Vector of screen_name
+#' @param target List of vectors of mentions (output from tw_extract)
+#' @param group Data frame with two columns: name & group
+tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1,
+                            group=NULL) {
+  
+  # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors
   options(stringsAsFactors = FALSE)
-  n <- length(from)
-
-  # Create edges
-  tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
-    cbind(from=rep(from[[i]],length(to[[i]])),to=to[[i]])
-  })))
-
-  # Frequency
-  tmp <- group_by(tmp, from, to)
-  tmp <- as.data.frame(summarise(tmp,n=n()))
-
-  # Encoding edges
-  ne <- nrow(tmp)
-  tmp2 <- as.factor(c(tmp$from,tmp$to))
-  edges <- data.frame(from=tmp2[1:ne],to=tmp2[(ne+1):(ne*2)],n=tmp$n)
-  nodes <- unique(unlist(edges[,-3]))
-
-  original <- unique(as.numeric(edges$from))
-  
-  # Returning output
-  out <- list(
-    edges=edges,
-    nodes=data.frame(id=as.numeric(nodes),label=as.character(nodes))
-    )
+  n <- length(source)
   
   # Reducing edges list
   if (onlyFrom) {
-    out$nodes <- out$nodes[which(out$nodes$id %in% original),]
-    out$edges <- out$edges[which(as.numeric(out$edges$to) %in% original),]
+    original <- unique(source)
+    target <- lapply(target, function(x) x[which(x %in% original)])
   }
+
+  # Create links
+  tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
+    cbind(source=rep(source[[i]],length(target[[i]])),target=target[[i]])
+  })))
+  
+  # If excludes self
+  if (excludeSelf) tmp <- subset(tmp,subset=source!=target)
+  
+  # Frequency
+  tmp <- group_by(tmp, source, target)
+  tmp <- as.data.frame(summarise(tmp,value=n()))
+
+  # Encoding links
+  ne <- nrow(tmp)
+  tmp2 <- as.factor(c(tmp$source,tmp$target))
+  links <- data.frame(source=tmp2[1:ne],target=tmp2[(ne+1):(ne*2)],value=tmp$value)
+  nodes <- unique(unlist(links[,-3]))
+
+  nodes <- data.frame(id=as.numeric(nodes),name=as.character(nodes))
+  nodes <- nodes[order(nodes$id),]
+  
+  # If there is grouping
+  if (length(group)) {
+    nodes <- merge(nodes,group)
+  }
+  
+  # Returning output
+  out <- list(nodes=nodes,links=links)
+  
   options(stringsAsFactors = oldstasf)
   return(out)
 }
@@ -231,6 +251,19 @@ tw_api_get_timeline <- function(usr,count=100,...) {
   })
   message('Success, timeline of user ',usr,' correctly retrieved')
   return(as.data.frame(bind_rows(req)))
+}
+
+
+.tw_df_to_json <- function(d) {
+  vnames <- colnames(d)
+  f <- lapply(1:nrow(d), function(x,...) {
+    paste0('{"',paste(vnames,d[x,],sep='":"',collapse='","'),'"}')
+  })
+  paste0(f,collapse=',\n')
+}
+tw_write_json_network <- function(graph) {
+  nodes <- .tw_df_to_json(graph$nodes)
+  links <- .tw_df_to_json(graph$links)
 }
 
 # Designing class
