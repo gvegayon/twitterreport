@@ -1,0 +1,96 @@
+---
+title: "Twitter Report"
+author: "George G. Vega Yon"
+date: "July 15, 2015"
+output: html_document
+---
+
+![Caltech Logo][caltechlogo]
+
+```{r, echo=FALSE}
+setwd('~/Documents/projects/caltech_masters/')
+
+suppressMessages({
+  source('R/text_mining.R')
+  load("data/senate_tweets_example.RData")
+  load("data/senate_info.RData")
+})
+```
+
+## General stats
+
+```{r, echo=FALSE,autodep=TRUE}
+suppressMessages({
+  library(dygraphs)
+  library(xts)
+})
+
+# Creating stats (and data)
+senate_tweets$day <- as.character(round(senate_tweets$created_at, "day"))
+timeday <- as.data.frame(table(senate_tweets$day),responseName = 'N of tweets')
+rownames(timeday) <- timeday$Var1
+timeday <- as.xts(timeday[,-1,drop=FALSE])
+
+# Graph
+nobs <- nrow(timeday)
+dygraph(timeday[(nobs-100):nobs,],main = 'Number of daily tweets')
+```
+
+
+```{r, echo=FALSE, autodep=TRUE}
+suppressMessages(library(DT))
+elements <- tw_extract(senate_tweets$text)
+
+# Creating table for hashtags
+hashtags <- sapply(elements, "[[", "hashtag")
+hashtags <- unlist(hashtags,recursive = TRUE)
+hashtags <- str_replace_all(hashtags, '[:punct:]','')
+
+hashtags <- as.data.frame(table(hashtags),responseName = 'N', stringsAsFactors=FALSE)
+hashtags <- hashtags[order(-hashtags$N),]
+datatable(hashtags[1:100,], options = list(pageLength = 5),rownames = FALSE,
+          caption='Most popular hashtags')
+
+# Creating table for users
+mentions <- sapply(elements, "[[", "mention")
+mentions <- unlist(mentions,recursive = TRUE)
+
+mentions <- as.data.frame(table(mentions),responseName = 'N', stringsAsFactors=FALSE)
+mentions <- mentions[order(-mentions$N),]
+datatable(mentions[1:100,], options = list(pageLength = 5),rownames = FALSE,
+          caption='Most popular users (@mentions)')
+
+```
+
+## Conversation Networks
+
+This is the graph of conversations between US senators. Colored by party (light blue are democrats, blue are republicans and orange is independent), the thickness of the edges (links) represent the number of times that one senator mentions the other. Notice that interestingly Democrats and Republicans tend to group around while Sen. Angus King (only independent in the graph) is right in between the two groups.
+
+In this case I consider two senators connected iff there one of them appears at least 3 times in the other senator's status timeline.
+
+```{r, echo=FALSE,autodep=TRUE}
+tweets_components <- tw_extract(senate_tweets$text)
+groups <- data.frame(
+  name      = senators_profile$tw_screen_name,
+  group     = factor(senators$party),
+  real_name = senators$Name,
+  stringsAsFactors = FALSE)
+groups$name <- tolower(groups$name)
+
+senate_network <- tw_conversation(
+  tolower(senate_tweets$screen_name),
+  lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
+  group=groups, minInteract = 3)
+
+library(networkD3)
+forceNetwork(
+  Links = senate_network$links,
+  Nodes = senate_network$nodes, 
+  Source="source", Target="target",
+  Value="value",NodeID="real_name", Group="group",opacity = .9,
+  opacityNoHover = .5, legend = TRUE)
+```
+
+
+
+[caltechlogo]: figures/Caltech_LOGO-Orange_RGB.png "Caltech"

@@ -90,6 +90,6 @@ colnames(representatives_profile) <- paste0('tw_',colnames(representatives_profi
 
 # Removing unrelevant objects
 rm(list=ls(pattern = '^tw_'))
-rm(twitter_token)
+rm(twitter_token,error,i,n,s,myapp,tmp,emptyvec)
 
 save.image("data/congress_info.RData")

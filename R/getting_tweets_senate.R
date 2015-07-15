@@ -19,13 +19,35 @@ senate_tweets <- bind_rows(senate_tweets)
 class(senate_tweets) <- 'data.frame'
 save(senate_tweets,file="data/senate_tweets_example.RData")
 
+# 
+load("data/senate_tweets_example.RData")
+
 tweets_components <- tw_extract(senate_tweets$text)
 groups <- data.frame(
-  name=senators_profile$tw_screen_name,group=as.numeric(factor(senators$party)),
+  name      = senators_profile$tw_screen_name,
+  group     = factor(senators$party),
+  real_name = senators$Name,
   stringsAsFactors = FALSE)
+groups$name <- tolower(groups$name)
+
 senate_network <- tw_conversation(
   tolower(senate_tweets$screen_name),
   lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
   group=groups, minInteract = 3)
 
 writeLines(tw_write_json_network(senate_network),'data/us_congress.json')
+
+library(networkD3)
+forceNetwork(
+  Links = senate_network$links,
+  Nodes = senate_network$nodes, 
+  Source="source", Target="target",
+  Value="value",NodeID="real_name", Group="group",opacity = .9,
+  opacityNoHover = .5, legend = TRUE)
+
+sankeyNetwork(
+  Links = senate_network$links,
+  Nodes = senate_network$nodes, 
+  Source="source", Target="target",
+  Value="value",NodeID="real_name") #, Group="group",opacity = .9,
+  #opacityNoHover = .5, legend = TRUE)

@@ -1,4 +1,4 @@
-rm(list=ls())
+# rm(list=ls())
 library(stringr)
 library(rgexf)
 library(dplyr)
@@ -198,20 +198,52 @@ tw_api_get_usr_profile <- function(usr,...) {
       minutes=5)
   
   # Checking if everything went fine
-  if (is.null(req) | status_code(req)!=200) return(NULL)
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
   
   # If it works, then process the data
   req <- content(req)
-  req <- req[which(!(names(req) %in% c('status','entities') ))]
+
+  # Nullable elements
+  time_zone   <- req$time_zone
+  utc_offset  <- req$utc_offset
+  description <- req$description
+  location    <- req$location
   
-  req <- as.data.frame(do.call(cbind,req),stringsAsFactors=FALSE)
+  req <- data.frame(
+    stringsAsFactors = FALSE,
+    id                      = req$id,
+    name                    = req$name,
+    screen_name             = req$screen_name,
+    contributors_enabled    = req$contributors_enabled,
+    created_at              = strptime(req$created_at,'%a %b %d %T +0000 %Y'),
+    default_profile         = req$default_profile,
+    default_profile_image   = req$default_profile_image,
+    description             = ifelse(is.null(description),NA,description),
+    favourites_count        = req$favourites_count,
+    followers_count         = req$followers_count,
+    friends_count           = req$friends_count,
+    geo_enabled             = req$geo_enabled,
+    is_translator           = req$is_translator,
+    lang                    = req$lang,
+    listed_count            = req$listed_count,
+    location                = ifelse(is.null(location),NA,location),
+    profile_image_url       = req$profile_image_url,
+    profile_image_url_https = req$profile_image_url_https,
+    protected               = req$protected,
+    statuses_count          = req$statuses_count,
+    time_zone               = ifelse(is.null(time_zone),NA,time_zone),
+    utc_offset              = ifelse(is.null(utc_offset),NA,utc_offset),
+    verified                = req$verified
+    )
   
   # Setting the proper class
   # Source https://dev.twitter.com/overview/api/users
-  var <- c('contributors_enabled','default_profile_image','default_profile',
-                   'geo_enabled','is_translator','notifications','protected','verified')
-  req[,var] <- as.logical(req[,var])
-  req$created_at <- strptime(req$created_at,'%a %b %d %T +0000 %Y')
+#   var <- c('contributors_enabled','default_profile_image','default_profile',
+#                    'geo_enabled','is_translator','notifications','protected','verified')
+#   req[,var] <- as.logical(req[,var])
+  # req$created_at <- strptime(req$created_at,'%a %b %d %T +0000 %Y')
   
   message('Success, info of user ',usr,' correctly retrieved')
   return(req)
@@ -244,14 +276,20 @@ tw_api_get_timeline <- function(usr,count=100,...) {
     nfav    <- x$favorite_count
     isfav   <- x$favorited
     data.frame(
-      screen_name=x$user$screen_name, 
-      in_reply_to_screen_name=ifelse(is.null(replyto),NA,replyto),
-      user_id=x$user$id,created_at=x$created_at,
-      id=x$id, text=x$text, source=x$source,truncated=x$truncated,
-      retweet_count=x$retweet_count,
-      favorite_count=ifelse(is.null(nfav),NA,nfav),
-      favorited=ifelse(is.null(isfav),FALSE,isfav),retweeted=x$retweeted,
-      coordinates=ifelse(coords=='',NA,coords),stringsAsFactors=FALSE
+      screen_name             = x$user$screen_name, 
+      in_reply_to_screen_name = ifelse(is.null(replyto),NA,replyto),
+      user_id                 = x$user$id,
+      created_at              = strptime(x$created_at,'%a %b %d %T +0000 %Y'),
+      id                      = x$id,
+      text                    = x$text, 
+      source                  = x$source,
+      truncated               = x$truncated,
+      retweet_count           = x$retweet_count,
+      favorite_count          = ifelse(is.null(nfav),NA,nfav),
+      favorited               = ifelse(is.null(isfav),FALSE,isfav),
+      retweeted               = x$retweeted,
+      coordinates             = ifelse(coords=='',NA,coords),
+      stringsAsFactors = FALSE
     )
   })
   message('Success, timeline of user ',usr,' correctly retrieved')
