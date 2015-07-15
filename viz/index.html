@@ -14,8 +14,8 @@
   
   </style>
     <body>
-    <script src="d3.min.js"></script>
-    <script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
 
 var width = 960,
     height = 500;
@@ -52,7 +52,18 @@ d3.json("us_congress.json", function(error, graph) {
       .attr("r", 5)
       .style("fill", function(d) { return color(d.group); })
       .call(force.drag);
-    
+
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  // Adding text
+  //var text = svg.append("g").selectAll("text")
+  //  .data(force.nodes())
+  //.enter().append("text")
+  //  .attr("x", 8)
+  //  .attr("y", ".31em")
+  //  .text(function(d) { return d.name; });
+
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })

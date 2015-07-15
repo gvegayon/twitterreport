@@ -84,6 +84,9 @@ tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInt
   # Frequency
   tmp <- group_by(tmp, source, target)
   tmp <- as.data.frame(summarise(tmp,value=n()))
+  
+  # Filtering interactions
+  tmp <- subset(tmp,subset=value>=minInteract)
 
   # Encoding links
   ne <- nrow(tmp)
@@ -91,7 +94,7 @@ tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInt
   links <- data.frame(source=tmp2[1:ne],target=tmp2[(ne+1):(ne*2)],value=tmp$value)
   nodes <- unique(unlist(links[,-3]))
 
-  nodes <- data.frame(id=as.numeric(nodes),name=as.character(nodes))
+  nodes <- data.frame(id=as.numeric(nodes)-1,name=as.character(nodes))
   nodes <- nodes[order(nodes$id),]
   
   # If there is grouping
@@ -100,6 +103,8 @@ tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInt
   }
   
   # Returning output
+  links$source <- as.numeric(links$source)-1
+  links$target <- as.numeric(links$target)-1
   out <- list(nodes=nodes,links=links)
   
   options(stringsAsFactors = oldstasf)
@@ -256,14 +261,20 @@ tw_api_get_timeline <- function(usr,count=100,...) {
 
 .tw_df_to_json <- function(d) {
   vnames <- colnames(d)
+  for (i in 1:ncol(d)) {
+    if (class(d[,i])=="character") d[,i] <- paste0('"',d[,i],'"')
+  }
   f <- lapply(1:nrow(d), function(x,...) {
-    paste0('{"',paste(vnames,d[x,],sep='":"',collapse='","'),'"}')
+    paste0('\t\t{"',paste(vnames,d[x,],sep='":',collapse=',"'),'}')
   })
   paste0(f,collapse=',\n')
 }
+
+#' @description Writes a JSON graph to be used with d3js
 tw_write_json_network <- function(graph) {
   nodes <- .tw_df_to_json(graph$nodes)
   links <- .tw_df_to_json(graph$links)
+  paste('{\n\t"nodes":[',nodes,'\t\t],\n\t"links":[',links,']\n}',sep="\n")
 }
 
 # Designing class

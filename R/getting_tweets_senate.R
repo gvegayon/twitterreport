@@ -20,8 +20,12 @@ class(senate_tweets) <- 'data.frame'
 save(senate_tweets,file="data/senate_tweets_example.RData")
 
 tweets_components <- tw_extract(senate_tweets$text)
+groups <- data.frame(
+  name=senators_profile$tw_screen_name,group=as.numeric(factor(senators$party)),
+  stringsAsFactors = FALSE)
 senate_network <- tw_conversation(
   tolower(senate_tweets$screen_name),
-  lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE)
+  lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
+  group=groups)
 
-writeLines(rjson::toJSON(senate_network),'data/us_congress.json')
+writeLines(tw_write_json_network(senate_network),'data/us_congress.json')
