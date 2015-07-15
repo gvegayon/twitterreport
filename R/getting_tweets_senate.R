@@ -26,6 +26,6 @@ groups <- data.frame(
 senate_network <- tw_conversation(
   tolower(senate_tweets$screen_name),
   lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
-  group=groups)
+  group=groups, minInteract = 3)
 
 writeLines(tw_write_json_network(senate_network),'data/us_congress.json')
