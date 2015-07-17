@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\begin{document}
+
+\section{General idea}
+
+Part of this analysis will be focused on a particular set of users defined by the researcher. In this case we will focus on congressman twitter accounts. In order to do so, besides of providing the names and user names of each user, we need to collect the following information:
+
+\begin{itemize}
+\item Gender
+\item Political party
+\item Geo-tag for the district/state that they represent
+\item Party they represent
+\end{itemize}
+
+With this information in hand we will perfor two types of analysis, simple analysis focused on descriptive statistics, and a more complex analysis on network dynamics. Both are described in the next subsections
+
+\subsection{Basic analysis}
+
+\begin{itemize}
+\item Build networks (conversation vs followers)
+\item Centrality measures (indegree, eigen centrality)
+\item Hashtags and stopwords (what are they discussing about), this can lead us to perform clustering in terms of words. Also create a word cloud and frequency tables
+\item Create network of words (set a cutoff for saying how are these related) and see how are these related
+\item Sentiment analysis (Happy/Sad faces)
+\item Geo tags (dynamics). Frequency of tweets
+\end{itemize}
+
+In order to perform this analysis I will develop a set of functions to analyze the corpus of each tweet. Using regular expressions and basic text-mining techniques we will be able to work on these functions.
+
+\subsection{More complex analysis}
+
+\begin{itemize}
+\item Network dynamics. Who starts the conversation and how does it moves through the graph (any graph)
+\item How does, for instance, the decision of the supreme court affects the discussion of some issue in the network.
+\end{itemize}
+
+\end{document}

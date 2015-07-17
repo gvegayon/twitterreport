@@ -26,14 +26,15 @@ suppressMessages({
 })
 
 # Creating stats (and data)
-senate_tweets$day <- as.character(round(senate_tweets$created_at, "day"))
-timeday <- as.data.frame(table(senate_tweets$day),responseName = 'N of tweets')
-rownames(timeday) <- timeday$Var1
-timeday <- as.xts(timeday[,-1,drop=FALSE])
+senate_tweets$time <- as.character(round(senate_tweets$created_at, "days"))
+time <- as.data.frame(table(senate_tweets$time),responseName = 'N of tweets')
+rownames(time) <- time$Var1
+time <- as.xts(time[,-1,drop=FALSE])
 
 # Graph
-nobs <- nrow(timeday)
-dygraph(timeday[(nobs-100):nobs,],main = 'Number of daily tweets')
+nobs <- nrow(time)
+dygraph(time[(nobs-100):nobs,],main = 'Number of daily tweets',width = 600,
+        height = 300)
 ```
 
 
@@ -57,7 +58,7 @@ mentions <- unlist(mentions,recursive = TRUE)
 
 mentions <- as.data.frame(table(mentions),responseName = 'N', stringsAsFactors=FALSE)
 mentions <- mentions[order(-mentions$N),]
-datatable(mentions[1:100,], options = list(pageLength = 5),rownames = FALSE,
+datatable(mentions[1:100,], options = list(pageLength = 5),rownames = FALSE, 
           caption='Most popular users (@mentions)')
 
 ```
@@ -82,7 +83,7 @@ senate_network <- tw_conversation(
   lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
   group=groups, minInteract = 3)
 
-library(networkD3)
+suppressMessages(library(networkD3))
 forceNetwork(
   Links = senate_network$links,
   Nodes = senate_network$nodes, 
@@ -93,4 +94,4 @@ forceNetwork(
 
 
 
-[caltechlogo]: figures/Caltech_LOGO-Orange_RGB.png "Caltech"
+[caltechlogo]: figures/Caltech_LOGO-Orange_RGB_10pc.png "Caltech"

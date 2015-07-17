@@ -315,6 +315,68 @@ tw_write_json_network <- function(graph) {
   paste('{\n\t"nodes":[',nodes,'\t\t],\n\t"links":[',links,']\n}',sep="\n")
 }
 
+#' @description Get codes from the places where trends are availables
+tw_api_trends_available <- function(...) {
+  req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',minutes = 5)
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  req <- content(req)
+  
+  req <- lapply(req, function(x) {
+    country     <- x$country
+    countryCode <- x$countryCode
+    
+    data.frame(
+      stringsAsFactors=FALSE,
+      name           = x$name,
+      placeType_code = x$placeType$code,
+      placeType_name = x$placeType$name,
+      url            = x$url,
+      parentid       = x$parentid,
+      country        = ifelse(country=="",NA,country),
+      woeid          = x$woeid
+      )
+  })
+  
+  return(do.call(rbind,req))
+}
+
+#' @description Gets 
+tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
+  
+  # Making the request
+  req <- .tw_api_get(
+    paste0('https://api.twitter.com/1.1/trends/place.json?id=',id,
+           ifelse(exclude,'&exclude=hashtags','')), 5)
+  
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  req <- content(req)[[1]]
+  
+  # Processing the data
+  trends <- lapply(req$trends, function(x) {
+    prom <- x$promoted_content
+    data.frame(
+      stringsAsFactors = FALSE,
+      name             = x$name,
+      query            = x$query,
+      url              = x$url,
+      promoted_content = ifelse(is.null(prom),NA,prom)
+      )
+  })
+  
+  trends <- bind_rows(trends)
+  attributes(trends) <- unlist(req[[-1]],recursive = TRUE)
+  
+  return(trends)
+}
+
 # Designing class
 # - Hasthtag table
 # - Accounts table
