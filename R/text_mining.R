@@ -292,8 +292,13 @@ tw_api_get_timeline <- function(usr,count=100,...) {
       stringsAsFactors = FALSE
     )
   })
+  
+  # Processing the data a litthe bit
+  req <- as.data.frame(bind_rows(req))
+  req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
+    
   message('Success, timeline of user ',usr,' correctly retrieved')
-  return(as.data.frame(bind_rows(req)))
+  return(req)
 }
 
 
@@ -376,6 +381,10 @@ tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
   
   return(trends)
 }
+
+# tw_api_get_statuses_sample <- function(...) {
+#   .tw_api_get('https://stream.twitter.com/1.1/statuses/sample.json',
+# }
 
 # Designing class
 # - Hasthtag table
