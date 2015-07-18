@@ -43,10 +43,7 @@ suppressMessages(library(DT))
 elements <- tw_extract(senate_tweets$text)
 
 # Creating table for hashtags
-hashtags <- sapply(elements, "[[", "hashtag")
-hashtags <- unlist(hashtags,recursive = TRUE)
-hashtags <- str_replace_all(hashtags, '[:punct:]','')
-
+hashtags <- unlist(elements$hashtag,recursive=TRUE)
 hashtags <- as.data.frame(table(hashtags),responseName = 'N', stringsAsFactors=FALSE)
 hashtags <- hashtags[order(-hashtags$N),]
 datatable(hashtags[1:100,], options = list(pageLength = 5),rownames = FALSE,
@@ -80,7 +77,7 @@ groups$name <- tolower(groups$name)
 
 senate_network <- tw_conversation(
   tolower(senate_tweets$screen_name),
-  lapply(lapply(tweets_components,"[[","mention"),unique),onlyFrom = TRUE,
+  lapply(tweets_components$mention,unique),onlyFrom = TRUE,
   group=groups, minInteract = 3)
 
 suppressMessages(library(networkD3))
