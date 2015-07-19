@@ -7,7 +7,6 @@
 #' @return List
 #' @examples  
 #' head(tw_extract(tweets$text))
-#' #lapply(x,"[[","mention")
 tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
                        normalize=TRUE) {
   # patterns
@@ -30,3 +29,24 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
   
   return(output)
 }
+
+tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
+  # Spleatting and cleaning
+  txt <- str_split(txt, '\\s+')
+  
+  if (length(cleanfun)>0)
+    txt <- lapply(txt, cleanfun)
+  else
+    txt <- lapply(txt, function(x) {
+      # Removing https
+      x <- x[which(!grepl('https?[:]//[[:graph:]]+',x))]
+      gsub('[[:punct:]]','',x)
+    })
+  
+  txt <- lapply(txt, function(x) x[!(x %in% stopw)])
+  
+  txt
+}
+load('data/senate_tweets_example.RData')
+words <- tw_words(senate_tweets$text)
+head(words)

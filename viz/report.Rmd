@@ -15,6 +15,14 @@ load("data/senate_tweets_example.RData")
 load("data/senate_info.RData")
 ```
 
+<dl>
+  <dt>Definition list</dt>
+  <dd>Is something people use sometimes.</dd>
+
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
+
 ## General stats
 
 ### Most popular #hashtags
