@@ -4,6 +4,7 @@ library(rgexf)
 library(dplyr)
 library(RCurl)
 library(XML)
+library(reshape2)
 source("R/verify.R")
 
 # x <- tw_extract(tweets$text)

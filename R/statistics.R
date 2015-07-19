@@ -1,42 +1,80 @@
- #' @description Creates a time series object with frecuencies 
- #' @param created_at POSIXct class vector
- tw_timeseries <- function(
-   obj,created_at, units=c('secs','mins','hours','days'),
-   nseries=5, span=1) {
-   
-   # Old stringAsFactors
-   oldstasf <- options()$stringsAsFactors
-   options(stringsAsFactors = FALSE)
-   
-   # Rounding
-   if (length(units)>1) units <- 'hours'
-   created_at <- round(created_at, units)
-   
-   # Processing the data
-   n <- length(obj)
-   tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
-     cbind(
-       created_at = rep(as.character(created_at[i]),length(obj[[i]])),
-       obj        = obj[[i]])
-   })))
-   
-   
-   tmp <- group_by(tmp, created_at, obj)
-   tmp <- summarise(tmp, n=n())
-   tmp <- tmp[order(-tmp$n),]
-   
-   print(lapply(tmp,class))
-   # Getting the top k elements
-   series <- unique(tmp$obj)[1:nseries]
-   series <- subset(tmp, obj %in% series)
-   
-   options(stringsAsFactors = oldstasf)
-   
-   return(tmp)
- }
- 
- x <- tw_extract(senate_tweets$text)
- head(tw_timeseries(x$mention,senate_tweets$created_at, units='days'), 10)
- head(y<-tw_timeseries(x$hashtag,senate_tweets$created_at, units='days'), 10)
- head(unique(y$obj))
- subset(y, obj=='irandeal')
+#' @description Creates a time series object with frecuencies 
+#' @param obj Any of the members of the output list from tw_extract()
+#' @param created_at POSIXct class vector
+#' @param span Number of time units to consider
+#' @param nseries Number of series to include
+#' @param units Time unit
+#' @return xts class 
+#' @author George G. Vega Yon
+tw_timeseries <- function(
+  obj,created_at, units=c('secs','mins','hours','days'),
+  nseries=5, span=30) {
+  
+  # Old stringAsFactors
+  oldstasf <- options()$stringsAsFactors
+  options(stringsAsFactors = FALSE)
+  
+  # Rounding
+  if (length(units)>1) units <- 'hours'
+  created_at <- round(created_at, units)
+  
+  # Processing the data
+  n <- length(obj)
+  tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
+    cbind(
+      created_at = rep(as.character(created_at[i]),length(obj[[i]])),
+      obj        = obj[[i]])
+    })))
+  
+  tmp <- group_by(tmp, created_at, obj)
+  tmp <- summarise(tmp, n=n())
+  tmp <- tmp[order(-tmp$n),]
+  
+  # Getting the top k elements
+  series <- unique(tmp$obj)[1:nseries]
+  series <- as.data.frame(subset(tmp, obj %in% series))
+  rm(tmp)
+  
+  # Creating the timeseries dataframe
+  series <- reshape(
+    series,timevar = 'obj',idvar = 'created_at', v.names = 'n', direction='wide')
+  series <- series[order(series$created_at),]
+  
+  # Fixing names and filtering
+  row.names(series) <- series$created_at
+  colnames(series)  <- gsub('^n[.]','',colnames(series))
+  series            <- series[(nrow(series)-span):nrow(series),-1]
+  
+  options(stringsAsFactors = oldstasf)
+  
+  series[is.na(series)] <- 0
+  
+  # Class
+  class(series) <- c('tw_timeseries',class(series))
+  attributes(series) <- c(attributes(series),units=units)
+  return(series)
+}
+
+.tw_format_unit <- function(obj) {
+  units <- attributes(obj)$units
+  if (units == 'days') return('%Y-%m-%d')
+  if (units %in% c('hours','minutes','secs'))
+    return('%a %b %d %T +0000 %Y')
+}
+
+#' @description Plot time series
+plot.tw_timeseries <- function(x,y=NULL,lty=1:ncol(x),...) {
+  plot.ts(as.ts(x),plot.type='single',lty=lty, xaxt='n')
+  
+  axis(side = 1,at = strptime(row.names(x),format = .tw_format_unit(x)))
+}
+# dygraph.tw_series <- function
+
+# load('data/senate_tweets_example.RData')
+# x <- tw_extract(senate_tweets$text)
+
+# Graph
+z <- tw_timeseries(x$mention,created_at = senate_tweets$created_at, units = 'days')
+plot(z)
+# library(dygraphs)
+# dygraph(z,main = 'Number of daily tweets',width = 600,height = 300)
