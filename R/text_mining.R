@@ -1,24 +1,6 @@
-# rm(list=ls())
-library(stringr)
-library(rgexf)
-library(dplyr)
-library(RCurl)
-library(XML)
-library(reshape2)
-source("R/verify.R")
-
 # x <- tw_extract(tweets$text)
 # conv <- tw_conversation(tweets$screen_name,lapply(x,"[[","mention"))
 # mygraph <- write.gexf(conv2$nodes,conv2$edges[,-3],keepFactors = TRUE)
-
-#' @title Create table (and plot graph bar if needed)
-tw_table <- function(txt) {
-  # Cleaning text
-  txt <- tolower(txt)
-  words <- as.data.frame(table(txt))
-  words <- words[order(-words$Freq),]
-  words
-}
 
 #' @description  Function to enter the website and get the twitter account
 tw_get_tw_account <- function(uri, redirect=TRUE) {

@@ -15,24 +15,28 @@ tw_timeseries <- function(
   options(stringsAsFactors = FALSE)
   
   # Rounding
-  if (length(units)>1) units <- 'hours'
+  if (length(units)>1) units <- 'days'
   created_at <- round(created_at, units)
   
   # Processing the data
   n <- length(obj)
-  tmp <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
+  data <- as.data.frame(do.call(rbind,lapply(1:n, function(i,...) {
     cbind(
       created_at = rep(as.character(created_at[i]),length(obj[[i]])),
       obj        = obj[[i]])
     })))
   
-  tmp <- group_by(tmp, created_at, obj)
-  tmp <- summarise(tmp, n=n())
+  grp <- group_by(data, created_at, obj)
+  tmp <- summarise(grp, n=n())
   tmp <- tmp[order(-tmp$n),]
   
   # Getting the top k elements
-  series <- unique(tmp$obj)[1:nseries]
-  series <- as.data.frame(subset(tmp, obj %in% series))
+  grp <- group_by(tmp, obj)
+  who <- summarise(grp, n=sum(n))
+  who <- who[order(-who$n),]$obj[1:nseries]
+  
+  # series <- unique(tmp$obj)[1:nseries]
+  series <- as.data.frame(subset(tmp, obj %in% who))
   rm(tmp)
   
   # Creating the timeseries dataframe
@@ -50,7 +54,7 @@ tw_timeseries <- function(
   series[is.na(series)] <- 0
   
   # Class
-  class(series) <- c('tw_timeseries',class(series))
+  class(series) <- c('tw_Class_ts',class(series))
   attributes(series) <- c(attributes(series),units=units)
   return(series)
 }
@@ -62,19 +66,36 @@ tw_timeseries <- function(
     return('%a %b %d %T +0000 %Y')
 }
 
-#' @description Plot time series
-plot.tw_timeseries <- function(x,y=NULL,lty=1:ncol(x),...) {
-  plot.ts(as.ts(x),plot.type='single',lty=lty, xaxt='n')
-  
-  axis(side = 1,at = strptime(row.names(x),format = .tw_format_unit(x)))
-}
-# dygraph.tw_series <- function
 
 # load('data/senate_tweets_example.RData')
 # x <- tw_extract(senate_tweets$text)
-
+# 
 # Graph
-z <- tw_timeseries(x$mention,created_at = senate_tweets$created_at, units = 'days')
-plot(z)
+# z <- tw_timeseries(x$mention,created_at = senate_tweets$created_at, units = 'days',span = 60)
+# x <- plot(z,rangeSelector=TRUE) 
 # library(dygraphs)
 # dygraph(z,main = 'Number of daily tweets',width = 600,height = 300)
+
+#' @description Creates a table
+#' hashtags <- unlist(elements$hashtag,recursive=TRUE)
+tw_table <- function(obj) {
+  obj <- unlist(obj,recursive=TRUE)
+  obj <- as.data.frame(table(obj),responseName='n', stringsAsFactors=FALSE)
+  obj <- obj[order(-obj$n),]
+  
+  # Setting the class
+  class(obj) <- c('tw_Class_table',class(obj))
+  
+  obj
+}
+
+plot.tw_Class_table <- function(
+  x, y=NULL, nentries=20, caption='Most popular hashtags',
+  options=list(pageLength=5),...) {
+  datatable(x[1:nentries,], options = options,rownames = FALSE,...)
+}
+
+# elements <- tw_extract(senate_tweets$text)
+# x <- tw_table(elements$mention)
+# head(x)
+# plot(x)

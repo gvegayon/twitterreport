@@ -1,0 +1,18 @@
+suppressMessages({
+  library(stringr)
+  library(rgexf)
+  library(dplyr)
+  library(RCurl)
+  library(XML)
+  library(reshape2)
+  library(dygraphs)
+  library(DT)
+  library(networkD3)
+  
+  source("R/verify.R")
+  source("R/text_mining.R")
+  source("R/text_processing.R")
+  source("R/statistics.R")
+  source("R/methods.R")
+  source('R/networks.R')
+})

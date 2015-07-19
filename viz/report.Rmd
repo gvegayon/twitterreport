@@ -7,57 +7,43 @@ output: html_document
 
 ![Caltech Logo][caltechlogo]
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 setwd('~/Documents/projects/caltech_masters/')
 
-suppressMessages({
-  source('R/text_mining.R')
-  load("data/senate_tweets_example.RData")
-  load("data/senate_info.RData")
-})
+source("R/load_package.R")
+load("data/senate_tweets_example.RData")
+load("data/senate_info.RData")
 ```
 
 ## General stats
 
+### Most popular #hashtags
+
+This graph shows the 5 most popular hashtags in this network through time including the number of times that these were mentioned in total (the table includes more).
+
 ```{r, echo=FALSE,autodep=TRUE}
-suppressMessages({
-  library(dygraphs)
-  library(xts)
-})
-
 # Creating stats (and data)
-senate_tweets$time <- as.character(round(senate_tweets$created_at, "days"))
-time <- as.data.frame(table(senate_tweets$time),responseName = 'N of tweets')
-rownames(time) <- time$Var1
-time <- as.xts(time[,-1,drop=FALSE])
-
-# Graph
-nobs <- nrow(time)
-dygraph(time[(nobs-100):nobs,],main = 'Number of daily tweets',width = 600,
-        height = 300)
-```
-
-
-```{r, echo=FALSE, autodep=TRUE}
-suppressMessages(library(DT))
 elements <- tw_extract(senate_tweets$text)
 
-# Creating table for hashtags
-hashtags <- unlist(elements$hashtag,recursive=TRUE)
-hashtags <- as.data.frame(table(hashtags),responseName = 'N', stringsAsFactors=FALSE)
-hashtags <- hashtags[order(-hashtags$N),]
-datatable(hashtags[1:100,], options = list(pageLength = 5),rownames = FALSE,
-          caption='Most popular hashtags')
+# Graph
+hashtags <- tw_timeseries(elements$hashtag,created_at = senate_tweets$created_at)
+plot(hashtags)
+
+# Table
+plot(tw_table(elements$hashtag),caption='Most popular hashtags')
+```
+
+### Most popular @users
+
+This graph shows the set of 5 of the most popular users. Just like the previous stats, while the graph shows the number of mentions through time, the table shows the total number of mentions.
+
+```{r, echo=FALSE, autodep=TRUE}
+# Graph
+mentions <- tw_timeseries(elements$mention,created_at = senate_tweets$created_at)
+plot(mentions)
 
 # Creating table for users
-mentions <- sapply(elements, "[[", "mention")
-mentions <- unlist(mentions,recursive = TRUE)
-
-mentions <- as.data.frame(table(mentions),responseName = 'N', stringsAsFactors=FALSE)
-mentions <- mentions[order(-mentions$N),]
-datatable(mentions[1:100,], options = list(pageLength = 5),rownames = FALSE, 
-          caption='Most popular users (@mentions)')
-
+plot(tw_table(elements$mention),caption='Most popular users')
 ```
 
 ## Conversation Networks
@@ -80,7 +66,6 @@ senate_network <- tw_conversation(
   lapply(tweets_components$mention,unique),onlyFrom = TRUE,
   group=groups, minInteract = 3)
 
-suppressMessages(library(networkD3))
 forceNetwork(
   Links = senate_network$links,
   Nodes = senate_network$nodes, 
