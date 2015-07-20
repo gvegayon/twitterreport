@@ -54,7 +54,7 @@ plot(mentions)
 plot(tw_table(elements$mention),caption='Most popular users')
 ```
 
-## Conversation Networks
+## Mention Networks
 
 This is the graph of conversations between US senators. Colored by party (light blue are democrats, blue are republicans and orange is independent), the thickness of the edges (links) represent the number of times that one senator mentions the other. Notice that interestingly Democrats and Republicans tend to group around while Sen. Angus King (only independent in the graph) is right in between the two groups.
 
@@ -82,6 +82,15 @@ forceNetwork(
   opacityNoHover = .5, legend = TRUE)
 ```
 
+## Word cloud
+
+What are the senators talking about
+
+```{r, echo=FALSE, autodep=TRUE,dev='png'}
+
+plot(tw_words(senate_tweets$text))
+
+```
 
 
 [caltechlogo]: figures/Caltech_LOGO-Orange_RGB_10pc.png "Caltech"

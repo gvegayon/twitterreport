@@ -31,22 +31,23 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
 }
 
 tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
-  # Spleatting and cleaning
-  txt <- str_split(txt, '\\s+')
+  # Removing URL and punctuation
+  txt <- gsub('https?[:]//[[:graph:]]+|&amp','',txt)
+  txt <- gsub("[^[:alnum:][:space:]']", "", txt)
+  
+  txt <- tolower(txt)
+  txt <- strsplit(txt, '\\s+')
   
   if (length(cleanfun)>0)
     txt <- lapply(txt, cleanfun)
   else
     txt <- lapply(txt, function(x) {
-      # Removing https
-      x <- x[which(!grepl('https?[:]//[[:graph:]]+',x))]
-      gsub('[[:punct:]]','',x)
+      # Removing RT and monosilabus
+      x <- x[!(x %in% c(stopw,'rt',letters))]
     })
   
-  txt <- lapply(txt, function(x) x[!(x %in% stopw)])
+  txt <- lapply(txt, function(x) x[!grepl('^\\s*$',x)])
+  class(txt) <- c('tw_Class_words', class(txt))
   
   txt
 }
-load('data/senate_tweets_example.RData')
-words <- tw_words(senate_tweets$text)
-head(words)

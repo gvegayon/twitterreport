@@ -88,14 +88,3 @@ tw_table <- function(obj) {
   
   obj
 }
-
-plot.tw_Class_table <- function(
-  x, y=NULL, nentries=20, caption='Most popular hashtags',
-  options=list(pageLength=5),...) {
-  datatable(x[1:nentries,], options = options,rownames = FALSE,...)
-}
-
-# elements <- tw_extract(senate_tweets$text)
-# x <- tw_table(elements$mention)
-# head(x)
-# plot(x)

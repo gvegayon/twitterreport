@@ -8,6 +8,8 @@ suppressMessages({
   library(dygraphs)
   library(DT)
   library(networkD3)
+  library(wordcloud)
+  library(tm)
   
   source("R/verify.R")
   source("R/text_mining.R")
