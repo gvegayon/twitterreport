@@ -42,7 +42,8 @@ tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInt
   
   # If there is grouping
   if (length(group)) {
-    nodes <- merge(nodes,group)
+    # nodes <- merge(nodes,group)
+    nodes <- inner_join(nodes,group)
   }
   
   # Returning output

@@ -87,9 +87,7 @@ forceNetwork(
 What are the senators talking about
 
 ```{r, echo=FALSE, autodep=TRUE,dev='png'}
-
 plot(tw_words(senate_tweets$text))
-
 ```
 
 
