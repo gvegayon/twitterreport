@@ -2,8 +2,8 @@
 #' @param source Vector of screen_name
 #' @param target List of vectors of mentions (output from tw_extract)
 #' @param group Data frame with two columns: name & group
-tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1,
-                            group=NULL) {
+tw_network <- function(
+  source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1, group=NULL) {
   
   # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors
@@ -42,14 +42,15 @@ tw_conversation <- function(source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInt
   
   # If there is grouping
   if (length(group)) {
-    # nodes <- merge(nodes,group)
-    nodes <- inner_join(nodes,group)
+    suppressMessages(nodes <- inner_join(nodes,group))
   }
+  else nodes <- cbind(nodes, group='1')
   
   # Returning output
   links$source <- as.numeric(links$source)-1
   links$target <- as.numeric(links$target)-1
   out <- list(nodes=nodes,links=links)
+  class(out) <- c('tw_Class_graph',class(out))
   
   options(stringsAsFactors = oldstasf)
   return(out)

@@ -30,9 +30,14 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
   return(output)
 }
 
+#' @description Process txt extracting relevant words, i.e. rm stop words and
+#'  symbols.
+#' @param txt A character vector with text to analyze
+#' @param Set of stop words
+#' @param cleanfun A function to pass to lapply
 tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
   # Removing URL and punctuation
-  txt <- gsub('https?[:]//[[:graph:]]+|&amp','',txt)
+  txt <- gsub('https?[:]\\/\\/[[:graph:]]+|&amp','',txt)
   txt <- gsub("[^[:alnum:][:space:]']", "", txt)
   
   txt <- tolower(txt)

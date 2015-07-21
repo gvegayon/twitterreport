@@ -12,7 +12,7 @@ suppressMessages({
   library(tm)
   
   source("R/verify.R")
-  source("R/text_mining.R")
+  source("R/web_crawling.R")
   source("R/text_processing.R")
   source("R/statistics.R")
   source("R/methods.R")

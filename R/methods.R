@@ -55,3 +55,24 @@ plot.tw_Class_words <- function(
 # head(words)
 # tab <- plot(words)
 # head(tab,20) 
+
+#' @description Plots a network using D3
+#' @param x A tw_Class_graph object (see tw_network)
+#' @param y Not used
+#' @param ... Further arguments to pass to forceNetwork
+#' @return A D3 graph
+plot.tw_Class_graph <- function(
+  x,y=NULL,
+  nodelabel='name',
+  opacity = .9,
+  opacityNoHover = .5, legend = TRUE,
+  ...) {
+  
+  forceNetwork(
+    Links = x$links,
+    Nodes = x$nodes, 
+    Source="source", Target="target",
+    Value="value",NodeID=nodelabel, Group="group",
+    opacity = opacity,
+    opacityNoHover = opacityNoHover, legend = legend,...)
+}

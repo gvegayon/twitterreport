@@ -1,4 +1,7 @@
 #' @title Wait in minutes to reconnect to the API
+#' @param minutes Number of minutes to wait
+#' @details Internal use only (it's just a timer...)
+#' @return Void
 tw_api_wait <- function(minutes=1) {
   nbars <- 60
   secs  <- minutes*60/nbars
@@ -12,6 +15,10 @@ tw_api_wait <- function(minutes=1) {
   message('done\nTrying again...')
 }
 
+#' @title Make a call to the twitter API
+#' @param query URL inlcuding the parameters
+#' @param minutes Argument passed to tw_api_wait
+#' @return A response class from the httr package (can be parsed with -content-)
 .tw_api_get <- function(query,minutes,...) {
   status <- 0
   while (status!=200) {
@@ -44,6 +51,13 @@ tw_api_wait <- function(minutes=1) {
 }
 
 #' @title Get user information
+#' @param usr User screen name
+#' @details Using the twitter api, get information about a twitter account
+#' @return A data.frame with info of the usr.
+#' @example 
+#' \dontrun{
+#' tw_api_get_usr_profile('gvegayon')
+#' }
 tw_api_get_usr_profile <- function(usr,...) { 
   if (is.na(usr)) return(NULL)
   else 
@@ -104,7 +118,10 @@ tw_api_get_usr_profile <- function(usr,...) {
   return(req)
 }
 
-#' @description Gets tweets from a user up to 1000 statuses
+#' @description Gets status updates (tweets) from a given user
+#' @param usr screen_name of the user
+#' @param count Number of statuses to get 
+#' @return A data.frame with tweets
 tw_api_get_timeline <- function(usr,count=100,...) {
   usr <- gsub("^@","",usr)
   
@@ -156,7 +173,9 @@ tw_api_get_timeline <- function(usr,count=100,...) {
   return(req)
 }
 
-
+#' @description Converts a data.frame into JSON
+#' @param d A data frame
+#' @return A Char string as JSON format
 .tw_df_to_json <- function(d) {
   vnames <- colnames(d)
   for (i in 1:ncol(d)) {
@@ -169,7 +188,12 @@ tw_api_get_timeline <- function(usr,count=100,...) {
 }
 
 #' @description Writes a JSON graph to be used with d3js
+#' @param graph 
 tw_write_json_network <- function(graph) {
+  
+  if (!inherits(graph, 'tw_Class_graph')) 
+    stop('The graph must be tw_Class_graph object (output of tw_')
+  
   nodes <- .tw_df_to_json(graph$nodes)
   links <- .tw_df_to_json(graph$links)
   paste('{\n\t"nodes":[',nodes,'\t\t],\n\t"links":[',links,']\n}',sep="\n")
@@ -293,7 +317,7 @@ tw_api_get_statuses_sample <- function(Timeout=60,...) {
 # load("data/lovewins.RData")
 # load("data/tweets_congress.RData")
 # x <- tw_extract(tweets_congress$text)
-# conv <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"))
-# conv2 <- tw_conversation(tweets_congress$screen_name,lapply(x,"[[","mention"),onlyFrom = TRUE)
+# conv <- tw_network(tweets_congress$screen_name,lapply(x,"[[","mention"))
+# conv2 <- tw_network(tweets_congress$screen_name,lapply(x,"[[","mention"),onlyFrom = TRUE)
 # mygraph <- write.gexf(conv$nodes,conv$edges,keepFactors = TRUE)
 # tw_table(unlist(lapply(x,"[[","hashtag"),recursive = TRUE))

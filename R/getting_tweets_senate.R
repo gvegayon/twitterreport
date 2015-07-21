@@ -30,7 +30,7 @@ save(senate_tweets,file="data/senate_tweets_example.RData")
 #   stringsAsFactors = FALSE)
 # groups$name <- tolower(groups$name)
 # 
-# senate_network <- tw_conversation(
+# senate_network <- tw_network(
 #   tolower(senate_tweets$screen_name),
 #   lapply(tweets_components$mention,unique),onlyFrom = TRUE,
 #   group=groups, minInteract = 3)

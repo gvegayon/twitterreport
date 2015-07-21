@@ -69,17 +69,12 @@ groups <- data.frame(
   stringsAsFactors = FALSE)
 groups$name <- tolower(groups$name)
 
-senate_network <- tw_conversation(
+senate_network <- tw_network(
   tolower(senate_tweets$screen_name),
   lapply(tweets_components$mention,unique),onlyFrom = TRUE,
   group=groups, minInteract = 3)
 
-forceNetwork(
-  Links = senate_network$links,
-  Nodes = senate_network$nodes, 
-  Source="source", Target="target",
-  Value="value",NodeID="real_name", Group="group",opacity = .9,
-  opacityNoHover = .5, legend = TRUE)
+plot(senate_network, nodelabel='real_name')
 ```
 
 ## Word cloud
