@@ -1,4 +1,4 @@
-#' @description Creates a time series object with frecuencies 
+#' Creates a time series object with frecuencies 
 #' @param obj Any of the members of the output list from tw_extract()
 #' @param created_at POSIXct class vector
 #' @param span Number of time units to consider

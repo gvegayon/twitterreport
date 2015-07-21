@@ -1,4 +1,4 @@
-#' @title Wait in minutes to reconnect to the API
+#' Wait in minutes to reconnect to the API
 #' @param minutes Number of minutes to wait
 #' @details Internal use only (it's just a timer...)
 #' @return Void
@@ -121,7 +121,7 @@ tw_api_get_usr_profile <- function(usr,...) {
   return(req)
 }
 
-#' @description Gets status updates (tweets) from a given user
+#' Gets status updates (tweets) from a given user
 #' @param usr screen_name of the user
 #' @param count Number of statuses to get 
 #' @return A data.frame with tweets
@@ -177,7 +177,7 @@ tw_api_get_timeline <- function(usr,count=100,...) {
   return(req)
 }
 
-#' @description Converts a data.frame into JSON
+#' Converts a data.frame into JSON
 #' @param d A data frame
 #' @return A Char string as JSON format
 #' @export
@@ -236,7 +236,7 @@ tw_api_trends_available <- function(...) {
   return(do.call(rbind,req))
 }
 
-#' @description Gets 
+#' Gets the trends for a given place
 #' @param id Id of the place
 #' @export
 tw_api_get_trends_place <- function(id,exclude=FALSE,...) {

@@ -1,4 +1,4 @@
-#' @description Plot time series
+#' Plot time series
 #' @param x a tw_Class_ts class object
 #' @param rangeSelector Wheather or not to include a time range selector
 #' @param main See dygraph
@@ -20,7 +20,7 @@ plot.tw_Class_ts <- function(
   else graph
 }
 
-# plot.tw_Class_ts
+#' Plot a table
 plot.tw_Class_table <- function(
   x, y=NULL, nentries=20, caption='Most popular hashtags',
   options=list(pageLength=5),...) {
@@ -32,7 +32,7 @@ plot.tw_Class_table <- function(
 # head(x)
 # plot(x)
 
-# plot.tw_Class_ts
+#' Plot words
 plot.tw_Class_words <- function(
   x,y=NULL,scale=c(4,.5),min.freq=100,max.n.words=100,
   around=NULL,
@@ -60,7 +60,7 @@ plot.tw_Class_words <- function(
 # tab <- plot(words)
 # head(tab,20) 
 
-#' @description Plots a network using D3
+#' Plots a network using D3
 #' @param x A tw_Class_graph object (see tw_network)
 #' @param y Not used
 #' @param ... Further arguments to pass to forceNetwork

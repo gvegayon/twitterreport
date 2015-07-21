@@ -6,4 +6,4 @@ Authors@R: person("George", "Vega Yon", email = "gvegayon@caltech.edu",
 Description: What the package does (one paragraph)
 Depends: R (>= 3.1.0), stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr
 License: MIT
-LazyData: false
+LazyData: true

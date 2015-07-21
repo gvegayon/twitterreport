@@ -1,7 +1,7 @@
 ^viz$
 ^images$
 ^playground$
-
+^streaming$
 .*[.]Rhistory
 .*[.]xml
 .*[.]RData
