@@ -8,6 +8,8 @@
 #' @param with See dygraph
 #' @param height See dygraph
 #' @param ... Further arguments to be passed to dygraph
+#' @author George G. Vega Yon
+#' @export
 plot.tw_Class_ts <- function(
   x,rangeSelector=TRUE,main='Number of daily tweets',
   xlab=NULL,ylab=NULL,group=NULL,width = 600,height = 400,...) {
@@ -18,6 +20,7 @@ plot.tw_Class_ts <- function(
   else graph
 }
 
+# plot.tw_Class_ts
 plot.tw_Class_table <- function(
   x, y=NULL, nentries=20, caption='Most popular hashtags',
   options=list(pageLength=5),...) {
@@ -29,6 +32,7 @@ plot.tw_Class_table <- function(
 # head(x)
 # plot(x)
 
+# plot.tw_Class_ts
 plot.tw_Class_words <- function(
   x,y=NULL,scale=c(4,.5),min.freq=100,max.n.words=100,
   around=NULL,
@@ -61,6 +65,7 @@ plot.tw_Class_words <- function(
 #' @param y Not used
 #' @param ... Further arguments to pass to forceNetwork
 #' @return A D3 graph
+#' @export
 plot.tw_Class_graph <- function(
   x,y=NULL,
   nodelabel='name',

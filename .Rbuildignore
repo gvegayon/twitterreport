@@ -1,0 +1,11 @@
+^viz$
+^images$
+^playground$
+
+.*[.]Rhistory
+.*[.]xml
+.*[.]RData
+.*[.]json
+^.*\.Rproj$
+^\.Rproj\.user$
+^data$

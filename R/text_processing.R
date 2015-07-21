@@ -1,12 +1,14 @@
-#' @title Extract info from tweets
-#' @aliases 
-#' @description Extract email accounts, mentions, hashtags and urls from tweets
+#' Extract info from tweets
 #' @param txt Character
 #' @param obj List of objects to extract
 #' @param normalize bool whether or not to normalize emails, hashtags and mentions (to lower)
 #' @return List
 #' @examples  
+#' \dontrun{
 #' head(tw_extract(tweets$text))
+#' }
+#' @author George G. Vega Yon
+#' @export
 tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
                        normalize=TRUE) {
   # patterns
@@ -30,11 +32,13 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
   return(output)
 }
 
-#' @description Process txt extracting relevant words, i.e. rm stop words and
+#' Process txt extracting relevant words, i.e. rm stop words and
 #'  symbols.
 #' @param txt A character vector with text to analyze
 #' @param Set of stop words
 #' @param cleanfun A function to pass to lapply
+#' @author George G. Vega Yon
+#' @export
 tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
   # Removing URL and punctuation
   txt <- gsub('https?[:]\\/\\/[[:graph:]]+|&amp','',txt)

@@ -2,6 +2,8 @@
 #' @param source Vector of screen_name
 #' @param target List of vectors of mentions (output from tw_extract)
 #' @param group Data frame with two columns: name & group
+#' @author George G. Vega Yon
+#' @export
 tw_network <- function(
   source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1, group=NULL) {
   

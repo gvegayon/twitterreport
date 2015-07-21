@@ -1,0 +1,9 @@
+Package: twitteranalysis
+Title: What The Package Does (one line, title case required)
+Version: 0.15.7
+Authors@R: person("George", "Vega Yon", email = "gvegayon@caltech.edu",
+                  role = c("aut", "cre"))
+Description: What the package does (one paragraph)
+Depends: R (>= 3.1.0), stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr
+License: MIT
+LazyData: false

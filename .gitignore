@@ -1,0 +1,16 @@
+.httr-oauth
+.Rproj.user
+
+# Data
+*.csv
+*.RData
+*.json
+*.html
+*.htm
+
+# Others
+*.py
+*.pdf
+*.tar
+*.gz
+

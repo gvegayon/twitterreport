@@ -6,6 +6,7 @@
 #' @param units Time unit
 #' @return xts class 
 #' @author George G. Vega Yon
+#' @export
 tw_timeseries <- function(
   obj,created_at, units=c('secs','mins','hours','days'),
   nseries=5, span=30) {
@@ -59,6 +60,9 @@ tw_timeseries <- function(
   return(series)
 }
 
+#' Internal use
+#' @author George G. Vega Yon
+#' @export
 .tw_format_unit <- function(obj) {
   units <- attributes(obj)$units
   if (units == 'days') return('%Y-%m-%d')
@@ -76,8 +80,10 @@ tw_timeseries <- function(
 # library(dygraphs)
 # dygraph(z,main = 'Number of daily tweets',width = 600,height = 300)
 
-#' @description Creates a table
-#' hashtags <- unlist(elements$hashtag,recursive=TRUE)
+#' Creates a table
+#' @param obj Some text
+#' @author George G. Vega Yon
+#' @export
 tw_table <- function(obj) {
   obj <- unlist(obj,recursive=TRUE)
   obj <- as.data.frame(table(obj),responseName='n', stringsAsFactors=FALSE)

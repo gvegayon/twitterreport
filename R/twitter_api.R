@@ -2,6 +2,7 @@
 #' @param minutes Number of minutes to wait
 #' @details Internal use only (it's just a timer...)
 #' @return Void
+#' @export
 tw_api_wait <- function(minutes=1) {
   nbars <- 60
   secs  <- minutes*60/nbars
@@ -19,6 +20,7 @@ tw_api_wait <- function(minutes=1) {
 #' @param query URL inlcuding the parameters
 #' @param minutes Argument passed to tw_api_wait
 #' @return A response class from the httr package (can be parsed with -content-)
+#' @export
 .tw_api_get <- function(query,minutes,...) {
   status <- 0
   while (status!=200) {
@@ -50,14 +52,15 @@ tw_api_wait <- function(minutes=1) {
   return(req)
 }
 
-#' @title Get user information
+#' Get user information
 #' @param usr User screen name
 #' @details Using the twitter api, get information about a twitter account
 #' @return A data.frame with info of the usr.
-#' @example 
+#' @examples
 #' \dontrun{
 #' tw_api_get_usr_profile('gvegayon')
 #' }
+#' @export
 tw_api_get_usr_profile <- function(usr,...) { 
   if (is.na(usr)) return(NULL)
   else 
@@ -122,6 +125,7 @@ tw_api_get_usr_profile <- function(usr,...) {
 #' @param usr screen_name of the user
 #' @param count Number of statuses to get 
 #' @return A data.frame with tweets
+#' @export
 tw_api_get_timeline <- function(usr,count=100,...) {
   usr <- gsub("^@","",usr)
   
@@ -176,6 +180,7 @@ tw_api_get_timeline <- function(usr,count=100,...) {
 #' @description Converts a data.frame into JSON
 #' @param d A data frame
 #' @return A Char string as JSON format
+#' @export
 .tw_df_to_json <- function(d) {
   vnames <- colnames(d)
   for (i in 1:ncol(d)) {
@@ -187,7 +192,7 @@ tw_api_get_timeline <- function(usr,count=100,...) {
   paste0(f,collapse=',\n')
 }
 
-#' @description Writes a JSON graph to be used with d3js
+#' Writes a JSON graph to be used with d3js
 #' @param graph 
 tw_write_json_network <- function(graph) {
   
@@ -199,7 +204,9 @@ tw_write_json_network <- function(graph) {
   paste('{\n\t"nodes":[',nodes,'\t\t],\n\t"links":[',links,']\n}',sep="\n")
 }
 
-#' @description Get codes from the places where trends are availables
+#' Get codes from the places where trends are availables
+#' @param ... Ignored
+#' @export
 tw_api_trends_available <- function(...) {
   req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',minutes = 5)
   
@@ -230,6 +237,8 @@ tw_api_trends_available <- function(...) {
 }
 
 #' @description Gets 
+#' @param id Id of the place
+#' @export
 tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
   
   # Making the request
@@ -261,6 +270,9 @@ tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
   return(trends)
 }
 
+#' Gets a sample through the sample API
+#' @param Timeout Number of seconds
+#' @export
 tw_api_get_statuses_sample <- function(Timeout=60,...) {
   
   # Parameters
