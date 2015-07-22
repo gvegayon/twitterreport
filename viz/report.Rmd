@@ -8,11 +8,13 @@ output: html_document
 ![Caltech Logo][caltechlogo]
 
 ```{r, echo=FALSE, message=FALSE}
-setwd('~/Documents/projects/caltech_masters/')
+setwd('~/Documents/projects/twitteranalysis/')
 
-source("R/load_package.R")
-load("data/senate_tweets_example.RData")
-load("data/senate_info.RData")
+# source("R/load_package.R")
+library(twitteranalysis)
+source('playground/verify.R')
+load("ddata/senate_tweets_example.RData")
+load("ddata/senate_info.RData")
 ```
 
 <dl>
@@ -38,7 +40,8 @@ hashtags <- tw_timeseries(elements$hashtag,created_at = senate_tweets$created_at
 plot(hashtags)
 
 # Table
-plot(tw_table(elements$hashtag),caption='Most popular hashtags')
+twtab <- tw_table(elements$hashtag)
+plot(twtab,caption='Most popular hashtags')
 ```
 
 ### Most popular @users

@@ -21,6 +21,7 @@ plot.tw_Class_ts <- function(
 }
 
 #' Plot a table
+#' @export
 plot.tw_Class_table <- function(
   x, y=NULL, nentries=20, caption='Most popular hashtags',
   options=list(pageLength=5),...) {
@@ -33,6 +34,7 @@ plot.tw_Class_table <- function(
 # plot(x)
 
 #' Plot words
+#' @export
 plot.tw_Class_words <- function(
   x,y=NULL,scale=c(4,.5),min.freq=100,max.n.words=100,
   around=NULL,
