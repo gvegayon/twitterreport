@@ -1,5 +1,5 @@
-Package: twitteranalysis
-Title: What The Package Does (one line, title case required)
+Package: twitterreport
+Title: Out-of-the-box analysis and reporting tools for twitter
 Version: 0.15.7
 Authors@R: person("George", "Vega Yon", email = "gvegayon@caltech.edu",
                   role = c("aut", "cre"))
