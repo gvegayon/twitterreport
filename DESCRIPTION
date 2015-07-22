@@ -3,9 +3,11 @@ Title: Out-of-the-Box Analysis and Reporting Tools for Twitter
 Version: 0.15.7
 Authors@R: person("George", "Vega Yon", email = "gvegayon@caltech.edu",
                   role = c("aut", "cre"))
-Description: What the package does (one paragraph)
+Description: Set of tools to download, process and analyze 'tweets', including methods
+  for exporting the outputs through 'D3js'.
 URL: http://github.com/gvegayon/twitterreport
 BugReports: http://github.com/gvegayon/twitterreport/issues
-Depends: R (>= 3.1.0), stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr
-License: MIT
+Depends: R (>= 3.1.0)
+Imports: stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr, RColorBrewer, RCurl
+License: MIT + file LICENSE
 LazyData: true

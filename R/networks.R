@@ -29,19 +29,19 @@ tw_network <- function(
   })))
   
   # If excludes self
-  if (excludeSelf) tmp <- subset(tmp,subset=source!=target)
+  if (excludeSelf) tmp <- subset(tmp,source!=target)
   
   # Frequency
   tmp <- group_by(tmp, source, target)
-  tmp <- as.data.frame(summarise(tmp,value=n()))
+  tmp <- as.data.frame(summarise(tmp,'value'=n()))
   
   # Filtering interactions
-  tmp <- subset(tmp,subset=value>=minInteract)
+  tmp <- subset(tmp,value>=minInteract)
   
   # Encoding links
   ne <- nrow(tmp)
   tmp2 <- as.factor(c(tmp$source,tmp$target))
-  links <- data.frame(source=tmp2[1:ne],target=tmp2[(ne+1):(ne*2)],value=tmp$value)
+  links <- data.frame(source=tmp2[1:ne],target=tmp2[(ne+1):(ne*2)],value=tmp[['value']])
   nodes <- unique(unlist(links[,-3]))
   
   nodes <- data.frame(id=as.numeric(nodes)-1,name=as.character(nodes))
@@ -49,7 +49,7 @@ tw_network <- function(
   
   # If there is grouping
   if (length(group)) {
-    suppressMessages(nodes <- inner_join(nodes,group))
+    suppressMessages(nodes <- left_join(nodes,group))
   }
   else nodes <- cbind(nodes, group='1')
   

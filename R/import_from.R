@@ -1,6 +1,6 @@
 #' @importFrom stringr str_extract str_detect str_extract_all str_replace
 NULL
-#' @importFrom dplyr summarise inner_join group_by bind_rows
+#' @importFrom dplyr summarise left_join group_by bind_rows
 NULL
 #' @importFrom DT datatable
 NULL
@@ -10,11 +10,13 @@ NULL
 NULL
 #' @importFrom networkD3 forceNetwork
 NULL
-
-#' @importFrom RColorBrewer brewer.pal
+#' @importFrom wordcloud wordcloud
 NULL
 #' @importFrom tm stopwords
 NULL
-
+#' @importFrom RColorBrewer brewer.pal
+NULL
+#' @importFrom RCurl getURL
+NULL
 # @importFrom NLP 
 # NULL
