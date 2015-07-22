@@ -4,10 +4,16 @@
 \alias{tw_api_get_trends_place}
 \title{Gets the trends for a given place}
 \usage{
-tw_api_get_trends_place(id, exclude = FALSE, ...)
+tw_api_get_trends_place(id, twitter_token, exclude = FALSE, ...)
 }
 \arguments{
 \item{id}{Id of the place}
+
+\item{twitter_token}{Token}
+
+\item{exclude}{Whether to exclude hashtags or not}
+
+\item{...}{Ignored}
 }
 \description{
 Gets the trends for a given place

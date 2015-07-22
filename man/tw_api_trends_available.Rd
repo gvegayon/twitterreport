@@ -4,9 +4,11 @@
 \alias{tw_api_trends_available}
 \title{Get codes from the places where trends are availables}
 \usage{
-tw_api_trends_available(...)
+tw_api_trends_available(twitter_token, ...)
 }
 \arguments{
+\item{twitter_token}{Token}
+
 \item{...}{Ignored}
 }
 \description{

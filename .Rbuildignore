@@ -2,6 +2,7 @@
 ^images$
 ^playground$
 ^streaming$
+^papers$
 .*[.]Rhistory
 .*[.]xml
 .*[.]RData
@@ -10,3 +11,8 @@
 ^\.Rproj\.user$
 ^data$
 ^\.httr-oauth$
+^README\.md$
+^makefile$
+^ddata$
+^playground$
+^twitterreport_.+$

@@ -35,7 +35,7 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
 #' Process txt extracting relevant words, i.e. rm stop words and
 #'  symbols.
 #' @param txt A character vector with text to analyze
-#' @param Set of stop words
+#' @param stopw Set of stop words
 #' @param cleanfun A function to pass to lapply
 #' @author George G. Vega Yon
 #' @export

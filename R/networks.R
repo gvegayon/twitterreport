@@ -1,6 +1,11 @@
 #' @title Creates conversation graph (directed)
 #' @param source Vector of screen_name
 #' @param target List of vectors of mentions (output from tw_extract)
+#' @param onlyFrom Whether to fileter the links to those only where 
+#' source and target are in the \code{source} vector
+#' @param excludeSelf Whether to exclude selflinks
+#' @param minInteract Minimun number of interactions to consider (links
+#' below this number will be excluded
 #' @param group Data frame with two columns: name & group
 #' @author George G. Vega Yon
 #' @export

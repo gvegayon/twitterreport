@@ -21,11 +21,11 @@
 
 \item{group}{See dygraph}
 
+\item{width}{See dygraph}
+
 \item{height}{See dygraph}
 
 \item{...}{Further arguments to be passed to dygraph}
-
-\item{with}{See dygraph}
 }
 \description{
 Plot time series

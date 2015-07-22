@@ -10,9 +10,9 @@ tw_words(txt, stopw = stopwords("en"), cleanfun = NULL)
 \arguments{
 \item{txt}{A character vector with text to analyze}
 
-\item{cleanfun}{A function to pass to lapply}
+\item{stopw}{Set of stop words}
 
-\item{Set}{of stop words}
+\item{cleanfun}{A function to pass to lapply}
 }
 \description{
 Process txt extracting relevant words, i.e. rm stop words and

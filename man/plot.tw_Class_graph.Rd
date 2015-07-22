@@ -10,7 +10,15 @@
 \arguments{
 \item{x}{A tw_Class_graph object (see tw_network)}
 
-\item{y}{Not used}
+\item{y}{Ignored}
+
+\item{nodelabel}{Name of the column that containts the name}
+
+\item{opacity}{See \code{\link{forceNetwork}}}
+
+\item{opacityNoHover}{Idem}
+
+\item{legend}{Whether to include a legend or not}
 
 \item{...}{Further arguments to pass to forceNetwork}
 }

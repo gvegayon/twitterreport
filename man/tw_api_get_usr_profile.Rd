@@ -4,10 +4,14 @@
 \alias{tw_api_get_usr_profile}
 \title{Get user information}
 \usage{
-tw_api_get_usr_profile(usr, ...)
+tw_api_get_usr_profile(usr, twitter_token, ...)
 }
 \arguments{
 \item{usr}{User screen name}
+
+\item{twitter_token}{Token}
+
+\item{...}{Additional arguments passed to GET}
 }
 \value{
 A data.frame with info of the usr.

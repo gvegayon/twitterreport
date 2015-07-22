@@ -1,3 +1,19 @@
+#' Generate twitter tokens
+#' @param appname See \code{\link{oauth_app}}
+#' @param key See \code{\link{oauth_app}}.
+#' @param secret See \code{\link{oauth_app}}
+#' @return A Token1.0 reference class (RC) object.
+#' @examples 
+#' \dontrun{
+#' tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
+#' tw_api_get_usr_profile('gvegayon',tokens)
+#' }
+#' @export
+tw_gen_token <- function(appname,key,secret=NULL) {
+  myapp <- oauth_app(appname,key,secret)
+  oauth1.0_token(oauth_endpoints('twitter'),myapp)
+}
+
 #' Wait in minutes to reconnect to the API
 #' @param minutes Number of minutes to wait
 #' @details Internal use only (it's just a timer...)
@@ -19,17 +35,18 @@ tw_api_wait <- function(minutes=1) {
 #' @title Make a call to the twitter API
 #' @param query URL inlcuding the parameters
 #' @param minutes Argument passed to tw_api_wait
+#' @param ... Additional arguments passed to GET
 #' @return A response class from the httr package (can be parsed with -content-)
 #' @export
-.tw_api_get <- function(query,minutes,...) {
+.tw_api_get <- function(query,twitter_token,minutes,...) {
   status <- 0
   while (status!=200) {
     # Making the call
-    req <- GET(query, config(token=twitter_token))
+    req <- GET(query, config(token=twitter_token),...)
     status <- status_code(req)
     if (status!=200) print(req)
     if (status==429) {
-      message('(429) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application’s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
+      message('(429) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application\'s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
       tw_api_wait(minutes)
     }
     else if (status==401) {
@@ -54,6 +71,8 @@ tw_api_wait <- function(minutes=1) {
 
 #' Get user information
 #' @param usr User screen name
+#' @param twitter_token Token
+#' @param ... Additional arguments passed to GET
 #' @details Using the twitter api, get information about a twitter account
 #' @return A data.frame with info of the usr.
 #' @examples
@@ -61,13 +80,14 @@ tw_api_wait <- function(minutes=1) {
 #' tw_api_get_usr_profile('gvegayon')
 #' }
 #' @export
-tw_api_get_usr_profile <- function(usr,...) { 
+tw_api_get_usr_profile <- function(usr,twitter_token,...) { 
   if (is.na(usr)) return(NULL)
   else 
     req <- .tw_api_get(
       paste0(
         "https://api.twitter.com/1.1/users/show.json?screen_name=",usr),
-      minutes=5)
+      twitter_token,
+      5,...)
   
   # Checking if everything went fine
   if (is.null(req)) return(NULL)
@@ -123,10 +143,12 @@ tw_api_get_usr_profile <- function(usr,...) {
 
 #' Gets status updates (tweets) from a given user
 #' @param usr screen_name of the user
+#' @param twitter_token Token
 #' @param count Number of statuses to get 
+#' @param ... Additional arguments passed to GET
 #' @return A data.frame with tweets
 #' @export
-tw_api_get_timeline <- function(usr,count=100,...) {
+tw_api_get_timeline <- function(usr,twitter_token,count=100,...) {
   usr <- gsub("^@","",usr)
   
   # API CALL
@@ -134,7 +156,8 @@ tw_api_get_timeline <- function(usr,count=100,...) {
     paste0(
       "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=",usr,
       "&count=",count,'&include_entities=false'),
-    minutes = 5
+    twitter_token,
+    5,...
   )
   
   # Checking if everything went fine
@@ -193,7 +216,8 @@ tw_api_get_timeline <- function(usr,count=100,...) {
 }
 
 #' Writes a JSON graph to be used with d3js
-#' @param graph 
+#' @param graph A \code{tw_Class_graph} class object (See \code{\link{tw_network}})
+#' @export
 tw_write_json_network <- function(graph) {
   
   if (!inherits(graph, 'tw_Class_graph')) 
@@ -205,10 +229,12 @@ tw_write_json_network <- function(graph) {
 }
 
 #' Get codes from the places where trends are availables
+#' @param twitter_token Token
 #' @param ... Ignored
 #' @export
-tw_api_trends_available <- function(...) {
-  req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',minutes = 5)
+tw_api_trends_available <- function(twitter_token,...) {
+  req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',
+                     twitter_token,minutes = 5,...)
   
   # Checking if everything went fine
   if (is.null(req)) return(NULL)
@@ -238,13 +264,16 @@ tw_api_trends_available <- function(...) {
 
 #' Gets the trends for a given place
 #' @param id Id of the place
+#' @param twitter_token Token
+#' @param exclude Whether to exclude hashtags or not
+#' @param ... Ignored
 #' @export
-tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
+tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   
   # Making the request
   req <- .tw_api_get(
     paste0('https://api.twitter.com/1.1/trends/place.json?id=',id,
-           ifelse(exclude,'&exclude=hashtags','')), 5)
+           ifelse(exclude,'&exclude=hashtags','')),twitter_token, 5)
   
   if (is.null(req)) return(NULL)
   else if (class(req)=='response')
@@ -271,9 +300,11 @@ tw_api_get_trends_place <- function(id,exclude=FALSE,...) {
 }
 
 #' Gets a sample through the sample API
+#' @param twitter_token Token
 #' @param Timeout Number of seconds
+#' @param ... Additional parameters to be passed to \code{\link{GET}}
 #' @export
-tw_api_get_statuses_sample <- function(Timeout=60,...) {
+tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
   
   # Parameters
   .start_time<-Sys.time()
@@ -286,8 +317,8 @@ tw_api_get_statuses_sample <- function(Timeout=60,...) {
                         if (tdif > Timeout) stop()
                         writeBin(x,tweets)
                         length(x)
-                      })))
-  message('ok')
+                      }),...))
+  # message('ok')
   con <- tempfile()
   on.exit(close(con))
   writeBin(tweets,con)

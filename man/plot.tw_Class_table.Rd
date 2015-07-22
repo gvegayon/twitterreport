@@ -7,6 +7,19 @@
 \method{plot}{tw_Class_table}(x, y = NULL, nentries = 20,
   caption = "Most popular hashtags", options = list(pageLength = 5), ...)
 }
+\arguments{
+\item{x}{An object of class \code{tw_Class_table}}
+
+\item{y}{Ignored}
+
+\item{nentries}{Number of rows to include in the table}
+
+\item{caption}{Title of the table}
+
+\item{options}{Options to be passed to \code{\link{datatable}}}
+
+\item{...}{Additional parameters to be passed to \code{\link{datatable}}}
+}
 \description{
 Plot a table
 }

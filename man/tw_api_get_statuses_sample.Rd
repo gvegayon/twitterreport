@@ -4,10 +4,14 @@
 \alias{tw_api_get_statuses_sample}
 \title{Gets a sample through the sample API}
 \usage{
-tw_api_get_statuses_sample(Timeout = 60, ...)
+tw_api_get_statuses_sample(twitter_token, Timeout = 60, ...)
 }
 \arguments{
+\item{twitter_token}{Token}
+
 \item{Timeout}{Number of seconds}
+
+\item{...}{Additional parameters to be passed to \code{\link{GET}}}
 }
 \description{
 Gets a sample through the sample API

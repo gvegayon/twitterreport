@@ -2,8 +2,10 @@
 #' @param uri Web address of the website from which to extract twitter accounts
 #' @param redirect Whether to follow up the link or not (redirection)
 #' @examples
+#' \dontrun{
 #' tw_get_tw_account('http://twitter.pbworks.com/w/page/1779986/USGovernment')
 #' tw_get_tw_account('http://caltech.edu')
+#' }
 #' @author George G. Vega Yon
 #' @export
 tw_get_tw_account <- function(uri, redirect=TRUE) {

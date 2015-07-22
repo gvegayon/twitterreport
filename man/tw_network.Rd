@@ -12,6 +12,14 @@ tw_network(source, target, onlyFrom = FALSE, excludeSelf = TRUE,
 
 \item{target}{List of vectors of mentions (output from tw_extract)}
 
+\item{onlyFrom}{Whether to fileter the links to those only where
+source and target are in the \code{source} vector}
+
+\item{excludeSelf}{Whether to exclude selflinks}
+
+\item{minInteract}{Minimun number of interactions to consider (links
+below this number will be excluded}
+
 \item{group}{Data frame with two columns: name & group}
 }
 \description{

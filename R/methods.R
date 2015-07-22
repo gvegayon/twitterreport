@@ -5,7 +5,7 @@
 #' @param xlab See dygraph
 #' @param ylab See dygraph
 #' @param group See dygraph
-#' @param with See dygraph
+#' @param width See dygraph
 #' @param height See dygraph
 #' @param ... Further arguments to be passed to dygraph
 #' @author George G. Vega Yon
@@ -21,6 +21,12 @@ plot.tw_Class_ts <- function(
 }
 
 #' Plot a table
+#' @param x An object of class \code{tw_Class_table}
+#' @param y Ignored
+#' @param nentries Number of rows to include in the table
+#' @param caption Title of the table
+#' @param options Options to be passed to \code{\link{datatable}}
+#' @param ... Additional parameters to be passed to \code{\link{datatable}}
 #' @export
 plot.tw_Class_table <- function(
   x, y=NULL, nentries=20, caption='Most popular hashtags',
@@ -34,10 +40,16 @@ plot.tw_Class_table <- function(
 # plot(x)
 
 #' Plot words
+#' @param x A \code{tw_Class_words} object
+#' @param y Ignored
+#' @param scale See \code{\link{wordcloud}}
+#' @param min.freq See \code{\link{wordcloud}}
+#' @param max.n.words Max number of words to include
+#' @param colors See \code{\link{wordcloud}}
+#' @param ... Further arguments to be passed to \code{\link{wordcloud}}
 #' @export
 plot.tw_Class_words <- function(
   x,y=NULL,scale=c(4,.5),min.freq=100,max.n.words=100,
-  around=NULL,
   colors=brewer.pal(min(c(9,max.n.words)),'Blues'),
   ...) {
   
@@ -47,6 +59,7 @@ plot.tw_Class_words <- function(
   x <- x[order(-x$n),] 
   
   # Plotting
+  max.n.words <- min(c(max.n.words,nrow(x)))
   with(x[1:max.n.words,],
        wordcloud(Var1,n,scale,min.freq, 
                  colors = colors,...)
@@ -64,7 +77,11 @@ plot.tw_Class_words <- function(
 
 #' Plots a network using D3
 #' @param x A tw_Class_graph object (see tw_network)
-#' @param y Not used
+#' @param y Ignored
+#' @param nodelabel Name of the column that containts the name
+#' @param opacity See \code{\link{forceNetwork}}
+#' @param opacityNoHover Idem
+#' @param legend Whether to include a legend or not
 #' @param ... Further arguments to pass to forceNetwork
 #' @return A D3 graph
 #' @export

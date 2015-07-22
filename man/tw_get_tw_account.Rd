@@ -15,8 +15,10 @@ tw_get_tw_account(uri, redirect = TRUE)
 Function to enter the website and get the twitter account
 }
 \examples{
+\dontrun{
 tw_get_tw_account('http://twitter.pbworks.com/w/page/1779986/USGovernment')
 tw_get_tw_account('http://caltech.edu')
+}
 }
 \author{
 George G. Vega Yon

@@ -4,12 +4,16 @@
 \alias{tw_api_get_timeline}
 \title{Gets status updates (tweets) from a given user}
 \usage{
-tw_api_get_timeline(usr, count = 100, ...)
+tw_api_get_timeline(usr, twitter_token, count = 100, ...)
 }
 \arguments{
 \item{usr}{screen_name of the user}
 
+\item{twitter_token}{Token}
+
 \item{count}{Number of statuses to get}
+
+\item{...}{Additional arguments passed to GET}
 }
 \value{
 A data.frame with tweets
