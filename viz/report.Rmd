@@ -8,11 +8,15 @@ output: html_document
 ![Caltech Logo][caltechlogo]
 
 ```{r, echo=FALSE, message=FALSE}
-setwd('~/Documents/projects/twitteranalysis/')
+setwd('~/Documents/projects/twitterreport/')
 
-# source("R/load_package.R")
-library(twitteranalysis)
-source('playground/verify.R')
+library(twitterreport)
+
+# Load the credentials
+# key<-tw_gen_token('myappname','key','secret')
+source('playground/credentials.R')
+
+# Loading the data
 load("ddata/senate_tweets_example.RData")
 load("ddata/senate_info.RData")
 ```

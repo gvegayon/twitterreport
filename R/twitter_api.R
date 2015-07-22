@@ -72,7 +72,8 @@ tw_api_wait <- function(minutes=1) {
 #' Get user information
 #' @param usr User screen name
 #' @param twitter_token Token
-#' @param ... Additional arguments passed to GET
+#' @param quietly Whether to show the 'success' message or not
+#' @param ... Additional arguments passed to \code{\link{GET}}
 #' @details Using the twitter api, get information about a twitter account
 #' @return A data.frame with info of the usr.
 #' @examples
@@ -80,7 +81,7 @@ tw_api_wait <- function(minutes=1) {
 #' tw_api_get_usr_profile('gvegayon')
 #' }
 #' @export
-tw_api_get_usr_profile <- function(usr,twitter_token,...) { 
+tw_api_get_usr_profile <- function(usr,twitter_token,quietly=FALSE,...) { 
   if (is.na(usr)) return(NULL)
   else 
     req <- .tw_api_get(
@@ -130,14 +131,7 @@ tw_api_get_usr_profile <- function(usr,twitter_token,...) {
     verified                = req$verified
   )
   
-  # Setting the proper class
-  # Source https://dev.twitter.com/overview/api/users
-  #   var <- c('contributors_enabled','default_profile_image','default_profile',
-  #                    'geo_enabled','is_translator','notifications','protected','verified')
-  #   req[,var] <- as.logical(req[,var])
-  # req$created_at <- strptime(req$created_at,'%a %b %d %T +0000 %Y')
-  
-  message('Success, info of user ',usr,' correctly retrieved')
+  if (!quietly) message('Success, info of user ',usr,' correctly retrieved')
   return(req)
 }
 
@@ -145,10 +139,11 @@ tw_api_get_usr_profile <- function(usr,twitter_token,...) {
 #' @param usr screen_name of the user
 #' @param twitter_token Token
 #' @param count Number of statuses to get 
-#' @param ... Additional arguments passed to GET
+#' @param quietly Whether or not to show the 'success' message
+#' @param ... Additional arguments passed to \code{\link{GET}}
 #' @return A data.frame with tweets
 #' @export
-tw_api_get_timeline <- function(usr,twitter_token,count=100,...) {
+tw_api_get_timeline <- function(usr,twitter_token,count=100,quietly=FALSE,...) {
   usr <- gsub("^@","",usr)
   
   # API CALL
@@ -196,7 +191,7 @@ tw_api_get_timeline <- function(usr,twitter_token,count=100,...) {
   req <- as.data.frame(bind_rows(req))
   req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
   
-  message('Success, timeline of user ',usr,' correctly retrieved')
+  if (!quietly) message('Success, timeline of user ',usr,' correctly retrieved')
   return(req)
 }
 

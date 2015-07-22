@@ -4,14 +4,16 @@
 \alias{tw_api_get_usr_profile}
 \title{Get user information}
 \usage{
-tw_api_get_usr_profile(usr, twitter_token, ...)
+tw_api_get_usr_profile(usr, twitter_token, quietly = FALSE, ...)
 }
 \arguments{
 \item{usr}{User screen name}
 
 \item{twitter_token}{Token}
 
-\item{...}{Additional arguments passed to GET}
+\item{quietly}{Whether to show the 'success' message or not}
+
+\item{...}{Additional arguments passed to \code{\link{GET}}}
 }
 \value{
 A data.frame with info of the usr.

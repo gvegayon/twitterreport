@@ -9,7 +9,6 @@
 .*[.]json
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^data$
 ^\.httr-oauth$
 ^README\.md$
 ^makefile$
