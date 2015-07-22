@@ -5,7 +5,6 @@
 ^papers$
 .*[.]Rhistory
 .*[.]xml
-.*[.]RData
 .*[.]json
 ^.*\.Rproj$
 ^\.Rproj\.user$
