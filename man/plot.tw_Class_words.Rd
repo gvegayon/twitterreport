@@ -21,7 +21,7 @@
 
 \item{colors}{See \code{\link{wordcloud}}}
 
-\item{...}{}
+\item{...}{Further arguments to be passed to \code{\link{wordcloud}}}
 }
 \description{
 Plot words
