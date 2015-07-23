@@ -33,18 +33,19 @@ tw_api_wait <- function(minutes=1) {
 }
 
 #' @title Make a call to the twitter API
-#' @param query URL inlcuding the parameters
+#' @param q URL inlcuding the parameters
 #' @param minutes Argument passed to tw_api_wait
 #' @param ... Additional arguments passed to GET
 #' @return A response class from the httr package (can be parsed with -content-)
 #' @export
-.tw_api_get <- function(query,twitter_token,minutes,...) {
+.tw_api_get <- function(q,twitter_token,minutes,noisy=FALSE,...) {
   status <- 0
   while (status!=200) {
     # Making the call
-    req <- GET(query, config(token=twitter_token),...)
+    req <- GET(q, config(token=twitter_token),...)
     status <- status_code(req)
     if (status!=200) print(req)
+    
     if (status==429) {
       message('(429) Too Many Requests: Returned in API v1.1 when a request cannot be served due to the application\'s rate limit having been exhausted for the resource. See Rate Limiting in API v1.1.')
       tw_api_wait(minutes)
@@ -166,9 +167,14 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 #' 
 #' Using the twitter API, gets the status updates of a given user
 #' 
-#' @param usr screen_name of the user
+#' @param screen_name of the user
 #' @param twitter_token Token
+#' @param user_id The ID of the user for whom to return results for
+#' @param since_id Returns results with an ID greater than (that is, more recent than) the specified ID
 #' @param count Number of statuses to get 
+#' @param max_id Returns results with an ID less than (that is, older than) or equal to the specified ID
+#' @param exclude_replies This parameter will prevent replies from appearing in the returned timeline
+#' @param include_rts When set to false, the timeline will strip any native retweets
 #' @param quietly Whether or not to show the 'success' message
 #' @param ... Additional arguments passed to \code{\link{GET}}
 #' @return A data.frame with tweets (if success), with the following columns: 
@@ -210,16 +216,21 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 #' @references Twitter REST API (GET statuses/user_timeline)
 #' \url{https://dev.twitter.com/rest/reference/get/statuses/user_timeline}
 #' @export
-tw_api_get_statuses_user_timeline <- function(usr,twitter_token,count=100,quietly=FALSE,...) {
-  usr <- gsub("^@","",usr)
+tw_api_get_statuses_user_timeline <- function(
+  screen_name=NULL,twitter_token, user_id=NULL, since_id=NULL, count=100,
+  max_id=NULL, exclude_replies=NULL, include_rts=NULL,
+  quietly=FALSE,...) {
+  
+  screen_name <- gsub("^@","",screen_name)
   
   # API CALL
   req <- .tw_api_get(
-    paste0(
-      "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=",usr,
-      "&count=",count,'&include_entities=false'),
-    twitter_token,
-    5,...
+    q="https://api.twitter.com/1.1/statuses/user_timeline.json",
+    twitter_token, 5, query=list(
+      screen_name=screen_name, user_id=user_id, since_id=since_id, count=count,
+      max_id=max_id, exclude_replies=exclude_replies, include_rts=include_rts,
+      include_entities='false'), 
+    ...
   )
   
   # Checking if everything went fine
@@ -260,7 +271,122 @@ tw_api_get_statuses_user_timeline <- function(usr,twitter_token,count=100,quietl
   
   class(req) <- c('tw_Class_api_timeline', class(req))
   
-  if (!quietly) message('Success, timeline of user ',usr,' correctly retrieved')
+  if (!quietly) message('Success, timeline of user ',req$screen_name[1],' correctly retrieved')
+  return(req)
+}
+
+#' Gets status updates (tweets) via serach
+#' 
+#' Using the twitter API, gets the status updates via search
+#' 
+#' @param q Search query
+#' @param twitter_token Token
+#' @param geocode character with 'latitude,longitude,radius', where radius units must be specified as either 'mi' (miles) or 'km' (kilometers)
+#' @param lang Restricts language
+#' @param locale Specifies the locale of the query
+#' @param result_type Either of the options especified
+#' @param count Number of statuses to get 
+#' @param until character specifying the limit date (tweets before than) as YYYY-MM-DD
+#' @param since_id Returns results with an ID greater than (that is, more recent than) the specified ID
+#' @param max_id Returns results with an ID less than (that is, older than) or equal to the specified ID
+#' @param quietly Whether or not to show the 'success' message
+#' @param ... Additional arguments passed to \code{\link{GET}}
+#' @return A data.frame with tweets (if success), with the following columns: 
+#' \itemize{
+#' \item \code{result_type}
+#' \item \code{screen_name}
+#' \item \code{in_reply_to_screen_name}
+#' \item \code{user_id}
+#' \item \code{created_at}
+#' \item \code{id}
+#' \item \code{text}
+#' \item \code{source}
+#' \item \code{truncated}
+#' \item \code{retweet_count}
+#' \item \code{favorite_count}
+#' \item \code{favorited}
+#' \item \code{retweeted}
+#' \item \code{coordinates}
+#' \item \code{source_name}
+#' }
+#' 
+#' otherwise returns \code{NULL}.
+#' @details Keep in mind that the search index has a 7-day limit. In other words, no tweets will be found for a date older than one week.
+#' @examples 
+#' \dontrun{
+#' # Getting the twitts (first gen the token)
+#' key <- tw_gen_token('myapp','key', 'secret')
+#' 
+#' # Making a query
+#' x <- tw_api_get_search_tweets('lovewins', key)
+#' }
+#' @author George G. Vega Yon
+#' @seealso \code{\link{tw_extract}}
+#' @references Twitter REST API (GET search/tweets)
+#' \url{https://dev.twitter.com/rest/reference/get/search/tweets}
+#' @export
+tw_api_get_search_tweets <- function(q, twitter_token,
+  geocode=NULL, lang=NULL, locale=NULL, result_type=c('mixed','recent','popular'),
+  count=100, until='9999-99-99', since_id=NULL, max_id=NULL,quietly=FALSE,...) {
+  
+  q <- URLencode(q)
+  
+  # Parsing options
+  if (until=='9999-99-99') until <- NULL
+  if (length(result_type)>1) result_type<-'mixed'
+  
+  # API CALL
+  req <- .tw_api_get(
+    "https://api.twitter.com/1.1/search/tweets.json",
+    twitter_token, 5,
+    query=list(
+      q=q,geocode=geocode, lang=lang, locale=locale, result_type=result_type,
+      count=100, until=until, since_id=NULL, max_id=NULL,include_entities='false'),
+    ...
+  )
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+  meta <- req$search_metadata
+
+  req <- lapply(req$statuses, function(x,...) {
+    # Nullable characters
+    coords  <- paste0(x$coordinates$coordinates,collapse=":")
+    replyto <- x$in_reply_to_screen_name
+    nfav    <- x$favorite_count
+    isfav   <- x$favorited
+    data.frame(
+      result_type             = x$metadata$result_type,
+      screen_name             = x$user$screen_name, 
+      in_reply_to_screen_name = ifelse(is.null(replyto),NA,replyto),
+      user_id                 = x$user$id,
+      created_at              = strptime(x$created_at,'%a %b %d %T +0000 %Y'),
+      id                      = x$id,
+      text                    = x$text, 
+      source                  = x$source,
+      truncated               = x$truncated,
+      retweet_count           = x$retweet_count,
+      favorite_count          = ifelse(is.null(nfav),NA,nfav),
+      favorited               = ifelse(is.null(isfav),FALSE,isfav),
+      retweeted               = x$retweeted,
+      coordinates             = ifelse(coords=='',NA,coords),
+      stringsAsFactors = FALSE
+    )
+  })
+  
+  # Processing the data a litthe bit
+  req <- as.data.frame(bind_rows(req))
+  req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
+  
+  class(req) <- c('tw_Class_api_timeline', class(req))
+  attributes(req)$search_metadata <- meta
+  
+  if (!quietly) message('Success, search ',q,' correctly retrieved')
   return(req)
 }
 

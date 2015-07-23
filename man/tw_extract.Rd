@@ -11,7 +11,7 @@ tw_extract(txt, ...)
 \method{tw_extract}{tw_Class_api_timeline}(txt, ...)
 
 \method{tw_extract}{character}(txt, obj = c("email", "mention", "hashtag",
-  "url"), normalize = TRUE)
+  "url"), normalize = TRUE, ...)
 }
 \arguments{
 \item{txt}{Object to be passed to the method}
