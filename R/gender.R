@@ -49,11 +49,6 @@ tw_gender <- function(x, male=NULL, female=NULL, lan=c('es','en'), rmNoAlpha=TRU
   if (any(!(lan %in% c('es','en')))) stop('Languaje not supported')
   
   # Getting the dictionaries
-  
-#   data(list='female_names_es_db',envir=environment())
-#   data(list='male_names_es_db',envir=environment())
-#   data(list='female_names_en_db',envir=environment())
-#   data(list='male_names_en_db',envir=environment())
   lapply(lan,tw_names_db,envir=environment(),loadOnly=TRUE,male=TRUE)
   lapply(lan,tw_names_db,envir=environment(),loadOnly=TRUE,male=FALSE)
   

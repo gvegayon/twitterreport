@@ -8,7 +8,14 @@ works. Several functions allow to use the REST API through the `httr` package.
 
 While there are some (very neat) R packages focused on twitter (specifically the
 package `twitteR` and `stramR`), `twitterreport` is centered in analysis and reporting
-tools.
+tools. This package includes functions to extract mentions/hashtags/urls from text, 
+match names with gender, create networks (currently of mentions), extract twitter
+accounts from a given url; besides of several twitter API tools using the REST
+API.
+
+You can take a look at a live example here 
+http://www.its.caltech.edu/~gvegayon/twitter/report_example.html and the source code
+for this example here https://github.com/gvegayon/twitterreport/blob/master/vignettes/report_example.Rmd
 
 ## Installation
 

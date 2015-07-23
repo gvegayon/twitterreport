@@ -7,8 +7,8 @@ Description: Set of tools to download, process and analyze 'tweets', including m
   for exporting the outputs through 'D3js'.
 URL: http://github.com/gvegayon/twitterreport
 BugReports: http://github.com/gvegayon/twitterreport/issues
-Depends: R (>= 3.1.0), ggvis
-Imports: stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr, RColorBrewer, RCurl, knitr, Rcpp
+Depends: R (>= 3.1.0)
+Imports: stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr, RColorBrewer, RCurl, knitr, Rcpp, ggvis
 LinkingTo: Rcpp
 Suggests: rmarkdown, twitteR, streamR
 License: MIT + file LICENSE
