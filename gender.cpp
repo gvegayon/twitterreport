@@ -12,11 +12,8 @@ using namespace Rcpp;
 //
 
 //' Matches names with genders
-//' @param x
-//' @param male
-//' @param female
 // [[Rcpp::export]]
-IntegerVector tw_gender(CharacterVector x, CharacterVector male, CharacterVector female) {
+IntegerVector cpp_tw_gender(CharacterVector x, CharacterVector male, CharacterVector female) {
   int n   = x.size();
   int n_m = male.size();
   int n_f = female.size();
@@ -58,7 +55,32 @@ IntegerVector tw_gender(CharacterVector x, CharacterVector male, CharacterVector
 /*** R
 male   <- c('george','jorge','juan')
 female <- c('valentina','camila','gabriela')
+
+# Loading data
+load('ddata/namedata/data/usnames.RData')
+fnames <- tolower(subset(usnames, F>M, select=Name, drop=TRUE))
+mnames <- tolower(subset(usnames, F<M, select=Name, drop=TRUE))
+
+#' 
+#' 
+tw_gender <- function(x, male=mnames, female=fnames) {
+  x <- tolower
+  cpp_tw_gender(x,male,female)
+}
+
+# Examples
+data("senators_profile")
+
+# Preparing the data
+head(senators_profile$tw_name)
+sen <- gsub('\\bsen(ator|\\.)\\s+','',senators_profile$tw_name,ignore.case = TRUE)
+head(sen)
+
+sen <- gsub('\\s+.+','',tolower(sen))
+
 tw_gender('george',male,female)
 tw_gender('valenta',male,female)
 tw_gender(c('george','valenta'),male,female)
+
+View(data.frame(name=sen,male=tw_gender(sen),senators_profile$tw_name))
 */
