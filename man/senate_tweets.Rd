@@ -13,20 +13,20 @@ API tool. It contains the following columns
 }
 \details{
 \itemize{
- \item screen_name
- \item in_reply_to_screen_name
- \item user_id
- \item created_at
- \item id
- \item text
- \item source
- \item truncated
- \item retweet_count
- \item favorite_count
- \item favorited
- \item retweeted
- \item coordinates
- \item source_name
+ \item \code{screen_name}
+ \item \code{in_reply_to_screen_name}
+ \item \code{user_id}
+ \item \code{created_at}
+ \item \code{id}
+ \item \code{text}
+ \item \code{source}
+ \item \code{truncated}
+ \item \code{retweet_count}
+ \item \code{favorite_count}
+ \item \code{favorited}
+ \item \code{retweeted}
+ \item \code{coordinates}
+ \item \code{source_name}
 }
 }
 

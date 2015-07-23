@@ -1,12 +1,12 @@
 quick:
 	make doc;
-	rm twitterreport_*;
+	rm twitterreport_*&
 	R CMD build --no-resave-data --no-build-vignettes --no-manual .;
-	R CMD REMOVE twitterreport_* &
+	R CMD REMOVE twitterreport &
 	R CMD INSTALL twitterreport_*
 build:
 	make doc;
-	rm twitterreport_*;
+	rm twitterreport_* &
 	R CMD REMOVE twitterreport_* &
 	R CMD build --resave-data .
 check:

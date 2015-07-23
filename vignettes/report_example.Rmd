@@ -21,18 +21,13 @@ knitr::opts_chunk$set(
 
 ```{r Loading Data}
 library(twitterreport)
-
-# Load the credentials
-# key<-tw_gen_token('myappname','key','secret')
-# source('playground/credentials.R')
-
 # Loading the data
 data(senators)
 data(senators_profile)
 data(senate_tweets)
 ```
 
-This document presents graphs and tables created with the package
+This document presents graphs and tables created with the package `twitterreport`. You can see the source code of this webpage at http://github.com/gvegayon/twitterreport.
 
 ## General stats
 
@@ -100,6 +95,24 @@ What are the senators talking about
 ```{r WordCloud,dev='svg',out.width='350px', out.height='350px'}
 plot(tw_words(senate_tweets$text), max.n.words = 50)
 ```
+
+
+## Gender!
+
+```{r Gender,out.width='350px', out.height='350px'}
+# For this we use the ggvis library
+library(ggvis)
+
+# Getting the names
+sen <- tolower(senators_profile$tw_name)
+sen <- gsub('\\bsen(ator|\\.)\\s+','',sen)
+sen <- gsub('\\s+.+','',sen)
+
+tab <- as.data.frame(table(tw_gender(sen)))
+colnames(tab) <- c('Gender','count')
+tab %>% ggvis(~Gender, ~count) %>% layer_bars()
+```
+
 
 
 [caltechlogo]: `r system.file(package='twitterreport')`/fig/Caltech_LOGO-Orange_RGB_10pc.png "Caltech"

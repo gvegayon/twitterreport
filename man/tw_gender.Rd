@@ -24,14 +24,11 @@ Matches text with male/female names
 \details{
 The char match is written in C++, which is why it should be fast
 }
-\section{Names datasets}{
+\examples{
+# Some list of names
+mix <- c('pedro','peter','mariano','maria jose','pablo','paul','jenny')
+tw_gender(mix)
 
-}
-\references{
-For english names OpenGenderTracking project
-\url{https://github.com/OpenGenderTracking/globalnamedata}
-
-For spanish names
-\url{https://github.com/apalancat/spanish-names}
+# Example with the candidates
 }
 

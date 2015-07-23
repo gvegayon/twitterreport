@@ -8,17 +8,17 @@
 \url{http://www.senate.gov/senators/contact/}
 }
 \description{
-Extracted using webcrawling
+Extracted using webcrawling, the dataset contains the following columns:
 }
 \details{
-Name
 \itemize{
-\item party
-\item State
-\item Addr
-\item phone
-\item website
-\item class
+ \item \code{Name}
+ \item \code{party}
+ \item \code{State}
+ \item \code{Addr}
+ \item \code{phone}
+ \item \code{website}
+ \item \code{class}
 }
 }
 
