@@ -76,12 +76,39 @@ tw_api_wait <- function(minutes=1) {
 #' @param ... Additional arguments passed to \code{\link{GET}}
 #' @details Using the twitter api, get information about a twitter account
 #' @return A data.frame with info of the usr.
+#' \itemize{
+#' \item \code{id}
+#' \item \code{name}
+#' \item \code{screen_name}
+#' \item \code{contributors_enabled}
+#' \item \code{created_at}
+#' \item \code{default_profile}
+#' \item \code{default_profile_image}
+#' \item \code{description}
+#' \item \code{favourites_count}
+#' \item \code{followers_count}
+#' \item \code{friends_count}
+#' \item \code{geo_enabled}
+#' \item \code{is_translator}
+#' \item \code{lang}
+#' \item \code{listed_count}
+#' \item \code{location}
+#' \item \code{profile_image_url}
+#' \item \code{profile_image_url_https}
+#' \item \code{protected}
+#' \item \code{statuses_count}
+#' \item \code{time_zone}
+#' \item \code{utc_offset}
+#' \item \code{verified}
+#' }
 #' @examples
 #' \dontrun{
-#' tw_api_get_usr_profile('gvegayon')
+#' tw_api_get_users_show('gvegayon')
 #' }
+#' @references Twitter REST API (GET users/show)
+#' \url{https://dev.twitter.com/rest/reference/get/users/show}
 #' @export
-tw_api_get_usr_profile <- function(usr,twitter_token,quietly=FALSE,...) { 
+tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) { 
   if (is.na(usr)) return(NULL)
   else 
     req <- .tw_api_get(
@@ -136,14 +163,54 @@ tw_api_get_usr_profile <- function(usr,twitter_token,quietly=FALSE,...) {
 }
 
 #' Gets status updates (tweets) from a given user
+#' 
+#' Using the twitter API, gets the status updates of a given user
+#' 
 #' @param usr screen_name of the user
 #' @param twitter_token Token
 #' @param count Number of statuses to get 
 #' @param quietly Whether or not to show the 'success' message
 #' @param ... Additional arguments passed to \code{\link{GET}}
-#' @return A data.frame with tweets
+#' @return A data.frame with tweets (if success), with the following columns: 
+#' \itemize{
+#' \item \code{screen_name}
+#' \item \code{in_reply_to_screen_name}
+#' \item \code{user_id}
+#' \item \code{created_at}
+#' \item \code{id}
+#' \item \code{text}
+#' \item \code{source}
+#' \item \code{truncated}
+#' \item \code{retweet_count}
+#' \item \code{favorite_count}
+#' \item \code{favorited}
+#' \item \code{retweeted}
+#' \item \code{coordinates}
+#' \item \code{source_name}
+#' }
+#' 
+#' otherwise returns \code{NULL}.
+#' @details This function is designed to be applied to a large list of twitter
+#' accounts, see the example below.
+#' @examples 
+#' \dontrun{
+#' # List of twitter accounts
+#' users <- c('MarsRovers', 'senatormenendez', 'sciencemagazine')
+#' 
+#' # Getting the twitts (first gen the token)
+#' key <- tw_gen_token('myapp','key', 'secret')
+#' tweets <- lapply(users, tw_api_get_statuses_user_timeline, twitter_token=key)
+#' 
+#' # Processing the data (and taking a look)
+#' tweets <- do.call(rbind, tweets)
+#' head(tweets)
+#' }
+#' @author George G. Vega Yon
+#' @seealso \code{\link{tw_extract}}
+#' @references Twitter REST API (GET statuses/user_timeline)
+#' \url{https://dev.twitter.com/rest/reference/get/statuses/user_timeline}
 #' @export
-tw_api_get_timeline <- function(usr,twitter_token,count=100,quietly=FALSE,...) {
+tw_api_get_statuses_user_timeline <- function(usr,twitter_token,count=100,quietly=FALSE,...) {
   usr <- gsub("^@","",usr)
   
   # API CALL
@@ -191,6 +258,8 @@ tw_api_get_timeline <- function(usr,twitter_token,count=100,quietly=FALSE,...) {
   req <- as.data.frame(bind_rows(req))
   req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
   
+  class(req) <- c('tw_Class_api_timeline', class(req))
+  
   if (!quietly) message('Success, timeline of user ',usr,' correctly retrieved')
   return(req)
 }
@@ -226,6 +295,8 @@ tw_write_json_network <- function(graph) {
 #' Get codes from the places where trends are availables
 #' @param twitter_token Token
 #' @param ... Ignored
+#' @references Twitter REST API (GET trends/available)
+#' \url{https://dev.twitter.com/rest/reference/get/trends/available}
 #' @export
 tw_api_trends_available <- function(twitter_token,...) {
   req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',
@@ -262,6 +333,8 @@ tw_api_trends_available <- function(twitter_token,...) {
 #' @param twitter_token Token
 #' @param exclude Whether to exclude hashtags or not
 #' @param ... Ignored
+#' @references Twitter REST API (GET trends/place)
+#' \url{https://dev.twitter.com/rest/reference/get/trends/place}
 #' @export
 tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   

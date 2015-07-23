@@ -20,3 +20,6 @@ NULL
 NULL
 # @importFrom NLP 
 # NULL
+
+#' @import knitr
+NULL

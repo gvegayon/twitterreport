@@ -2,13 +2,21 @@
 % Please edit documentation in R/text_processing.R
 \name{tw_extract}
 \alias{tw_extract}
+\alias{tw_extract.character}
+\alias{tw_extract.tw_Class_api_timeline}
 \title{Extract info from tweets}
 \usage{
-tw_extract(txt, obj = c("email", "mention", "hashtag", "url"),
-  normalize = TRUE)
+tw_extract(txt, ...)
+
+\method{tw_extract}{tw_Class_api_timeline}(txt, ...)
+
+\method{tw_extract}{character}(txt, obj = c("email", "mention", "hashtag",
+  "url"), normalize = TRUE)
 }
 \arguments{
-\item{txt}{Character}
+\item{txt}{Object to be passed to the method}
+
+\item{...}{Further arguments to be passed to the method}
 
 \item{obj}{List of objects to extract}
 
@@ -20,6 +28,12 @@ List
 \description{
 Extract info from tweets
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{tw_Class_api_timeline}: Applies for the output of \code{\link{tw_api_get_statuses_user_timeline}}.
+
+\item \code{character}: Applies for a character vector
+}}
 \examples{
 \dontrun{
 head(tw_extract(tweets$text))

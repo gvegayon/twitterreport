@@ -8,6 +8,6 @@
 \url{https://dev.twitter.com}
 }
 \description{
-US senators twitter profile
+Extracted from the web using webcrawling
 }
 

@@ -14,4 +14,8 @@ tw_api_trends_available(twitter_token, ...)
 \description{
 Get codes from the places where trends are availables
 }
+\references{
+Twitter REST API (GET trends/available)
+\url{https://dev.twitter.com/rest/reference/get/trends/available}
+}
 

@@ -80,17 +80,51 @@ tw_timeseries <- function(
 # library(dygraphs)
 # dygraph(z,main = 'Number of daily tweets',width = 600,height = 300)
 
-#' Creates a table
-#' @param obj Some text
+#' Creates a table of frequencies
+#' 
+#' See \code{\link{tw_extract}}
+#' 
+#' @param x An object of class \code{tw_Class_extract}.
+#' @param obj A character indicating 
+#' @param ... Further arguments to be passed to the method
 #' @author George G. Vega Yon
+#' @examples 
+#' # Loading tweets
+#' data(senate_tweets)
+#' head(senate_tweets$text)
+#' 
+#' # Extracting elements and creating tables
+#' x <- tw_extract(senate_tweets$text)
+#' 
+#' head(tw_table(x,'mention'))
 #' @export
-tw_table <- function(obj) {
-  obj <- unlist(obj,recursive=TRUE)
+tw_table <- function(x,...) UseMethod('tw_table')
+
+#' @describeIn tw_table Makes a table out of the output of \code{\link{tw_extract}}
+#' @export
+tw_table.tw_Class_extract <- function(x, obj=c("email", "mention", "hashtag", "url"),...) {
+  
+  # Checking if the obj is well specified
+  original <- c("email", "mention", "hashtag", "url")
+  test <- which(!(obj %in% original))
+  if (any(test))
+    stop('-obj- object list badly specified, should be any of ',
+         paste0('\'',original,'\'',collapse=', '),'.')
+  
+  if (length(obj)>1) obj <- 'hashtag'
+  
+  obj <- unlist(x[[obj]],recursive=TRUE)
   obj <- as.data.frame(table(obj),responseName='n', stringsAsFactors=FALSE)
   obj <- obj[order(-obj$n),]
+  
+  rownames(obj) <- 1:nrow(obj)
   
   # Setting the class
   class(obj) <- c('tw_Class_table',class(obj))
   
   obj
 }
+
+
+
+

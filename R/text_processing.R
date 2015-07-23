@@ -1,7 +1,8 @@
 #' Extract info from tweets
-#' @param txt Character
+#' @param txt Object to be passed to the method
 #' @param obj List of objects to extract
 #' @param normalize bool whether or not to normalize emails, hashtags and mentions (to lower)
+#' @param ... Further arguments to be passed to the method
 #' @return List
 #' @examples  
 #' \dontrun{
@@ -9,8 +10,26 @@
 #' }
 #' @author George G. Vega Yon
 #' @export
-tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
-                       normalize=TRUE) {
+tw_extract <- function(txt,...) UseMethod('tw_extract')
+
+#' @describeIn tw_extract Applies for the output of \code{\link{tw_api_get_statuses_user_timeline}}.
+#' @export
+tw_extract.tw_Class_api_timeline <- function(txt,...) {
+  tw_extract(txt$text,...)
+}
+
+#' @describeIn tw_extract Applies for a character vector
+#' @export
+tw_extract.character <- function(txt, obj = c("email", "mention", "hashtag", "url"),
+                       normalize=TRUE,...) {
+  
+  # Checking if the obj is well specified
+  original <- c("email", "mention", "hashtag", "url")
+  test <- which(!(obj %in% original))
+  if (any(test))
+      stop('-obj- object list badly specified, should be any of ',
+           paste0('\'',original,'\'',collapse=', '),'.')
+  
   # patterns
   p.email <- "([a-zA-Z0-9_]-?\\.?)+@([a-zA-Z0-9_]-?)+\\.[a-zA-Z]+"
   p.hashtag <- "(?<=#)\\w+"
@@ -28,6 +47,8 @@ tw_extract <- function(txt, obj = c("email", "mention", "hashtag", "url"),
     output$hashtag <- lapply(output$hashtag,tolower)
     output$email <- lapply(output$email,tolower)
   }
+  
+  class(output) <- c('tw_Class_extract',class(output))
   
   return(output)
 }

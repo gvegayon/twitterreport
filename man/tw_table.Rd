@@ -2,15 +2,37 @@
 % Please edit documentation in R/statistics.R
 \name{tw_table}
 \alias{tw_table}
-\title{Creates a table}
+\alias{tw_table.tw_Class_extract}
+\title{Creates a table of frequencies}
 \usage{
-tw_table(obj)
+tw_table(x, ...)
+
+\method{tw_table}{tw_Class_extract}(x, obj = c("email", "mention", "hashtag",
+  "url"), ...)
 }
 \arguments{
-\item{obj}{Some text}
+\item{x}{An object of class \code{tw_Class_extract}.}
+
+\item{...}{Further arguments to be passed to the method}
+
+\item{obj}{A character indicating}
 }
 \description{
-Creates a table
+See \code{\link{tw_extract}}
+}
+\section{Methods (by class)}{
+\itemize{
+\item \code{tw_Class_extract}: Makes a table out of the output of \code{\link{tw_extract}}
+}}
+\examples{
+# Loading tweets
+data(senate_tweets)
+head(senate_tweets$text)
+
+# Extracting elements and creating tables
+x <- tw_extract(senate_tweets$text)
+
+head(tw_table(x,'mention'))
 }
 \author{
 George G. Vega Yon

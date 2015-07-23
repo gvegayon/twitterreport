@@ -18,4 +18,8 @@ tw_api_get_trends_place(id, twitter_token, exclude = FALSE, ...)
 \description{
 Gets the trends for a given place
 }
+\references{
+Twitter REST API (GET trends/place)
+\url{https://dev.twitter.com/rest/reference/get/trends/place}
+}
 

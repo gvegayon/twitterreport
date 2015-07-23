@@ -9,9 +9,17 @@ vignette: |
   \usepackage[utf8]{inputenc}
 ---
 
+```{r,include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE, message = FALSE, warning = FALSE, autodep = TRUE,
+  out.width = '600px', out.height = '300px'
+  )
+```
+
+
 ![Caltech Logo][caltechlogo]
 
-```{r, echo=FALSE, message=FALSE}
+```{r Loading Data}
 library(twitterreport)
 
 # Load the credentials
@@ -21,16 +29,10 @@ library(twitterreport)
 # Loading the data
 data(senators)
 data(senators_profile)
-data(senators_profile)
+data(senate_tweets)
 ```
 
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
+This document presents graphs and tables created with the package
 
 ## General stats
 
@@ -38,16 +40,18 @@ data(senators_profile)
 
 This graph shows the 5 most popular hashtags in this network through time including the number of times that these were mentioned in total (the table includes more).
 
-```{r, echo=TRUE,autodep=TRUE}
+```{r Hashtags}
 # Creating stats (and data)
 elements <- tw_extract(senate_tweets$text)
 
 # Graph
 hashtags <- tw_timeseries(elements$hashtag,created_at = senate_tweets$created_at)
 plot(hashtags)
+```
 
-# Table
-twtab <- tw_table(elements$hashtag)
+```{r Hashtag table}
+# Table (default using hashtags)
+twtab <- tw_table(elements)
 plot(twtab,caption='Most popular hashtags')
 ```
 
@@ -55,13 +59,15 @@ plot(twtab,caption='Most popular hashtags')
 
 This graph shows the set of 5 of the most popular users. Just like the previous stats, while the graph shows the number of mentions through time, the table shows the total number of mentions.
 
-```{r, echo=TRUE, autodep=TRUE}
+```{r Users}
 # Graph
 mentions <- tw_timeseries(elements$mention,created_at = senate_tweets$created_at)
 plot(mentions)
+```
 
+```{r Users table}
 # Creating table for users
-plot(tw_table(elements$mention),caption='Most popular users')
+plot(tw_table(elements,'mention'),caption='Most popular users')
 ```
 
 ## Mention Networks
@@ -70,7 +76,7 @@ This is the graph of conversations between US senators. Colored by party (light 
 
 In this case I consider two senators connected iff there one of them appears at least 3 times in the other senator's status timeline.
 
-```{r, echo=TRUE,autodep=TRUE}
+```{r Network, out.width = '600px', out.height = '600px'}
 tweets_components <- tw_extract(senate_tweets$text)
 groups <- data.frame(
   name      = senators_profile$tw_screen_name,
@@ -91,8 +97,8 @@ plot(senate_network, nodelabel='real_name')
 
 What are the senators talking about
 
-```{r, echo=TRUE, autodep=TRUE,dev='png',warning=FALSE}
-plot(tw_words(senate_tweets$text))
+```{r WordCloud,dev='svg',out.width='350px', out.height='350px'}
+plot(tw_words(senate_tweets$text), max.n.words = 50)
 ```
 
 

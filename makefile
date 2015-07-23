@@ -1,6 +1,6 @@
 build:
 	make doc;
-	R CMD build .
+	R CMD build --resave-data .
 check:
 	make build;
 	R CMD check --as-cran twitterreport_*
