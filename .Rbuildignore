@@ -9,7 +9,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.httr-oauth$
-^README\.md$
+^README\.R?md$
+^README\_files$
 ^makefile$
 ^ddata$
 ^playground$

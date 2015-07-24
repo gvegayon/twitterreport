@@ -7,10 +7,12 @@
 #' @param minInteract Minimun number of interactions to consider (links
 #' below this number will be excluded
 #' @param group Data frame with two columns: name & group
+#' @param size Character name of the size variable
 #' @author George G. Vega Yon
 #' @export
 tw_network <- function(
-  source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1, group=NULL) {
+  source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1, group=NULL,
+  size=NULL) {
   
   # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors

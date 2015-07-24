@@ -1,5 +1,8 @@
 .httr-oauth
 .Rproj.user
+.Rhistory
+
+*.Rcheck
 
 # Data
 *.csv
@@ -14,3 +17,6 @@
 *.tar
 *.gz
 playground/credentials.R
+
+viz
+README.Rmd
