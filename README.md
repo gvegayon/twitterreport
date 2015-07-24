@@ -104,7 +104,7 @@ tab <- table(tw_gender(sen))
 barplot(tab)
 ```
 
-![](https://github.com/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/gender-1.png)
+![](README_files/figure-markdown_github/gender-1.png?raw=true)
 
 Author
 ------
