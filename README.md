@@ -86,7 +86,7 @@ senate_tweets$text[1:2];tab[1:2]
 plot(tab, max.n.words = 40)
 ```
 
-![](https://github.com/github/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/wordcloud-1.png)
+![](https://github.com/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/wordcloud-1.png)
 
 ### Identifying individuals gender
 
@@ -104,7 +104,7 @@ tab <- table(tw_gender(sen))
 barplot(tab)
 ```
 
-![](https://github.com/github/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/gender-1.png)
+![](https://github.com/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/gender-1.png)
 
 Author
 ------
