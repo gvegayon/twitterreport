@@ -86,7 +86,7 @@ senate_tweets$text[1:2];tab[1:2]
 plot(tab, max.n.words = 40)
 ```
 
-![](https://github.com/gvegayon/twitterreport/tree/master/README_files/figure-markdown_github/wordcloud-1.png)
+![](README_files/figure-markdown_github/wordcloud-1.png?raw=true)
 
 ### Identifying individuals gender
 
