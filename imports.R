@@ -34,3 +34,35 @@ function(txt, lst, selective = TRUE)
 }
 
 imports_for_undefined_globals(check)
+
+
+################################################################################
+# Check the dependencies of the packages
+################################################################################
+
+library(stringr)
+check_imports <- function(f, exclude_base=TRUE, DESCRIPTION=NULL) {
+  fs <- f
+  
+  # Checking what type of object is
+  if (dir.exists(f)) fs <- list.files(f,pattern = '\\.R$',ignore.case = TRUE,
+                                      full.names=TRUE)
+  else if (!file.exists(f)) stop('No such file or directory')
+  
+  funs <- lapply(fs, function(x) {
+    x <- readLines(x)
+    str_extract_all(x,'[a-zA-Z_\\.]+(?=\\()',simplify = TRUE)
+  })
+  
+  # Making unique
+  funs <- unique(unlist(funs,recursive = TRUE))
+  funs <- funs[which(funs!="")]
+  
+  # Looking for NAMESPACES
+  funs <- lapply(funs,find)
+  
+  # Checking out packages to load
+  
+}
+
+x<-check_imports("R")

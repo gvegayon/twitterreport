@@ -11,7 +11,7 @@ vignette: |
 
 ```{r,include=FALSE}
 knitr::opts_chunk$set(
-  echo=FALSE, message = FALSE, warning = FALSE, autodep = TRUE,
+  echo=TRUE, message = FALSE, warning = FALSE, autodep = TRUE,
   out.width = '600px', out.height = '300px'
   )
 ```
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ![Caltech Logo][caltechlogo]
 
-```{r Loading Data}
+```{r Loading Data,echo=FALSE}
 library(twitterreport)
 # Loading the data
 data(senators)
@@ -28,6 +28,10 @@ data(senate_tweets)
 ```
 
 This document presents graphs and tables created with the package `twitterreport`. You can see the source code of this webpage at http://github.com/gvegayon/twitterreport.
+
+The data used to ilustrate how the package works corresponds to the last 200 twitter
+messages emited by US senators retrieved through the twitter REST API using the function
+`tw_api_get_statuses_user_timeline`.
 
 ## General stats
 
@@ -39,8 +43,8 @@ This graph shows the 5 most popular hashtags in this network through time includ
 # Creating stats (and data)
 elements <- tw_extract(senate_tweets$text)
 
-# Graph
-hashtags <- tw_timeseries(elements$hashtag,created_at = senate_tweets$created_at)
+# Creating a xts type class object and using its plot method (tw_Class_ts)
+hashtags <- tw_timeseries(elements$hashtag,senate_tweets$created_at)
 plot(hashtags)
 ```
 
@@ -90,14 +94,16 @@ plot(senate_network, nodelabel='real_name')
 
 ## Word cloud
 
-What are the senators talking about
+The function `tw_words` takes a character vector (of tweets for example) and extracts all the stopwords+symbols. And the `plot` method for its output creates a wordcloud
 
 ```{r WordCloud,dev='svg',out.width='350px', out.height='350px'}
 plot(tw_words(senate_tweets$text), max.n.words = 50)
 ```
 
 
-## Gender!
+## Identifying individuals gender
+
+Using english and spanish names, the `tw_gender` function matches the character argument (which can be a vector) with either a male or female name (or unidentified).
 
 ```{r Gender,out.width='350px', out.height='350px'}
 # For this we use the ggvis library
@@ -112,7 +118,5 @@ tab <- as.data.frame(table(tw_gender(sen)))
 colnames(tab) <- c('Gender','count')
 tab %>% ggvis(~Gender, ~count) %>% layer_bars()
 ```
-
-
 
 [caltechlogo]: `r system.file(package='twitterreport')`/fig/Caltech_LOGO-Orange_RGB_10pc.png "Caltech"
