@@ -5,7 +5,7 @@
 \title{Creates conversation graph (directed)}
 \usage{
 tw_network(source, target, onlyFrom = FALSE, excludeSelf = TRUE,
-  minInteract = 1, group = NULL)
+  minInteract = 1, group = NULL, size = NULL)
 }
 \arguments{
 \item{source}{Vector of screen_name}
@@ -21,6 +21,8 @@ source and target are in the \code{source} vector}
 below this number will be excluded}
 
 \item{group}{Data frame with two columns: name & group}
+
+\item{size}{Character name of the size variable}
 }
 \description{
 Creates conversation graph (directed)

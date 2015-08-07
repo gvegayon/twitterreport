@@ -2,6 +2,13 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Matches names with genders
+#' 
+#' Internal use, please refer to \code{\link{tw_gender}} instead.
+#' 
+#' @param x Character vector with names
+#' @param male Character vector with male names
+#' @param female Character vector with female names
+#' @return Numeric vector with -1, 0, and 1 as 'unidentified', 'female', 'male'
 cpp_tw_gender <- function(x, male, female) {
     .Call('twitterreport_cpp_tw_gender', PACKAGE = 'twitterreport', x, male, female)
 }

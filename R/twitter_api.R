@@ -493,6 +493,54 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   return(trends)
 }
 
+#' Get Followers list
+#'
+#' @param twitter_token Twitter token
+#' @param user_id User id
+#' @param screen_name  Screen name
+#' @param cursor (advanced)
+#' @param count Number of registries per page (advanced)
+#' @param skip_status It self
+#' @param include_entities  (advanced)
+#'
+#' @return A list
+#' @export
+#'
+tw_api_get_followers_list <- function(
+  twitter_token, user_id=NULL, screen_name=NULL, cursor=NULL, count=200,
+  skip_status=NULL, include_entities='false',current=NULL,...) {
+  
+  # API CALL
+  req <- .tw_api_get(
+    "https://api.twitter.com/1.1/followers/list.json",
+    twitter_token, 5,
+    query=list(user_id=user_id, screen_name=screen_name, cursor=cursor,
+               count=count, skip_status=skip_status,include_entities=include_entities),
+    ...
+  )
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+  
+  # Checking cursor
+  n <- length(current)
+  
+  if (!n) current <- list(x$users)
+  else current[[n+1]] <- x$users
+  
+  if (req$next_cursor) current <- tw_api_get_followers_list(
+      twitter_token, user_id, screen_name, cursor=req$next_cursor, count,
+      skip_status, include_entities,current,...
+    )
+  
+  return(current)
+}
+
 #' Gets a sample through the sample API
 #' @param twitter_token Token
 #' @param Timeout Number of seconds
@@ -511,14 +559,17 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
                         if (tdif > Timeout) stop()
                         writeBin(x,tweets)
                         length(x)
-                      }),...))
+                      }),...), error=function(e) e)
+  
   # message('ok')
   con <- tempfile()
   on.exit(close(con))
   writeBin(tweets,con)
+  
   close(tweets)
   return(readLines(con))
 }
+# x<-tw_api_get_statuses_sample2(key,5)
 # x <- tw_api_get_statuses_sample(5)
 # con <- rawConnection(raw(0),'r+')
 # # GET("https://jeroenooms.github.io/data/diamonds.json",

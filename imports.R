@@ -41,6 +41,7 @@ imports_for_undefined_globals(check)
 ################################################################################
 
 library(stringr)
+library(twitterreport)
 check_imports <- function(f, exclude_base=TRUE, DESCRIPTION=NULL) {
   fs <- f
   
@@ -51,6 +52,7 @@ check_imports <- function(f, exclude_base=TRUE, DESCRIPTION=NULL) {
   
   funs <- lapply(fs, function(x) {
     x <- readLines(x)
+    # x <- x[!grepl('^\\s*[#]',x)]
     str_extract_all(x,'[a-zA-Z_\\.]+(?=\\()',simplify = TRUE)
   })
   
@@ -59,10 +61,14 @@ check_imports <- function(f, exclude_base=TRUE, DESCRIPTION=NULL) {
   funs <- funs[which(funs!="")]
   
   # Looking for NAMESPACES
-  funs <- lapply(funs,find)
+  pkgs <- lapply(funs,find)
   
   # Checking out packages to load
-  
+  pkgs <- lapply(pkgs, gsub, pattern="package[:]", replace="")
+  names(pkgs) <- funs
+  pkgs
 }
 
 x<-check_imports("R")
+x
+table(unlist(x))

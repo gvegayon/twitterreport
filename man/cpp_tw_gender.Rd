@@ -6,7 +6,17 @@
 \usage{
 cpp_tw_gender(x, male, female)
 }
+\arguments{
+\item{x}{Character vector with names}
+
+\item{male}{Character vector with male names}
+
+\item{female}{Character vector with female names}
+}
+\value{
+Numeric vector with -1, 0, and 1 as 'unidentified', 'female', 'male'
+}
 \description{
-Matches names with genders
+Internal use, please refer to \code{\link{tw_gender}} instead.
 }
 
