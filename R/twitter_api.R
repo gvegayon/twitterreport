@@ -411,6 +411,93 @@ tw_api_get_search_tweets <- function(q, twitter_token,
   return(req)
 }
 
+#' GET friends/ids
+#'
+#' @param scree_name 
+#' @param twitter_token 
+#' @param user_id 
+#' @param cursor 
+#' @param count 
+#' @param ... 
+#'
+#' @return A vector
+#' @export
+tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
+                                   cursor=NULL, count=1000, ...) {
+  
+  # API CALL
+  req <- .tw_api_get(
+    "https://api.twitter.com/1.1/friends/ids.json",
+    twitter_token, 15,
+    query=list(
+      screen_name=screen_name, user_id=user_id,cursor=cursor, count=count),
+    ...
+  )
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+  friends <- unlist(req$ids, TRUE)
+  
+  cursor <- req$next_cursor
+  if (cursor & count) {
+    count <- count - length(friends)
+    message('Retrieving several pages, to go: ', count, ' (next cursor ',cursor,')')
+    friends <- c(friends, tw_api_get_friends_ids(screen_name, twitter_token, user_id,
+                                             cursor, count, ...))
+  }
+  
+  friends
+}
+
+#' GET followers/ids
+#'
+#' @param scree_name 
+#' @param twitter_token 
+#' @param user_id 
+#' @param cursor 
+#' @param count 
+#' @param ... 
+#'
+#' @return A vector
+#' @export
+tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
+                                   cursor=NULL, count=1000, ...) {
+  
+  # API CALL
+  req <- .tw_api_get(
+    "https://api.twitter.com/1.1/followers/ids.json",
+    twitter_token, 15,
+    query=list(
+      screen_name=screen_name, user_id=user_id,cursor=cursor, count=count),
+    ...
+  )
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+  followers <- unlist(req$ids, TRUE)
+  
+  cursor <- req$next_cursor
+  count <- count - length(followers)
+  
+  if (cursor & count) {
+    message('Retrieving several pages, to go: ', count, ' (next cursor ',cursor,')')
+    followers <- c(followers, tw_api_get_followers_ids(screen_name, twitter_token, user_id,
+                                                 cursor, count, ...))
+  }
+  
+  followers
+}
+
 #' Converts a data.frame into JSON
 #' @param d A data frame
 #' @return A Char string as JSON format
@@ -516,20 +603,24 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 
 #' Get Followers list
 #'
+#' @param screen_name  Screen name
 #' @param twitter_token Twitter token
 #' @param user_id User id
-#' @param screen_name  Screen name
 #' @param cursor (advanced)
 #' @param count Number of registries per page (advanced)
 #' @param skip_status It self
 #' @param include_entities  (advanced)
+#' @param howmany
+#' @param ...
 #'
 #' @return A list
 #' @export
 #'
-tw_api_get_followers_list <- function(
-  twitter_token, user_id=NULL, screen_name=NULL, cursor=NULL, count=200,
-  skip_status=NULL, include_user_entities='false',current=NULL,...) {
+tw_api_get_followers_list <- function(screen_name=NULL,
+  twitter_token, user_id=NULL, cursor=NULL, count=200,
+  skip_status=NULL, include_user_entities='false',howmany=NULL,...) {
+  
+  # Working the howmany (SOLVE)
   
   # API CALL
   req <- .tw_api_get(
@@ -581,28 +672,23 @@ tw_api_get_followers_list <- function(
       statuses_count          = x$statuses_count,
       time_zone               = ifelse(is.null(time_zone),NA,time_zone),
       utc_offset              = ifelse(is.null(utc_offset),NA,utc_offset),
-      verified                = x$verified,
-      next_cursor             = req$next_cursor
+      verified                = x$verified
     )
   }))
   
-  # Checking cursor
-  n <- length(current)
-  
-  if (!n) current <- list(usrs)
-  else current[[n+1]] <- usrs
-  
-  message('Getting the next cursor ',req$next_cursor,'. So far we\'ve got ',length(current))
-  
-  if (req$next_cursor) {
-    current <- tw_api_get_followers_list(
-      twitter_token, user_id, screen_name, cursor=req$next_cursor, count,
-      skip_status, include_user_entities,current,...
-    )
+  count  <- max(c(0,count - nrow(usrs)))
+  cursor <- req$next_cursor
+
+  if (count & cursor) {
+    message('Number of followers got: ', nrow(usrs), ', to go: ',count, 
+            ' (checking id ',cursor,')')
+    usrs <- rbind(usrs, tw_api_get_followers_list(screen_name,
+      twitter_token, user_id,  cursor, count,
+      skip_status, include_user_entities,...
+    ))
   }
   
-  current <- do.call('rbind',current)
-  return(current)
+  return(usrs)
 }
 
 #' Gets a sample through the sample API

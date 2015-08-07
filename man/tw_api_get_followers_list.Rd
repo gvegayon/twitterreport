@@ -4,16 +4,16 @@
 \alias{tw_api_get_followers_list}
 \title{Get Followers list}
 \usage{
-tw_api_get_followers_list(twitter_token, user_id = NULL, screen_name = NULL,
+tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
   cursor = NULL, count = 200, skip_status = NULL,
-  include_user_entities = "false", current = NULL, ...)
+  include_user_entities = "false", ...)
 }
 \arguments{
+\item{screen_name}{Screen name}
+
 \item{twitter_token}{Twitter token}
 
 \item{user_id}{User id}
-
-\item{screen_name}{Screen name}
 
 \item{cursor}{(advanced)}
 
