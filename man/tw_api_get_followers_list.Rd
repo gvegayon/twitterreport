@@ -5,8 +5,8 @@
 \title{Get Followers list}
 \usage{
 tw_api_get_followers_list(twitter_token, user_id = NULL, screen_name = NULL,
-  cursor = NULL, count = 20, skip_status = NULL,
-  include_entities = "false", current = NULL, ...)
+  cursor = NULL, count = 200, skip_status = NULL,
+  include_user_entities = "false", current = NULL, ...)
 }
 \arguments{
 \item{twitter_token}{Twitter token}

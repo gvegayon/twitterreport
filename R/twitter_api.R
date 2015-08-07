@@ -38,7 +38,7 @@ tw_api_wait <- function(minutes=1) {
 #' @param ... Additional arguments passed to GET
 #' @return A response class from the httr package (can be parsed with -content-)
 #' @export
-.tw_api_get <- function(q,twitter_token,minutes,noisy=FALSE,...) {
+.tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
   status <- 0
   while (status!=200) {
     # Making the call
@@ -116,7 +116,7 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
       paste0(
         "https://api.twitter.com/1.1/users/show.json?screen_name=",usr),
       twitter_token,
-      5,...)
+      15,...)
   
   # Checking if everything went fine
   if (is.null(req)) return(NULL)
@@ -223,10 +223,13 @@ tw_api_get_statuses_user_timeline <- function(
   
   screen_name <- gsub("^@","",screen_name)
   
+  if (count>200 & is.null(max_id)) 
+    message("We will need to do this in several steps...")
+  
   # API CALL
   req <- .tw_api_get(
     q="https://api.twitter.com/1.1/statuses/user_timeline.json",
-    twitter_token, 5, query=list(
+    twitter_token, 15, query=list(
       screen_name=screen_name, user_id=user_id, since_id=since_id, count=count,
       max_id=max_id, exclude_replies=exclude_replies, include_rts=include_rts,
       include_entities='false'), 
@@ -247,14 +250,19 @@ tw_api_get_statuses_user_timeline <- function(
     replyto <- x$in_reply_to_screen_name
     nfav    <- x$favorite_count
     isfav   <- x$favorited
+    rpl2sid <- x$in_reply_to_status_id
+    lang    <- x$lang
+    
     data.frame(
       screen_name             = x$user$screen_name, 
       in_reply_to_screen_name = ifelse(is.null(replyto),NA,replyto),
+      in_reply_to_status_id   = ifelse(is.null(rpl2sid),NA,rpl2sid),
       user_id                 = x$user$id,
       created_at              = strptime(x$created_at,'%a %b %d %T +0000 %Y'),
       id                      = x$id,
       text                    = x$text, 
       source                  = x$source,
+      lang                    = ifelse(is.null(lang),NA,lang),
       truncated               = x$truncated,
       retweet_count           = x$retweet_count,
       favorite_count          = ifelse(is.null(nfav),NA,nfav),
@@ -268,6 +276,19 @@ tw_api_get_statuses_user_timeline <- function(
   # Processing the data a litthe bit
   req <- as.data.frame(bind_rows(req))
   req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
+  
+  # Checking if we have to make a second call
+  if (nrow(req)<count & nrow(req)>0) {
+    togo <- max(c(0,count - nrow(req)))
+    
+    minid <- min(req$id)
+    
+    message('Number of statuses got: ', nrow(req), ', to go: ',count, 
+            ' (checking id ',minid,')')
+    req <- rbind(req, tw_api_get_statuses_user_timeline(
+      screen_name,twitter_token, user_id, since_id, togo, max_id=minid,
+      exclude_replies, include_rts, quietly,...))
+  }
   
   class(req) <- c('tw_Class_api_timeline', class(req))
   
@@ -338,7 +359,7 @@ tw_api_get_search_tweets <- function(q, twitter_token,
   # API CALL
   req <- .tw_api_get(
     "https://api.twitter.com/1.1/search/tweets.json",
-    twitter_token, 5,
+    twitter_token, 15,
     query=list(
       q=q,geocode=geocode, lang=lang, locale=locale, result_type=result_type,
       count=100, until=until, since_id=NULL, max_id=NULL,include_entities='false'),
@@ -426,7 +447,7 @@ tw_write_json_network <- function(graph) {
 #' @export
 tw_api_trends_available <- function(twitter_token,...) {
   req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',
-                     twitter_token,minutes = 5,...)
+                     twitter_token,minutes = 15,...)
   
   # Checking if everything went fine
   if (is.null(req)) return(NULL)
@@ -467,7 +488,7 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   # Making the request
   req <- .tw_api_get(
     paste0('https://api.twitter.com/1.1/trends/place.json?id=',id,
-           ifelse(exclude,'&exclude=hashtags','')),twitter_token, 5)
+           ifelse(exclude,'&exclude=hashtags','')),twitter_token, 15)
   
   if (is.null(req)) return(NULL)
   else if (class(req)=='response')
@@ -508,14 +529,15 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #'
 tw_api_get_followers_list <- function(
   twitter_token, user_id=NULL, screen_name=NULL, cursor=NULL, count=200,
-  skip_status=NULL, include_entities='false',current=NULL,...) {
+  skip_status=NULL, include_user_entities='false',current=NULL,...) {
   
   # API CALL
   req <- .tw_api_get(
     "https://api.twitter.com/1.1/followers/list.json",
-    twitter_token, 5,
+    twitter_token, 15,
     query=list(user_id=user_id, screen_name=screen_name, cursor=cursor,
-               count=count, skip_status=skip_status,include_entities=include_entities),
+               count=count, skip_status=skip_status,
+               include_user_entities=include_user_entities),
     ...
   )
   
@@ -527,17 +549,59 @@ tw_api_get_followers_list <- function(
   # If it works, then process the data
   req <- content(req)
   
+  # Processing the info
+  usrs <- do.call('rbind', lapply(req$users, function(x,...) {
+    # Nullable elements
+    time_zone   <- req$time_zone
+    utc_offset  <- req$utc_offset
+    description <- req$description
+    location    <- req$location
+    
+    data.frame(
+      stringsAsFactors = FALSE,
+      id                      = x$id,
+      name                    = x$name,
+      screen_name             = x$screen_name,
+      contributors_enabled    = x$contributors_enabled,
+      created_at              = strptime(x$created_at,'%a %b %d %T +0000 %Y'),
+      default_profile         = x$default_profile,
+      default_profile_image   = x$default_profile_image,
+      description             = ifelse(is.null(description),NA,description),
+      favourites_count        = x$favourites_count,
+      followers_count         = x$followers_count,
+      friends_count           = x$friends_count,
+      geo_enabled             = x$geo_enabled,
+      is_translator           = x$is_translator,
+      lang                    = x$lang,
+      listed_count            = x$listed_count,
+      location                = ifelse(is.null(location),NA,location),
+      profile_image_url       = x$profile_image_url,
+      profile_image_url_https = x$profile_image_url_https,
+      protected               = x$protected,
+      statuses_count          = x$statuses_count,
+      time_zone               = ifelse(is.null(time_zone),NA,time_zone),
+      utc_offset              = ifelse(is.null(utc_offset),NA,utc_offset),
+      verified                = x$verified,
+      next_cursor             = req$next_cursor
+    )
+  }))
+  
   # Checking cursor
   n <- length(current)
   
-  if (!n) current <- list(x$users)
-  else current[[n+1]] <- x$users
+  if (!n) current <- list(usrs)
+  else current[[n+1]] <- usrs
   
-  if (req$next_cursor) current <- tw_api_get_followers_list(
+  message('Getting the next cursor ',req$next_cursor,'. So far we\'ve got ',length(current))
+  
+  if (req$next_cursor) {
+    current <- tw_api_get_followers_list(
       twitter_token, user_id, screen_name, cursor=req$next_cursor, count,
-      skip_status, include_entities,current,...
+      skip_status, include_user_entities,current,...
     )
+  }
   
+  current <- do.call('rbind',current)
   return(current)
 }
 
