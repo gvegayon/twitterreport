@@ -1,4 +1,19 @@
 ################################################################################
+# Lexicon datasets
+################################################################################
+#' Negative Lexicon (en)
+#' @name sentiment_lexicon_neg_en
+#' @format A Character vector
+#' @source \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
+NULL
+
+#' Positive Lexicon (en)
+#' @name sentiment_lexicon_pos_en
+#' @format A Character vector
+#' @source \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
+NULL
+
+################################################################################
 # Names datasets
 ################################################################################
 #' Spanish male names
@@ -110,3 +125,4 @@ NULL
 #' @format A data.frame with 100 rows and 23 columns
 #' @source \url{https://dev.twitter.com}
 NULL
+

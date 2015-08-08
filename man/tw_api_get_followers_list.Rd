@@ -6,7 +6,7 @@
 \usage{
 tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
   cursor = NULL, count = 200, skip_status = NULL,
-  include_user_entities = "false", ...)
+  include_user_entities = "false", howmany = NULL, ...)
 }
 \arguments{
 \item{screen_name}{Screen name}
@@ -20,6 +20,10 @@ tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
 \item{count}{Number of registries per page (advanced)}
 
 \item{skip_status}{It self}
+
+\item{howmany}{}
+
+\item{...}{}
 
 \item{include_entities}{(advanced)}
 }
