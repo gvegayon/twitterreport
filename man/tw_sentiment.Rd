@@ -4,7 +4,8 @@
 \alias{tw_sentiment}
 \title{Computes sentiment score}
 \usage{
-tw_sentiment(text, pos = NULL, neg = NULL, lang = "en")
+tw_sentiment(text, pos = NULL, neg = NULL, pos_s = NULL, neg_s = NULL,
+  lang = "en", normalize = TRUE)
 }
 \arguments{
 \item{text}{Character vector}
@@ -13,7 +14,13 @@ tw_sentiment(text, pos = NULL, neg = NULL, lang = "en")
 
 \item{neg}{Negative words}
 
-\item{lang}{Languaje}
+\item{pos_s}{Numeric vector of scores for each word in the pos vec}
+
+\item{neg_s}{Numeric vector of scores for each word in the neg vec}
+
+\item{lang}{Languaje of the lexicon (can be either 'en' or 'es')}
+
+\item{normalize}{Whether or not to normalize the values of each words' score.}
 }
 \value{
 Numeric Vector with scores

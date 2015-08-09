@@ -19,19 +19,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // cpp_tw_sentiment
-NumericVector cpp_tw_sentiment(List x, CharacterVector pos, CharacterVector neg, NumericVector pos_score, NumericVector neg_score, CharacterVector neu, NumericVector neu_score);
-RcppExport SEXP twitterreport_cpp_tw_sentiment(SEXP xSEXP, SEXP posSEXP, SEXP negSEXP, SEXP pos_scoreSEXP, SEXP neg_scoreSEXP, SEXP neuSEXP, SEXP neu_scoreSEXP) {
+NumericVector cpp_tw_sentiment(const List x, CharacterVector pos, CharacterVector neg, const NumericVector pos_score, const NumericVector neg_score, CharacterVector neu, const NumericVector neu_score, bool normalize);
+RcppExport SEXP twitterreport_cpp_tw_sentiment(SEXP xSEXP, SEXP posSEXP, SEXP negSEXP, SEXP pos_scoreSEXP, SEXP neg_scoreSEXP, SEXP neuSEXP, SEXP neu_scoreSEXP, SEXP normalizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const List >::type x(xSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type pos(posSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type neg(negSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pos_score(pos_scoreSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type neg_score(neg_scoreSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type pos_score(pos_scoreSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type neg_score(neg_scoreSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type neu(neuSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type neu_score(neu_scoreSEXP);
-    __result = Rcpp::wrap(cpp_tw_sentiment(x, pos, neg, pos_score, neg_score, neu, neu_score));
+    Rcpp::traits::input_parameter< const NumericVector >::type neu_score(neu_scoreSEXP);
+    Rcpp::traits::input_parameter< bool >::type normalize(normalizeSEXP);
+    __result = Rcpp::wrap(cpp_tw_sentiment(x, pos, neg, pos_score, neg_score, neu, neu_score, normalize));
     return __result;
 END_RCPP
 }

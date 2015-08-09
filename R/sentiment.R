@@ -24,11 +24,17 @@
 #                                  as.is=TRUE)
 # warriner_et_al_en <- subset(warriner_et_al_en, select=c(Word,V.Mean.Sum))
 # colnames(warriner_et_al_en) <- c("word","valence")
+# write.csv(warriner_et_al_en, file='data/warriner_et_al_en.csv',
+#                     quote = FALSE, row.names = FALSE)
+# system('xz data/warriner_et_al_en.csv')
 # 
 # warriner_et_al_es <- read.csv("ddata/Warriner_et_al/Ratings_Warriner_et_al_Spanish.csv",
 #                                  as.is=TRUE)
 # warriner_et_al_es <- subset(warriner_et_al_es, select=c(Palabra,V.Mean.Sum))
 # colnames(warriner_et_al_es) <- c("word","valence")
+# write.csv(warriner_et_al_es, file='data/warriner_et_al_es.csv',
+#           quote = FALSE, row.names = FALSE)
+# system('xz data/warriner_et_al_es.csv')
 
 #' Computes sentiment score
 #' 
@@ -37,7 +43,10 @@
 #' @param text Character vector
 #' @param pos Positive words
 #' @param neg Negative words
-#' @param lang Languaje
+#' @param pos_s Numeric vector of scores for each word in the pos vec
+#' @param neg_s Numeric vector of scores for each word in the neg vec
+#' @param lang Languaje of the lexicon (can be either 'en' or 'es')
+#' @param normalize Whether or not to normalize the values of each words' score.
 #'
 #' @details By default uses an english lexicon downloaded from 
 #' \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html}.
@@ -47,16 +56,31 @@
 #' @return Numeric Vector with scores
 #' @export
 #'
-tw_sentiment <- function(text, pos=NULL, neg=NULL, lang='en') {
+tw_sentiment <- function(
+  text, pos=NULL, neg=NULL, pos_s=NULL, neg_s=NULL, lang='en', normalize=TRUE) {
   x <- sapply(tolower(text), strsplit, split="[^a-zA-Z']")
   x <- lapply(x, gsub, pattern="[^a-zA-Z]", replacement="")
   
   path <- system.file('data/',package='twitterreport')
   
-  if (!length(pos)) pos<-read.csv(
-    paste0(path,'/sentiment_lexicon_pos_',lang,'.csv.xz'), as.is=TRUE)
-  if (!length(neg)) neg<-read.csv(
-    paste0(path,'/sentiment_lexicon_neg_',lang,'.csv.xz'), as.is=TRUE)
+  # Checking language
+  if (!(lang %in% c('en','es'))) stop('Invalid language, only \'es\' or \'en\' are supported')
   
-  cpp_tw_sentiment(x, pos[,1], neg[,1])
+  # Checking list of words
+  if (!length(pos)) {
+    pos<-read.csv(
+    paste0(path,'/warriner_et_al_',lang,'.csv.xz'), as.is=TRUE)
+    pos_s <- pos$valence
+    pos   <- pos$word
+  }
+  if (!length(neg)) {
+    neg   <- character()
+    neg_s <- numeric()
+  }
+  
+  # Checking scores
+  if (!length(pos_s)) pos_s <- rep(1, length(pos))
+  if (!length(neg_s)) neg_s <- rep(-1, length(neg))
+  
+  cpp_tw_sentiment(x, pos, neg, pos_s, neg_s, normalize = normalize)
 }

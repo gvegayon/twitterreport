@@ -13,4 +13,6 @@ check:
 	make build;
 	R CMD check --as-cran twitterreport_*
 doc:
-	Rscript -e 'roxygen2::roxygenise()'
+	rm *.o twitterreport.so &
+	Rscript -e 'roxygen2::roxygenise()' ;
+	Rscript -e 'Rcpp::compileAttributes(verbose=TRUE)'

@@ -22,11 +22,6 @@ NULL
 NULL
 #' @importFrom RCurl getURL
 NULL
-# @importFrom NLP 
-# NULL
-
-#' @import ggvis
-NULL
 
 ################################################################################
 # knitr!

@@ -13,6 +13,18 @@ NULL
 #' @source \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
 NULL
 
+#' Warriner et al. Lexicon (en)
+#' @name warriner_et_al_en
+#' @format A data.frame with scores (Valence)
+#' @source \url{http://crr.ugent.be/archives/1003}
+NULL
+
+#' Warriner et al. Lexicon (es)
+#' @name warriner_et_al_es
+#' @format A data.frame with scores (Valence)
+#' @source \url{http://danigayo.info/blog/index.php?entry=entry130117-183114}
+NULL
+
 ################################################################################
 # Names datasets
 ################################################################################

@@ -106,8 +106,6 @@ plot(tw_words(senate_tweets$text), max.n.words = 50)
 Using english and spanish names, the `tw_gender` function matches the character argument (which can be a vector) with either a male or female name (or unidentified).
 
 ```{r Gender,out.width='350px', out.height='350px'}
-library(ggvis)
-
 # Getting the names
 sen <- tolower(senators_profile$tw_name)
 sen <- gsub('\\bsen(ator|\\.)\\s+','',sen)
@@ -115,7 +113,14 @@ sen <- gsub('\\s+.+','',sen)
 
 tab <- as.data.frame(table(tw_gender(sen)))
 colnames(tab) <- c('Gender','count')
-tab %>% ggvis(~Gender, ~count) %>% layer_bars()
+
+if (requireNamespace("ggvis", quietly=TRUE)) {
+  library(ggvis)
+  tab %>% ggvis(~Gender, ~count) %>% layer_bars()
+} else {
+  barplot(tab)
+}
+
 ```
 
 ## Sentiment analysis
@@ -124,8 +129,14 @@ Here we have an example clasifying senate tweets on #irandeal. Again, using `ggv
 
 ```{r}
 irandeal <- subset(senate_tweets, grepl('irandeal',text, ignore.case = TRUE))
-irandeal$sentiment <- tw_sentiment(irandeal$text)
-irandeal %>% ggvis(~sentiment) %>% layer_bars()
+irandeal$sentiment <- tw_sentiment(irandeal$text, normalize = TRUE)
+
+if (requireNamespace("ggvis", quietly=TRUE)) {
+  library(ggvis)
+  irandeal %>% ggvis(~sentiment) %>% layer_histograms()
+} else {
+  hist(irandeal$sentiment)
+}
 ```
 
 
