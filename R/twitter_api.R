@@ -413,12 +413,12 @@ tw_api_get_search_tweets <- function(q, twitter_token,
 
 #' GET friends/ids
 #'
-#' @param scree_name 
-#' @param twitter_token 
-#' @param user_id 
-#' @param cursor 
-#' @param count 
-#' @param ... 
+#' @param screen_name Screen name
+#' @param twitter_token Token
+#' @param user_id User ID number
+#' @param cursor Cursor page
+#' @param count Number of elements to download
+#' @param ... Further arguments to be passed to \code{\link{GET}}
 #'
 #' @return A vector
 #' @export
@@ -456,12 +456,12 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 
 #' GET followers/ids
 #'
-#' @param scree_name 
-#' @param twitter_token 
-#' @param user_id 
-#' @param cursor 
-#' @param count 
-#' @param ... 
+#' @param screen_name User screen name
+#' @param twitter_token Token
+#' @param user_id User Id number
+#' @param cursor Page number (cursor)
+#' @param count Number of ids by page
+#' @param ... Further arguments to be passed to \code{\link{GET}}
 #'
 #' @return A vector
 #' @export
@@ -609,9 +609,9 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' @param cursor (advanced)
 #' @param count Number of registries per page (advanced)
 #' @param skip_status It self
-#' @param include_entities  (advanced)
-#' @param howmany
-#' @param ...
+#' @param include_user_entities (advanced)
+#' @param howmany Number of followers to download
+#' @param ... Further arguments to be passed to \code{\link{GET}}
 #'
 #' @return A list
 #' @export

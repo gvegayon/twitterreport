@@ -34,11 +34,11 @@ tw_network <- function(
   if (excludeSelf) tmp <- subset(tmp,source!=target)
   
   # Frequency
-  tmp <- group_by(tmp, source, target)
+  tmp <- dplyr::group_by(tmp, source, target)
   tmp <- as.data.frame(summarise(tmp,'value'=n()))
   
   # Filtering interactions
-  tmp <- subset(tmp,value>=minInteract)
+  tmp <- tmp[tmp$value>=minInteract,]
   
   # Encoding links
   ne <- nrow(tmp)

@@ -13,7 +13,7 @@ cpp_tw_gender <- function(x, male, female) {
     .Call('twitterreport_cpp_tw_gender', PACKAGE = 'twitterreport', x, male, female)
 }
 
-cpp_tw_sentiment <- function(x, neg, pos, neg_score, pos_score, neu = as.character( c()), neu_score = as.numeric( c())) {
-    .Call('twitterreport_cpp_tw_sentiment', PACKAGE = 'twitterreport', x, neg, pos, neg_score, pos_score, neu, neu_score)
+cpp_tw_sentiment <- function(x, pos, neg, pos_score = as.numeric( c()), neg_score = as.numeric( c()), neu = as.character( c()), neu_score = as.numeric( c())) {
+    .Call('twitterreport_cpp_tw_sentiment', PACKAGE = 'twitterreport', x, pos, neg, pos_score, neg_score, neu, neu_score)
 }
 

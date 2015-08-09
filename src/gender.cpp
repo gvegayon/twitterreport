@@ -1,14 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Matches names with genders
-//' 
-//' Internal use, please refer to \code{\link{tw_gender}} instead.
-//' 
-//' @param x Character vector with names
-//' @param male Character vector with male names
-//' @param female Character vector with female names
-//' @return Numeric vector with -1, 0, and 1 as 'unidentified', 'female', 'male'
 // [[Rcpp::export]]
 IntegerVector cpp_tw_gender(CharacterVector x, CharacterVector male, CharacterVector female) {
   int n   = x.size();

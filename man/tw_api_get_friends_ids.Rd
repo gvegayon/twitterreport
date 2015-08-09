@@ -8,17 +8,17 @@ tw_api_get_friends_ids(screen_name = NULL, twitter_token, user_id = NULL,
   cursor = NULL, count = 1000, ...)
 }
 \arguments{
-\item{twitter_token}{}
+\item{screen_name}{Screen name}
 
-\item{user_id}{}
+\item{twitter_token}{Token}
 
-\item{cursor}{}
+\item{user_id}{User ID number}
 
-\item{count}{}
+\item{cursor}{Cursor page}
 
-\item{...}{}
+\item{count}{Number of elements to download}
 
-\item{scree_name}{}
+\item{...}{Further arguments to be passed to \code{\link{GET}}}
 }
 \value{
 A vector

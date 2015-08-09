@@ -21,11 +21,11 @@ tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
 
 \item{skip_status}{It self}
 
-\item{howmany}{}
+\item{include_user_entities}{(advanced)}
 
-\item{...}{}
+\item{howmany}{Number of followers to download}
 
-\item{include_entities}{(advanced)}
+\item{...}{Further arguments to be passed to \code{\link{GET}}}
 }
 \value{
 A list

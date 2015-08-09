@@ -8,7 +8,7 @@ build:
 	make doc;
 	rm twitterreport_* &
 	R CMD REMOVE twitterreport_* &
-	R CMD build --resave-data .
+	R CMD build --no-resave-data .
 check:
 	make build;
 	R CMD check --as-cran twitterreport_*

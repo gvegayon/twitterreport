@@ -17,25 +17,25 @@ NULL
 # Names datasets
 ################################################################################
 #' Spanish male names
-#' @name male_names_es_db
+#' @name names_male_es
 #' @format A character vector with 25,442 elements
 #' @source \url{https://github.com/apalancat/spanish-names}
 NULL
 
 #' Spanish female names
-#' @name female_names_es_db
+#' @name names_female_es
 #' @format A character vector with 24,494 elements
 #' @source \url{https://github.com/apalancat/spanish-names}
 NULL
 
 #' English male names
-#' @name male_names_en_db
+#' @name names_male_en
 #' @format A character vector with 51,212 elements
 #' @source OpenGenderTracking project \url{https://github.com/OpenGenderTracking/globalnamedata}
 NULL
 
 #' English female names
-#' @name female_names_en_db
+#' @name names_female_en
 #' @format A character vector with 80,148 elements
 #' @source OpenGenderTracking project \url{https://github.com/OpenGenderTracking/globalnamedata}
 NULL

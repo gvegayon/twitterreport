@@ -27,12 +27,12 @@ tw_timeseries <- function(
       obj        = obj[[i]])
     })))
   
-  grp <- group_by(data, created_at, obj)
+  grp <- dplyr::group_by(data, created_at, obj)
   tmp <- summarise(grp, n=n())
   tmp <- tmp[order(-tmp$n),]
   
   # Getting the top k elements
-  grp <- group_by(tmp, obj)
+  grp <- dplyr::group_by(tmp, obj)
   who <- summarise(grp, n=sum(n))
   who <- who[order(-who$n),]$obj[1:nseries]
   

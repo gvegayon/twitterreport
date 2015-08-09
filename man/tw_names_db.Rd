@@ -4,16 +4,12 @@
 \alias{tw_names_db}
 \title{Retrieve the database of}
 \usage{
-tw_names_db(lan, male = TRUE, envir = NULL, loadOnly = FALSE)
+tw_names_db(lan, male = TRUE)
 }
 \arguments{
 \item{lan}{Languaje}
 
 \item{male}{TRUE loads male names}
-
-\item{envir}{Environment to which it will be loaded}
-
-\item{loadOnly}{TRUE only loads (no assign)}
 }
 \value{
 A factor vector indicating gender or unidentified
