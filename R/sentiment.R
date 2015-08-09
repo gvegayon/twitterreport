@@ -15,26 +15,26 @@
 # write.csv(sentiment_lexicon_pos_en, file='data/sentiment_lexicon_pos_en.csv',
 #           quote = FALSE, row.names = FALSE)
 
-# ################################################################################
-# # From Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.
-# # http://crr.ugent.be/archives/1003
-# # http://danigayo.info/blog/index.php?entry=entry130117-183114
-# ################################################################################
+################################################################################
+# From Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.
+# http://crr.ugent.be/archives/1003
+# http://danigayo.info/blog/index.php?entry=entry130117-183114
+################################################################################
 # warriner_et_al_en <- read.csv("ddata/Warriner_et_al/Ratings_Warriner_et_al.csv",
-#                                  as.is=TRUE)
+#                                  as.is=TRUE, dec = '.')
 # warriner_et_al_en <- subset(warriner_et_al_en, select=c(Word,V.Mean.Sum))
 # colnames(warriner_et_al_en) <- c("word","valence")
-# write.csv(warriner_et_al_en, file='data/warriner_et_al_en.csv',
-#                     quote = FALSE, row.names = FALSE)
-# system('xz data/warriner_et_al_en.csv')
+# write.table(warriner_et_al_en, file='data/warriner_et_al_en.csv',
+#                     quote = FALSE, row.names = FALSE, sep=";")
+# system('xz -f data/warriner_et_al_en.csv')
 # 
 # warriner_et_al_es <- read.csv("ddata/Warriner_et_al/Ratings_Warriner_et_al_Spanish.csv",
-#                                  as.is=TRUE)
+#                                  as.is=TRUE, dec='.')
 # warriner_et_al_es <- subset(warriner_et_al_es, select=c(Palabra,V.Mean.Sum))
 # colnames(warriner_et_al_es) <- c("word","valence")
-# write.csv(warriner_et_al_es, file='data/warriner_et_al_es.csv',
-#           quote = FALSE, row.names = FALSE)
-# system('xz data/warriner_et_al_es.csv')
+# write.table(warriner_et_al_es, file='data/warriner_et_al_es.csv',
+#           quote = FALSE, row.names = FALSE, sep=";")
+# system('xz -f data/warriner_et_al_es.csv')
 
 #' Computes sentiment score
 #' 
@@ -68,7 +68,7 @@ tw_sentiment <- function(
   
   # Checking list of words
   if (!length(pos)) {
-    pos<-read.csv(
+    pos<-read.table(sep=';',header = TRUE,file=
     paste0(path,'/warriner_et_al_',lang,'.csv.xz'), as.is=TRUE)
     pos_s <- pos$valence
     pos   <- pos$word

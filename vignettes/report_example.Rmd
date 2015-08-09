@@ -111,14 +111,15 @@ sen <- tolower(senators_profile$tw_name)
 sen <- gsub('\\bsen(ator|\\.)\\s+','',sen)
 sen <- gsub('\\s+.+','',sen)
 
-tab <- as.data.frame(table(tw_gender(sen)))
+otab <- table(tw_gender(sen))
+tab <- as.data.frame(otab)
 colnames(tab) <- c('Gender','count')
 
 if (requireNamespace("ggvis", quietly=TRUE)) {
   library(ggvis)
   tab %>% ggvis(~Gender, ~count) %>% layer_bars()
 } else {
-  barplot(tab)
+  barplot(otab)
 }
 
 ```
@@ -127,7 +128,7 @@ if (requireNamespace("ggvis", quietly=TRUE)) {
 
 Here we have an example clasifying senate tweets on #irandeal. Again, using `ggvis` we plot an histogram to show the output
 
-```{r}
+```{r Sentiments, out.width='350px', out.height='350px'}
 irandeal <- subset(senate_tweets, grepl('irandeal',text, ignore.case = TRUE))
 irandeal$sentiment <- tw_sentiment(irandeal$text, normalize = TRUE)
 

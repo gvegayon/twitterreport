@@ -10,4 +10,7 @@
 \description{
 Warriner et al. Lexicon (en)
 }
+\details{
+Spanish version translated by Daniel Gayo-Avello based on Warriner, et al.
+}
 

@@ -16,12 +16,14 @@ NULL
 #' Warriner et al. Lexicon (en)
 #' @name warriner_et_al_en
 #' @format A data.frame with scores (Valence)
+#' @details Spanish version translated by Daniel Gayo-Avello based on Warriner, et al.
 #' @source \url{http://crr.ugent.be/archives/1003}
 NULL
 
 #' Warriner et al. Lexicon (es)
 #' @name warriner_et_al_es
 #' @format A data.frame with scores (Valence)
+#' @details Based on \emph{Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.}
 #' @source \url{http://danigayo.info/blog/index.php?entry=entry130117-183114}
 NULL
 

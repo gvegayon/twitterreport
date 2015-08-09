@@ -10,4 +10,7 @@
 \description{
 Warriner et al. Lexicon (es)
 }
+\details{
+Based on \emph{Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.}
+}
 
