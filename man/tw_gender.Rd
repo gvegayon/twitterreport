@@ -4,11 +4,11 @@
 \alias{tw_gender}
 \title{Matches text with male/female names}
 \usage{
-tw_gender(x, male = NULL, female = NULL, lan = c("es", "en"),
-  rmNoAlpha = TRUE)
+tw_gender(Names, male = NULL, female = NULL, lan = c("en"),
+  rm.no.alpha = TRUE)
 }
 \arguments{
-\item{x}{Character vector of names/text to analyze and match}
+\item{Names}{Character vector of names/text to analyze and match}
 
 \item{male}{Character vector of male names}
 
@@ -16,19 +16,33 @@ tw_gender(x, male = NULL, female = NULL, lan = c("es", "en"),
 
 \item{lan}{Languaje of the names}
 
-\item{rmNoAlpha}{Whether or not to remove no alpha characters}
+\item{rm.no.alpha}{Whether or not to remove no alpha characters}
+}
+\value{
+A factor vector assigning gender to each \code{Name} provided.
 }
 \description{
-Matches text with male/female names
+Using names+gender dataset, matches a list of \code{Names} with a dictionary
+and sets the gender of the name.
 }
 \details{
-The char match is written in C++, which is why it should be fast
+The char match is written in C++, which is why it should be fast.
+
+When no \code{male} or \code{female} names are provided, the function uses
+by default the names datasets \code{\link{names_male_en}} and
+\code{\link{names_female_en}} (if \code{lan='en'}).
+
+If \code{lan='es'} and no list of male or female names is provided, the
+function will load the \code{\link{names_male_es}} and
+\code{\link{names_female_es}} datasets. Note that if \code{lan=c('es','en')}
+the function will use both.
+
+The argument \code{rm.no.alpha}, by default in \code{TRUE} set whether or not
+to remove no letter characters before analyzing the data.
 }
 \examples{
 # Some list of names
 mix <- c('pedro','peter','mariano','maria jose','pablo','paul','jenny')
 tw_gender(mix)
-
-# Example with the candidates
 }
 

@@ -1,3 +1,8 @@
+/* http://www.lindonslog.com/programming/r/rcpp/
+ * https://wbnicholson.wordpress.com/2014/07/10/parallelization-in-rcpp-via-openmp/
+ * http://gribblelab.org/CBootcamp/A2_Parallel_Programming_in_C.html
+ */
+
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -112,7 +117,7 @@ neg_score <- c(-1,-4,-2,-3)
 
 # Example data
 text <- c(
-  "I'm fealing sad today",
+  "I'm feeling sad today",
   "This is terrible, bad",
   "I'm doing ok",
   "I'm feeling great",

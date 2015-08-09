@@ -5,20 +5,20 @@
 \title{Computes sentiment score}
 \usage{
 tw_sentiment(text, pos = NULL, neg = NULL, pos_s = NULL, neg_s = NULL,
-  lang = "en", normalize = TRUE)
+  lan = "en", normalize = TRUE)
 }
 \arguments{
-\item{text}{Character vector}
+\item{text}{Character vector with the text to be classified}
 
-\item{pos}{Positive words}
+\item{pos}{Positive words lexicon}
 
-\item{neg}{Negative words}
+\item{neg}{Negative words lexicon}
 
 \item{pos_s}{Numeric vector of scores for each word in the pos vec}
 
 \item{neg_s}{Numeric vector of scores for each word in the neg vec}
 
-\item{lang}{Languaje of the lexicon (can be either 'en' or 'es')}
+\item{lan}{Languaje of the lexicon (can be either 'en' or 'es')}
 
 \item{normalize}{Whether or not to normalize the values of each words' score.}
 }
@@ -30,7 +30,39 @@ Computes sentiment score by counting the number of positive and negative terms.
 }
 \details{
 By default uses an english lexicon downloaded from
-\url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html}.
+\url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html}. In particular
+if no list of words is provided, the function loads the dataset
+\code{\link{warriner_et_al_en}} or \code{\link{warriner_et_al_es}}, depending
+on the \code{lang} argument, both of which contains a vector of words with
+their respective \emph{valence} (pleasantness of the stimulus).
+
+The arguments \code{pos_s} and \code{neg_s} allow to provide with scores
+(valence) to each vector of words, so instead of adding 1 or -1 for every
+positive or negative word the function can add some other value specified by
+these arguments.
+
+By default, when using the default lexicon, the function loads the english
+lexicon (\code{lan='en'}). Otherwise, if \code{lan} is set to 'es', it
+will load the spanish lexicon.
+
+When \code{normalize} is set to \code{TRUE} (default), the function will normalize
+the scores values for each word such as all values are within -1 and 1. Note that
+this does not implies that the final sentiment score will be in that range as
+well since it is a result of the addition of the scores.
+}
+\examples{
+# Example data
+ text <- c(
+   "I'm feeling sad today",
+   "This is terrible, bad",
+   "I'm doing ok",
+   "I'm feeling great",
+   "I'm feeling nothing",
+   "This is sick, but good at the same time")
+
+ # Getting the scores
+ tw_sentiment(text)
+ tw_sentiment(text, normalize=FALSE)
 }
 \seealso{
 \code{\link{sentiment_lexicon_pos_en}} \code{\link{sentiment_lexicon_neg_en}}

@@ -2,30 +2,42 @@
 % Please edit documentation in R/networks.R
 \name{tw_network}
 \alias{tw_network}
-\title{Creates conversation graph (directed)}
+\title{Creates graph (directed)}
 \usage{
-tw_network(source, target, onlyFrom = FALSE, excludeSelf = TRUE,
-  minInteract = 1, group = NULL, size = NULL)
+tw_network(source, target, only.from = FALSE, exclude.self = TRUE,
+  min.interact = 1, group = NULL, size = NULL)
 }
 \arguments{
-\item{source}{Vector of screen_name}
+\item{source}{Vector of \emph{screen_name}}
 
-\item{target}{List of vectors of mentions (output from tw_extract)}
+\item{target}{List of vectors of \emph{mentions} (output from \code{tw_extract})}
 
-\item{onlyFrom}{Whether to fileter the links to those only where
+\item{only.from}{Whether to filter the links to those only where
 source and target are in the \code{source} vector}
 
-\item{excludeSelf}{Whether to exclude selflinks}
+\item{exclude.self}{Whether to exclude self-links}
 
-\item{minInteract}{Minimun number of interactions to consider (links
-below this number will be excluded}
+\item{min.interact}{Minimun number of interactions to consider (links
+below this number will be excluded)}
 
 \item{group}{Data frame with two columns: name & group}
 
 \item{size}{Character name of the size variable}
 }
+\value{
+A two-element list containing two data.frames, nodes and links of
+class \code{tw_Class_graph} (to be used with \code{\link{plot.tw_Class_graph}}.
+The nodes data.frame includes two columns, \code{id}, \code{name} and
+\code{group}. The links data.frame includes three columns, \code{source},
+\code{target} and \code{value}.
+}
 \description{
-Creates conversation graph (directed)
+Using the output of \code{\link{tw_extract}} and the author of the message,
+creates a graph
+}
+\details{
+The \code{value} column in the \code{links} dataframe (see \strong{Value})
+is computed as the number of connexions between the source and the target.
 }
 \author{
 George G. Vega Yon

@@ -78,8 +78,8 @@ groups$name <- tolower(groups$name)
 
 senate_network <- tw_network(
   tolower(senate_tweets$screen_name),
-  lapply(tweets_components$mention,unique),onlyFrom = TRUE,
-  group=groups, minInteract = 3)
+  lapply(tweets_components$mention,unique),only.from = TRUE,
+  group=groups, min.interact = 3)
 
 plot(senate_network, nodelabel='real_name')
 ```

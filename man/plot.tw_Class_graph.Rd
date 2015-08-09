@@ -2,13 +2,13 @@
 % Please edit documentation in R/methods.R
 \name{plot.tw_Class_graph}
 \alias{plot.tw_Class_graph}
-\title{Plots a network using D3}
+\title{Plots a network using D3js}
 \usage{
 \method{plot}{tw_Class_graph}(x, y = NULL, nodelabel = "name",
   opacity = 0.9, opacityNoHover = 0.5, legend = TRUE, ...)
 }
 \arguments{
-\item{x}{A tw_Class_graph object (see tw_network)}
+\item{x}{A tw_Class_graph object (see \code{\link{tw_network}})}
 
 \item{y}{Ignored}
 
@@ -23,9 +23,9 @@
 \item{...}{Further arguments to pass to forceNetwork}
 }
 \value{
-A D3 graph
+A D3js graph
 }
 \description{
-Plots a network using D3
+Plots a network using D3js
 }
 

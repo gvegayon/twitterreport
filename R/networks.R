@@ -1,17 +1,30 @@
-#' @title Creates conversation graph (directed)
-#' @param source Vector of screen_name
-#' @param target List of vectors of mentions (output from tw_extract)
-#' @param onlyFrom Whether to fileter the links to those only where 
+#' Creates graph (directed)
+#' 
+#' Using the output of \code{\link{tw_extract}} and the author of the message,
+#' creates a graph
+#' 
+#' @param source Vector of \emph{screen_name}
+#' @param target List of vectors of \emph{mentions} (output from \code{tw_extract})
+#' @param only.from Whether to filter the links to those only where 
 #' source and target are in the \code{source} vector
-#' @param excludeSelf Whether to exclude selflinks
-#' @param minInteract Minimun number of interactions to consider (links
-#' below this number will be excluded
+#' @param exclude.self Whether to exclude self-links
+#' @param min.interact Minimun number of interactions to consider (links
+#' below this number will be excluded)
 #' @param group Data frame with two columns: name & group
 #' @param size Character name of the size variable
 #' @author George G. Vega Yon
+#' @return A two-element list containing two data.frames, nodes and links of
+#' class \code{tw_Class_graph} (to be used with \code{\link{plot.tw_Class_graph}}.
+#' The nodes data.frame includes two columns, \code{id}, \code{name} and
+#' \code{group}. The links data.frame includes three columns, \code{source},
+#' \code{target} and \code{value}.
+#' 
+#' @details The \code{value} column in the \code{links} dataframe (see \strong{Value})
+#' is computed as the number of connexions between the source and the target.
+#' 
 #' @export
 tw_network <- function(
-  source,target,onlyFrom=FALSE,excludeSelf=TRUE,minInteract=1, group=NULL,
+  source,target,only.from=FALSE,exclude.self=TRUE,min.interact=1, group=NULL,
   size=NULL) {
   
   # Old stringAsFactors
@@ -20,7 +33,7 @@ tw_network <- function(
   n <- length(source)
   
   # Reducing edges list
-  if (onlyFrom) {
+  if (only.from) {
     original <- unique(source)
     target <- lapply(target, function(x) x[which(x %in% original)])
   }
@@ -31,14 +44,14 @@ tw_network <- function(
   })))
   
   # If excludes self
-  if (excludeSelf) tmp <- subset(tmp,source!=target)
+  if (exclude.self) tmp <- subset(tmp,source!=target)
   
   # Frequency
-  tmp <- dplyr::group_by(tmp, source, target)
+  tmp <- group_by(tmp, source, target)
   tmp <- as.data.frame(summarise(tmp,'value'=n()))
   
   # Filtering interactions
-  tmp <- tmp[tmp$value>=minInteract,]
+  tmp <- tmp[tmp$value>=min.interact,]
   
   # Encoding links
   ne <- nrow(tmp)

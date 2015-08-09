@@ -75,15 +75,15 @@ plot.tw_Class_words <- function(
 # tab <- plot(words)
 # head(tab,20) 
 
-#' Plots a network using D3
-#' @param x A tw_Class_graph object (see tw_network)
+#' Plots a network using D3js
+#' @param x A tw_Class_graph object (see \code{\link{tw_network}})
 #' @param y Ignored
 #' @param nodelabel Name of the column that containts the name
 #' @param opacity See \code{\link{forceNetwork}}
 #' @param opacityNoHover Idem
 #' @param legend Whether to include a legend or not
 #' @param ... Further arguments to pass to forceNetwork
-#' @return A D3 graph
+#' @return A D3js graph
 #' @export
 plot.tw_Class_graph <- function(
   x,y=NULL,
