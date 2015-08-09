@@ -4,7 +4,8 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector cpp_tw_sentiment(
     List x, 
-    CharacterVector pos, CharacterVector neg,
+    CharacterVector pos, 
+    CharacterVector neg     = CharacterVector::create(),
     NumericVector pos_score = NumericVector::create(),
     NumericVector neg_score = NumericVector::create(),
     CharacterVector neu     = CharacterVector::create(),
@@ -43,6 +44,7 @@ NumericVector cpp_tw_sentiment(
       }
       
       // Loop through NEG
+      if (!n_neg) continue;
       for(int k=0;k<n_neg;++k) {
         if (neg[k]!=wrds[j]) continue;
         score[i] += neg_s[k];

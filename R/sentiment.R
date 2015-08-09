@@ -15,6 +15,21 @@
 # write.csv(sentiment_lexicon_pos_en, file='data/sentiment_lexicon_pos_en.csv',
 #           quote = FALSE, row.names = FALSE)
 
+# ################################################################################
+# # From Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.
+# # http://crr.ugent.be/archives/1003
+# # http://danigayo.info/blog/index.php?entry=entry130117-183114
+# ################################################################################
+# warriner_et_al_en <- read.csv("ddata/Warriner_et_al/Ratings_Warriner_et_al.csv",
+#                                  as.is=TRUE)
+# warriner_et_al_en <- subset(warriner_et_al_en, select=c(Word,V.Mean.Sum))
+# colnames(warriner_et_al_en) <- c("word","valence")
+# 
+# warriner_et_al_es <- read.csv("ddata/Warriner_et_al/Ratings_Warriner_et_al_Spanish.csv",
+#                                  as.is=TRUE)
+# warriner_et_al_es <- subset(warriner_et_al_es, select=c(Palabra,V.Mean.Sum))
+# colnames(warriner_et_al_es) <- c("word","valence")
+
 #' Computes sentiment score
 #' 
 #' Computes sentiment score by counting the number of positive and negative terms.
