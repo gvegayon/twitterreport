@@ -17,3 +17,4 @@
 ^twitterreport_.+$
 ^data-raw$
 ^imports\.R$
+.travis.yml
