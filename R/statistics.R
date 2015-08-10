@@ -60,9 +60,8 @@ tw_timeseries <- function(
   return(series)
 }
 
-#' Internal use
-#' @author George G. Vega Yon
-#' @export
+# Internal use
+# @author George G. Vega Yon
 .tw_format_unit <- function(obj) {
   units <- attributes(obj)$units
   if (units == 'days') return('%Y-%m-%d')

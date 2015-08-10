@@ -1,18 +1,24 @@
 twitterreport
 =============
 
-Out-of-the-box tools for analysis and reporting for twitter
+Out-of-the-box analysis and reporting tools for twitter
 
 About
 -----
 
-This package is an exercise to understad a little bit more how does the Twitter API works. Several functions allow to use the REST API through the `httr` package.
+While there are some (very neat) R packages focused on twitter (namely `twitteR` and `stramR`), `twitterreport` is centered on providing analysis and reporting tools for twitter data. The package's current version features:
 
-While there are some (very neat) R packages focused on twitter (specifically the package `twitteR` and `stramR`), `twitterreport` is centered in analysis and reporting tools. This package includes functions to extract mentions/hashtags/urls from text, match names with gender, create networks (currently of mentions), extract twitter accounts from a given url; besides of several twitter API tools using the REST API.
+-   Access to twitter API
+-   Extracting mentions/hashtags/urls from text (tweets)
+-   Gender tagging by matching user names with gender datasets included in the package (**es** and **en**)
+-   Creating (mentions) networks and visualizing them using D3js
+-   Sentiment analysis (basic, but useful) using lexicons included in the package (again, **es** and **en**)
+-   Creating time series charts of hashtags/users/etc. and visualizing them using D3js
+-   Create wordclouds (after removing stop words and processing the text)
 
-You can take a look at a live example here <http://www.its.caltech.edu/~gvegayon/twitter/report_example.html> and the source code for this example here <https://github.com/gvegayon/twitterreport/blob/master/vignettes/report_example.Rmd>
+You can take a look at a live example at <http://www.its.caltech.edu/~gvegayon/twitter/report_example.html>, and at the source code of that example at <https://github.com/gvegayon/twitterreport/blob/master/vignettes/report_example.Rmd>
 
-Some of the functions here were firstly originated in the project *nodoschile.cl*, a Chile based SNA consultancy company. You can visit the project <http://nodos.modularity.cl> and the website (part of nodoschile) that motivated `twitterreports` here <http://modularity.cl/presidenciales>.
+Some of the functions here were firstly developed in the project *nodoschile.cl* (no longer running). You can visit the project's testimonial website <http://nodos.modularity.cl> and the website (part of nodoschile) that motivated `twitterreports` at <http://modularity.cl/presidenciales>.
 
 Installation
 ------------
@@ -105,6 +111,21 @@ barplot(tab)
 ```
 
 ![](README_files/figure-markdown_github/gender-1.png?raw=true)
+
+Sentiment analysis
+------------------
+
+Here we have an example clasifying senate tweets on the \#irandeal.
+
+``` r
+irandeal <- subset(senate_tweets, grepl('irandeal',text, ignore.case = TRUE))
+irandeal$sentiment <- tw_sentiment(irandeal$text, normalize = TRUE)
+
+hist(irandeal$sentiment, col = 'lightblue', 
+     xlab ='Valence (strength of sentiment)')
+```
+
+<img src="README_files/figure-markdown_github/Sentiments-1.png?raw=true" title="" alt="" width="350px" height="350px" />
 
 Author
 ------

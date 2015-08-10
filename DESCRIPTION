@@ -1,5 +1,5 @@
 Package: twitterreport
-Title: Out-of-the-Box Analysis and Reporting Tools for Twitter
+Title: Out-of-the-box analysis and reporting tools for twitter
 Version: 0.15.8.9.1
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com",
                   role = c("aut", "cre"))
