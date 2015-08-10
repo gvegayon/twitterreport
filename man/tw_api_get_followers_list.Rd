@@ -6,7 +6,7 @@
 \usage{
 tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
   cursor = NULL, count = 200, skip_status = NULL,
-  include_user_entities = "false", howmany = NULL, ...)
+  include_user_entities = "false", max.n = NULL, ...)
 }
 \arguments{
 \item{screen_name}{Screen name}
@@ -23,7 +23,7 @@ tw_api_get_followers_list(screen_name = NULL, twitter_token, user_id = NULL,
 
 \item{include_user_entities}{(advanced)}
 
-\item{howmany}{Number of followers to download}
+\item{max.n}{Number of followers to download}
 
 \item{...}{Further arguments to be passed to \code{\link{GET}}}
 }

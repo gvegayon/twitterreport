@@ -15,5 +15,5 @@
 ^ddata$
 ^playground$
 ^twitterreport_.+$
-
+^data-raw$
 ^imports\.R$

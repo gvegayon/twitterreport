@@ -51,7 +51,7 @@ Using the twitter api, get information about a twitter account
 }
 \examples{
 \dontrun{
-tw_api_get_users_show('gvegayon')
+tw_api_get_users_show('gvegayon', mytoken)
 }
 }
 \references{

@@ -32,13 +32,12 @@ tw_api_wait <- function(minutes=1) {
   message('done\nTrying again...')
 }
 
-#' @title Make a call to the twitter API
-#' @param q URL inlcuding the parameters
-#' @param minutes Argument passed to tw_api_wait
-#' @param ... Additional arguments passed to GET
-#' @return A response class from the httr package (can be parsed with -content-)
-#' @export
-.tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
+# @title Make a call to the twitter API
+# @param q URL inlcuding the parameters
+# @param minutes Argument passed to tw_api_wait
+# @param ... Additional arguments passed to GET
+# @return A response class from the httr package (can be parsed with -content-)
+tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
   status <- 0
   while (status!=200) {
     # Making the call
@@ -104,7 +103,7 @@ tw_api_wait <- function(minutes=1) {
 #' }
 #' @examples
 #' \dontrun{
-#' tw_api_get_users_show('gvegayon')
+#' tw_api_get_users_show('gvegayon', mytoken)
 #' }
 #' @references Twitter REST API (GET users/show)
 #' \url{https://dev.twitter.com/rest/reference/get/users/show}
@@ -112,7 +111,7 @@ tw_api_wait <- function(minutes=1) {
 tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) { 
   if (is.na(usr)) return(NULL)
   else 
-    req <- .tw_api_get(
+    req <- tw_api_get(
       paste0(
         "https://api.twitter.com/1.1/users/show.json?screen_name=",usr),
       twitter_token,
@@ -223,11 +222,15 @@ tw_api_get_statuses_user_timeline <- function(
   
   screen_name <- gsub("^@","",screen_name)
   
-  if (count>200 & is.null(max_id)) 
+  # Checking limits
+  if (count > 3200) warning('API can return up to 3,200 tweets.')
+  count <- min(c(count,3200))
+  
+  if (count > 200 & is.null(max_id)) 
     message("We will need to do this in several steps...")
   
   # API CALL
-  req <- .tw_api_get(
+  req <- tw_api_get(
     q="https://api.twitter.com/1.1/statuses/user_timeline.json",
     twitter_token, 15, query=list(
       screen_name=screen_name, user_id=user_id, since_id=since_id, count=count,
@@ -287,7 +290,7 @@ tw_api_get_statuses_user_timeline <- function(
             ' (checking id ',minid,')')
     req <- rbind(req, tw_api_get_statuses_user_timeline(
       screen_name,twitter_token, user_id, since_id, togo, max_id=minid,
-      exclude_replies, include_rts, quietly,...))
+      exclude_replies, include_rts, quietly=TRUE,...))
   }
   
   class(req) <- c('tw_Class_api_timeline', class(req))
@@ -357,7 +360,7 @@ tw_api_get_search_tweets <- function(q, twitter_token,
   if (length(result_type)>1) result_type<-'mixed'
   
   # API CALL
-  req <- .tw_api_get(
+  req <- tw_api_get(
     "https://api.twitter.com/1.1/search/tweets.json",
     twitter_token, 15,
     query=list(
@@ -426,7 +429,7 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
                                    cursor=NULL, count=1000, ...) {
   
   # API CALL
-  req <- .tw_api_get(
+  req <- tw_api_get(
     "https://api.twitter.com/1.1/friends/ids.json",
     twitter_token, 15,
     query=list(
@@ -469,7 +472,7 @@ tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NU
                                    cursor=NULL, count=1000, ...) {
   
   # API CALL
-  req <- .tw_api_get(
+  req <- tw_api_get(
     "https://api.twitter.com/1.1/followers/ids.json",
     twitter_token, 15,
     query=list(
@@ -501,7 +504,6 @@ tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NU
 #' Converts a data.frame into JSON
 #' @param d A data frame
 #' @return A Char string as JSON format
-#' @export
 .tw_df_to_json <- function(d) {
   vnames <- colnames(d)
   for (i in 1:ncol(d)) {
@@ -515,7 +517,6 @@ tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NU
 
 #' Writes a JSON graph to be used with d3js
 #' @param graph A \code{tw_Class_graph} class object (See \code{\link{tw_network}})
-#' @export
 tw_write_json_network <- function(graph) {
   
   if (!inherits(graph, 'tw_Class_graph')) 
@@ -533,7 +534,7 @@ tw_write_json_network <- function(graph) {
 #' \url{https://dev.twitter.com/rest/reference/get/trends/available}
 #' @export
 tw_api_trends_available <- function(twitter_token,...) {
-  req <- .tw_api_get('https://api.twitter.com/1.1/trends/available.json',
+  req <- tw_api_get('https://api.twitter.com/1.1/trends/available.json',
                      twitter_token,minutes = 15,...)
   
   # Checking if everything went fine
@@ -573,7 +574,7 @@ tw_api_trends_available <- function(twitter_token,...) {
 tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   
   # Making the request
-  req <- .tw_api_get(
+  req <- tw_api_get(
     paste0('https://api.twitter.com/1.1/trends/place.json?id=',id,
            ifelse(exclude,'&exclude=hashtags','')),twitter_token, 15)
   
@@ -610,7 +611,7 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' @param count Number of registries per page (advanced)
 #' @param skip_status It self
 #' @param include_user_entities (advanced)
-#' @param howmany Number of followers to download
+#' @param max.n Number of followers to download
 #' @param ... Further arguments to be passed to \code{\link{GET}}
 #'
 #' @return A list
@@ -618,12 +619,16 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #'
 tw_api_get_followers_list <- function(screen_name=NULL,
   twitter_token, user_id=NULL, cursor=NULL, count=200,
-  skip_status=NULL, include_user_entities='false',howmany=NULL,...) {
+  skip_status=NULL, include_user_entities='false',max.n=NULL,...) {
   
-  # Working the howmany (SOLVE)
+  # Fixing the number to retrieve
+  if (length(max.n)) getall <- FALSE
+  else getall <- TRUE
+  
+  if (!getall) count <- min(c(count, max.n))
   
   # API CALL
-  req <- .tw_api_get(
+  req <- tw_api_get(
     "https://api.twitter.com/1.1/followers/list.json",
     twitter_token, 15,
     query=list(user_id=user_id, screen_name=screen_name, cursor=cursor,
@@ -676,15 +681,21 @@ tw_api_get_followers_list <- function(screen_name=NULL,
     )
   }))
   
-  count  <- max(c(0,count - nrow(usrs)))
+  # Checking if we need to continue or not
+  if (!getall) {
+    max.n  <- max(c(0,max.n - nrow(usrs)))
+    if (!max.n) return(usrs)
+  }
+  
   cursor <- req$next_cursor
 
-  if (count & cursor) {
-    message('Number of followers got: ', nrow(usrs), ', to go: ',count, 
-            ' (checking id ',cursor,')')
+  if (cursor) {
+    message('Number of records got: ', nrow(usrs), ' (next cursor ',cursor,')')
+    
+    # Next recursion
     usrs <- rbind(usrs, tw_api_get_followers_list(screen_name,
       twitter_token, user_id,  cursor, count,
-      skip_status, include_user_entities,...
+      skip_status, include_user_entities, max.n,...
     ))
   }
   
