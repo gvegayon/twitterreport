@@ -14,11 +14,11 @@ tw_gen_token <- function(appname,key,secret=NULL) {
   oauth1.0_token(oauth_endpoints('twitter'),myapp)
 }
 
-#' Wait in minutes to reconnect to the API
-#' @param minutes Number of minutes to wait
-#' @details Internal use only (it's just a timer...)
-#' @return Void
-#' @export
+# Wait in minutes to reconnect to the API
+# @param minutes Number of minutes to wait
+# @details Internal use only (it's just a timer...)
+# @return Void
+# @export
 tw_api_wait <- function(minutes=1) {
   nbars <- 60
   secs  <- minutes*60/nbars
@@ -218,7 +218,7 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 tw_api_get_statuses_user_timeline <- function(
   screen_name=NULL,twitter_token, user_id=NULL, since_id=NULL, count=100,
   max_id=NULL, exclude_replies=NULL, include_rts=NULL,
-  quietly=FALSE,...) {
+  quietly=FALSE, ...) {
   
   screen_name <- gsub("^@","",screen_name)
   
@@ -281,10 +281,10 @@ tw_api_get_statuses_user_timeline <- function(
   req$source_name <- str_extract(req$source,'(?<=">).+(?=</a)')
   
   # Checking if we have to make a second call
-  if (nrow(req)<count & nrow(req)>0) {
+  if (nrow(req)<count & nrow(req)>1) {
     togo <- max(c(0,count - nrow(req)))
     
-    minid <- min(req$id)
+    minid <- min(req$id)-1
     
     message('Number of statuses got: ', nrow(req), ', to go: ',count, 
             ' (checking id ',minid,')')
@@ -501,9 +501,9 @@ tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NU
   followers
 }
 
-#' Converts a data.frame into JSON
-#' @param d A data frame
-#' @return A Char string as JSON format
+# Converts a data.frame into JSON
+# @param d A data frame
+# @return A Char string as JSON format
 .tw_df_to_json <- function(d) {
   vnames <- colnames(d)
   for (i in 1:ncol(d)) {
