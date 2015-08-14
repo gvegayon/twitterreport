@@ -15,7 +15,12 @@ NumericVector cpp_tw_sentiment(
     const NumericVector neg_score = NumericVector::create(),
     CharacterVector neu     = CharacterVector::create(),
     const NumericVector neu_score = NumericVector::create(),
-    bool normalize          = true)
+    bool normalize          = true
+//   ,
+//     CharacterVector x_enc   = CharacterVector::create(),
+//     CharacterVector pos_dic = DataFrame::create(),
+//     CharacterVector neg_dic = DataFrame::create()
+    )
 {
   
   // Number of elements
