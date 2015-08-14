@@ -18,3 +18,5 @@
 ^data-raw$
 ^imports\.R$
 .travis.yml
+
+^dictionary\_index\.cpp$

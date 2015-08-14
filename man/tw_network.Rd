@@ -5,7 +5,7 @@
 \title{Creates graph (directed)}
 \usage{
 tw_network(source, target, only.from = FALSE, exclude.self = TRUE,
-  min.interact = 1, group = NULL, size = NULL)
+  min.interact = 1, group = NULL, size = NULL, ignore.case = TRUE)
 }
 \arguments{
 \item{source}{Vector of \emph{screen_name}}
@@ -23,6 +23,9 @@ below this number will be excluded)}
 \item{group}{Data frame with two columns: name & group}
 
 \item{size}{Character name of the size variable}
+
+\item{ignore.case}{When \code{TRUE} converts all of \code{source} and \code{target}
+to lower-case.}
 }
 \value{
 A two-element list containing two data.frames, nodes and links of

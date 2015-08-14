@@ -12,6 +12,8 @@
 #' below this number will be excluded)
 #' @param group Data frame with two columns: name & group
 #' @param size Character name of the size variable
+#' @param ignore.case When \code{TRUE} converts all of \code{source} and \code{target}
+#' to lower-case.
 #' @author George G. Vega Yon
 #' @return A two-element list containing two data.frames, nodes and links of
 #' class \code{tw_Class_graph} (to be used with \code{\link{plot.tw_Class_graph}}.
@@ -25,12 +27,18 @@
 #' @export
 tw_network <- function(
   source,target,only.from=FALSE,exclude.self=TRUE,min.interact=1, group=NULL,
-  size=NULL) {
+  size=NULL, ignore.case=TRUE) {
   
   # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors
   options(stringsAsFactors = FALSE)
   n <- length(source)
+  
+  # Checking Case
+  if (ignore.case) {
+    source <- tolower(source)
+    target <- lapply(target, tolower)
+  }
   
   # Reducing edges list
   if (only.from) {
@@ -64,6 +72,7 @@ tw_network <- function(
   
   # If there is grouping
   if (length(group)) {
+    if (ignore.case) group$name <- tolower(group$name)
     suppressMessages(nodes <- left_join(nodes,group))
   }
   else nodes <- cbind(nodes, group='1')
