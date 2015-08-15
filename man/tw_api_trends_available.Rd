@@ -14,6 +14,16 @@ tw_api_trends_available(twitter_token, ...)
 \description{
 Get codes from the places where trends are availables
 }
+\details{
+\subsection{From Twitter}{Returns the locations that Twitter has
+trending topic information for.
+
+The response is an array of ``locations'' that encode the location's WOEID and
+some other human-readable information such as a canonical name and country
+the location belongs in.
+
+A WOEID is a \href{http://developer.yahoo.com/geo/geoplanet/}{Yahoo! Where On Earth ID}.}
+}
 \references{
 Twitter REST API (GET trends/available)
 \url{https://dev.twitter.com/rest/reference/get/trends/available}

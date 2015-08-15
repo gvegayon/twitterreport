@@ -60,7 +60,14 @@ otherwise returns \code{NULL}.
 Using the twitter API, gets the status updates via search
 }
 \details{
-Keep in mind that the search index has a 7-day limit. In other words, no tweets will be found for a date older than one week.
+Keep in mind that the search index has a 7-day limit. In other words,
+no tweets will be found for a date older than one week.
+\subsection{From Twitter}{Returns a collection of relevant Tweets matching a
+specified query.
+
+Please note that Twitter’s search service and, by extension, the Search API
+is not meant to be an exhaustive source of Tweets. Not all Tweets will be
+indexed or made available via the search interface.}
 }
 \examples{
 \dontrun{

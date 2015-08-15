@@ -70,11 +70,18 @@ tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
 }
 
 #' Get user information
-#' @param usr User screen name
+#'
+#' @param screen_name User screen name
 #' @param twitter_token Token
 #' @param quietly Whether to show the 'success' message or not
+#' @param user_id User id
+#' @param include_entities Not used
 #' @param ... Additional arguments passed to \code{\link{GET}}
+#'
 #' @details Using the twitter api, get information about a twitter account
+#' \subsection{From Twitter}{Returns a \href{https://dev.twitter.com/overview/api/users}{variety of information}
+#'  about the user specified by the required user_id or screen_name parameter.
+#'  The author’s most recent Tweet will be returned inline when possible.}
 #' @return A data.frame with info of the usr.
 #' \itemize{
 #' \item \code{id}
@@ -108,14 +115,24 @@ tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
 #' @references Twitter REST API (GET users/show)
 #' \url{https://dev.twitter.com/rest/reference/get/users/show}
 #' @export
-tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) { 
-  if (is.na(usr)) return(NULL)
-  else 
+tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
+                                  user_id=NULL,include_entities="false",...) {
+  
+  if (is.null(screen_name) && is.null(user_id)) {
+    stop("Must provide either screen_name or user_id.")
+  }
+  else if (is.na(screen_name) && is.na(user_id)) {
+    warning("Both screen_name and user_id are NA. Returning NULL")
+    return(NULL)
+  } else 
     req <- tw_api_get(
-      paste0(
-        "https://api.twitter.com/1.1/users/show.json?screen_name=",usr),
-      twitter_token,
-      15,...)
+      "https://api.twitter.com/1.1/users/show.json",
+      twitter_token, 15,
+      query=list(user_id=user_id, screen_name=screen_name,
+                 include_entities=include_entities),
+    ...
+  )
+  
   
   # Checking if everything went fine
   if (is.null(req)) return(NULL)
@@ -164,7 +181,7 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 
 #' Gets status updates (tweets) from a given user
 #' 
-#' Using the twitter API, gets the status updates of a given user
+#' Using the twitter API, gets the status updates of a given user (up to 3,200)
 #' 
 #' @param screen_name of the user
 #' @param twitter_token Token
@@ -187,7 +204,7 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 #' \item \code{source}
 #' \item \code{truncated}
 #' \item \code{retweet_count}
-#' \item \code{favorite_count}
+#' \item \code{favourites_count}
 #' \item \code{favorited}
 #' \item \code{retweeted}
 #' \item \code{coordinates}
@@ -197,6 +214,9 @@ tw_api_get_users_show <- function(usr,twitter_token,quietly=FALSE,...) {
 #' otherwise returns \code{NULL}.
 #' @details This function is designed to be applied to a large list of twitter
 #' accounts, see the example below.
+#' \subsection{From twitter}{Returns a collection of the most recent Tweets
+#' posted by the user indicated by the screen_name or user_id parameters.
+#' }
 #' @examples 
 #' \dontrun{
 #' # List of twitter accounts
@@ -251,7 +271,7 @@ tw_api_get_statuses_user_timeline <- function(
     # Nullable characters
     coords  <- paste0(x$coordinates$coordinates,collapse=":")
     replyto <- x$in_reply_to_screen_name
-    nfav    <- x$favorite_count
+    nfav    <- x$favourites_count
     isfav   <- x$favorited
     rpl2sid <- x$in_reply_to_status_id
     lang    <- x$lang
@@ -335,7 +355,14 @@ tw_api_get_statuses_user_timeline <- function(
 #' }
 #' 
 #' otherwise returns \code{NULL}.
-#' @details Keep in mind that the search index has a 7-day limit. In other words, no tweets will be found for a date older than one week.
+#' @details Keep in mind that the search index has a 7-day limit. In other words,
+#' no tweets will be found for a date older than one week.
+#' \subsection{From Twitter}{Returns a collection of relevant Tweets matching a 
+#' specified query.
+#' 
+#' Please note that Twitter’s search service and, by extension, the Search API
+#' is not meant to be an exhaustive source of Tweets. Not all Tweets will be
+#' indexed or made available via the search interface.}
 #' @examples 
 #' \dontrun{
 #' # Getting the twitts (first gen the token)
@@ -416,14 +443,20 @@ tw_api_get_search_tweets <- function(q, twitter_token,
 
 #' GET friends/ids
 #'
+#' Returns a list of friends of a given user (list of who he/she follows)
+#'
 #' @param screen_name Screen name
 #' @param twitter_token Token
 #' @param user_id User ID number
 #' @param cursor Cursor page
 #' @param count Number of elements to download
 #' @param ... Further arguments to be passed to \code{\link{GET}}
-#'
+#' @details \subsection{From Twitter}{Returns a cursored collection of user IDs
+#' for every user the specified user is following (otherwise known as their
+#' ``friends'').}
 #' @return A vector
+#' @references Twitter REST API (GET search/tweets) 
+#' \url{https://dev.twitter.com/rest/reference/get/friends/ids}
 #' @export
 tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
                                    cursor=NULL, count=1000, ...) {
@@ -458,6 +491,8 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 }
 
 #' GET followers/ids
+#' 
+#' Returns a list of followers IDs of a given user.
 #'
 #' @param screen_name User screen name
 #' @param twitter_token Token
@@ -465,8 +500,15 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 #' @param cursor Page number (cursor)
 #' @param count Number of ids by page
 #' @param ... Further arguments to be passed to \code{\link{GET}}
-#'
+#' @details \subsection{From twitter}{Returns a cursored collection of user IDs
+#' for every user following the specified user.
+#' 
+#' At this time, results are ordered with the most recent following first -- 
+#' however, this ordering is subject to unannounced change and eventual
+#' consistency issues.}
 #' @return A vector
+#' @references Twitter REST API (GET followers/ids)
+#' \url{https://dev.twitter.com/rest/reference/get/followers/ids}
 #' @export
 tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
                                    cursor=NULL, count=1000, ...) {
@@ -530,6 +572,14 @@ tw_write_json_network <- function(graph) {
 #' Get codes from the places where trends are availables
 #' @param twitter_token Token
 #' @param ... Ignored
+#' @details \subsection{From Twitter}{Returns the locations that Twitter has
+#' trending topic information for. 
+#' 
+#' The response is an array of ``locations'' that encode the location's WOEID and
+#' some other human-readable information such as a canonical name and country
+#' the location belongs in.
+#' 
+#' A WOEID is a \href{http://developer.yahoo.com/geo/geoplanet/}{Yahoo! Where On Earth ID}.}
 #' @references Twitter REST API (GET trends/available)
 #' \url{https://dev.twitter.com/rest/reference/get/trends/available}
 #' @export
@@ -564,10 +614,24 @@ tw_api_trends_available <- function(twitter_token,...) {
 }
 
 #' Gets the trends for a given place
+#' 
+#' Uses the output from \code{\link{tw_api_trends_available}}
+#' 
 #' @param id Id of the place
 #' @param twitter_token Token
 #' @param exclude Whether to exclude hashtags or not
 #' @param ... Ignored
+#' @details \subsection{From Twitter}{Returns the top 10 trending topics for a
+#' specific WOEID, if trending information is available for it.
+#' 
+#' The response is an array of ``trend'' objects that encode the name of the
+#' trending topic, the query parameter that can be used to search for the topic
+#' on \href{http://search.twitter.com/}{Twitter Search}, and the Twitter Search
+#' URL.
+#' 
+#' This information is cached for 5 minutes. Requesting more frequently than
+#' that will not return any more data, and will count against your rate limit
+#' usage.}
 #' @references Twitter REST API (GET trends/place)
 #' \url{https://dev.twitter.com/rest/reference/get/trends/place}
 #' @export
@@ -613,7 +677,14 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' @param include_user_entities (advanced)
 #' @param max.n Number of followers to download
 #' @param ... Further arguments to be passed to \code{\link{GET}}
-#'
+#' @details \subsection{From Twitter}{Returns a cursored collection of user
+#' objects for users following the specified user.
+#' 
+#' At this time, results are ordered with the most recent following first --
+#' however, this ordering is subject to unannounced change and eventual
+#' consistency issues.}
+#' @references Twitter REST API (GET followers/list)
+#' \url{https://dev.twitter.com/rest/reference/get/followers/list}
 #' @return A list
 #' @export
 #'
@@ -703,9 +774,18 @@ tw_api_get_followers_list <- function(screen_name=NULL,
 }
 
 #' Gets a sample through the sample API
+#' 
+#' ON DEVELOPMENT
+#' 
 #' @param twitter_token Token
 #' @param Timeout Number of seconds
 #' @param ... Additional parameters to be passed to \code{\link{GET}}
+#' @details \subsection{From Twitter}{Returns a small random sample of all
+#' public statuses. The Tweets returned by the default access level are the
+#' same, so if two different clients connect to this endpoint, they will see the
+#' same Tweets.}
+#' @references Twitter Streaming API (GET statuses/sample)
+#' \url{https://dev.twitter.com/streaming/reference/get/statuses/sample}
 #' @export
 tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
   
@@ -731,7 +811,9 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
   return(readLines(con))
 }
 
-#' Title
+#' Search users
+#' 
+#' Search users via approximate string matching
 #'
 #' @param q Query
 #' @param twitter_token key
@@ -739,6 +821,11 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' @param count Number of accounts per page
 #' @param ... 
 #'
+#' @details 
+#' \subsection{From Twitter}{Provides a simple, relevance-based search interface to public user 
+#' accounts on Twitter. Try querying by topical interest, full name, company name,
+#' location, or other criteria. Exact match searches are not supported.}
+#' @references Twitter REST API (GET users/search) \url{https://dev.twitter.com/rest/reference/get/users/search}
 #' @return A list of twitter accounts
 #' @export
 #'
@@ -762,19 +849,41 @@ tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,...) {
   
   # If it works, then process the data
   req <- content(req)
-#   followers <- unlist(req$ids, TRUE)
-#   
-#   cursor <- req$next_cursor
-#   count <- count - length(followers)
-#   
-#   if (cursor & count) {
-#     message('Retrieving several pages, to go: ', count, ' (next cursor ',cursor,')')
-#     followers <- c(followers, tw_api_get_followers_ids(screen_name, twitter_token, user_id,
-#                                                        cursor, count, ...))
-#   }
-#   
-#   followers  
-  req
+
+  req <- lapply(req, function(x,...) {
+    # Nullable characters
+    nfav <- x$favourites_count
+    lang <- x$lang
+    loca <- x$location
+    tzon <- x$time_zone
+    uurl <- x$url
+    utco <- x$utc_offset
+    
+    data.frame(
+      screen_name             = x$screen_name,
+      name                    = x$name,
+      user_id                 = x$id,
+      created_at              = strptime(x$created_at,'%a %b %d %T +0000 %Y','UTC'),
+      lang                    = ifelse(is.null(lang),NA,lang),
+      favourite_count         = ifelse(is.null(nfav),NA,nfav),
+      description             = x$description,
+      friends_count           = x$friends_count,
+      is_translator           = x$is_translator,
+      followers_count         = x$followers_count,
+      geo_enabled             = x$geo_enabled,
+      location                = ifelse(is.null(loca),NA,loca),
+      listed_count            = x$listed_count,
+      protected               = x$protected,
+      time_zone               = ifelse(is.null(tzon),NA,tzon),
+      statuses_count          = x$statuses_count,
+      url                     = ifelse(is.null(uurl),NA,uurl),
+      utc_offset              = ifelse(is.null(utco),NA,utco),
+      verified                = x$verified,
+      stringsAsFactors = FALSE
+    )
+  })
+  
+  do.call("rbind",req)
 }
 # x<-tw_api_get_statuses_sample2(key,5)
 # x <- tw_api_get_statuses_sample(5)

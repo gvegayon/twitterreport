@@ -18,6 +18,19 @@ tw_api_get_trends_place(id, twitter_token, exclude = FALSE, ...)
 \description{
 Gets the trends for a given place
 }
+\details{
+\subsection{From Twitter}{Returns the top 10 trending topics for a
+specific WOEID, if trending information is available for it.
+
+The response is an array of ``trend'' objects that encode the name of the
+trending topic, the query parameter that can be used to search for the topic
+on \href{http://search.twitter.com/}{Twitter Search}, and the Twitter Search
+URL.
+
+This information is cached for 5 minutes. Requesting more frequently than
+that will not return any more data, and will count against your rate limit
+usage.}
+}
 \references{
 Twitter REST API (GET trends/place)
 \url{https://dev.twitter.com/rest/reference/get/trends/place}

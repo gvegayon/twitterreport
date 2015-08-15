@@ -24,6 +24,15 @@ tw_api_get_friends_ids(screen_name = NULL, twitter_token, user_id = NULL,
 A vector
 }
 \description{
-GET friends/ids
+Returns a list of friends of a given user (list of who he/she follows)
+}
+\details{
+\subsection{From Twitter}{Returns a cursored collection of user IDs
+for every user the specified user is following (otherwise known as their
+``friends'').}
+}
+\references{
+Twitter REST API (GET search/tweets)
+\url{https://dev.twitter.com/rest/reference/get/friends/ids}
 }
 

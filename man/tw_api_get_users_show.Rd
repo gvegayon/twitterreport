@@ -4,14 +4,19 @@
 \alias{tw_api_get_users_show}
 \title{Get user information}
 \usage{
-tw_api_get_users_show(usr, twitter_token, quietly = FALSE, ...)
+tw_api_get_users_show(screen_name = NULL, twitter_token, quietly = FALSE,
+  user_id = NULL, include_entities = "false", ...)
 }
 \arguments{
-\item{usr}{User screen name}
+\item{screen_name}{User screen name}
 
 \item{twitter_token}{Token}
 
 \item{quietly}{Whether to show the 'success' message or not}
+
+\item{user_id}{User id}
+
+\item{include_entities}{Not used}
 
 \item{...}{Additional arguments passed to \code{\link{GET}}}
 }
@@ -48,6 +53,9 @@ Get user information
 }
 \details{
 Using the twitter api, get information about a twitter account
+\subsection{From Twitter}{Returns a \href{https://dev.twitter.com/overview/api/users}{variety of information}
+ about the user specified by the required user_id or screen_name parameter.
+ The author’s most recent Tweet will be returned inline when possible.}
 }
 \examples{
 \dontrun{

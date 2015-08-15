@@ -41,7 +41,7 @@ A data.frame with tweets (if success), with the following columns:
 \item \code{source}
 \item \code{truncated}
 \item \code{retweet_count}
-\item \code{favorite_count}
+\item \code{favourites_count}
 \item \code{favorited}
 \item \code{retweeted}
 \item \code{coordinates}
@@ -51,11 +51,14 @@ A data.frame with tweets (if success), with the following columns:
 otherwise returns \code{NULL}.
 }
 \description{
-Using the twitter API, gets the status updates of a given user
+Using the twitter API, gets the status updates of a given user (up to 3,200)
 }
 \details{
 This function is designed to be applied to a large list of twitter
 accounts, see the example below.
+\subsection{From twitter}{Returns a collection of the most recent Tweets
+posted by the user indicated by the screen_name or user_id parameters.
+}
 }
 \examples{
 \dontrun{

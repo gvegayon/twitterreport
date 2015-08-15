@@ -24,6 +24,18 @@ tw_api_get_followers_ids(screen_name = NULL, twitter_token, user_id = NULL,
 A vector
 }
 \description{
-GET followers/ids
+Returns a list of followers IDs of a given user.
+}
+\details{
+\subsection{From twitter}{Returns a cursored collection of user IDs
+for every user following the specified user.
+
+At this time, results are ordered with the most recent following first --
+however, this ordering is subject to unannounced change and eventual
+consistency issues.}
+}
+\references{
+Twitter REST API (GET followers/ids)
+\url{https://dev.twitter.com/rest/reference/get/followers/ids}
 }
 
