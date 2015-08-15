@@ -730,6 +730,52 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
   close(tweets)
   return(readLines(con))
 }
+
+#' Title
+#'
+#' @param q Query
+#' @param twitter_token key
+#' @param page Page number to retrieve
+#' @param count Number of accounts per page
+#' @param ... 
+#'
+#' @return A list of twitter accounts
+#' @export
+#'
+tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,...) {
+  
+  # Encoding the query
+  q <- URLencode(q)
+  
+  # API CALL
+  req <- tw_api_get(
+    "https://api.twitter.com/1.1/users/search.json",
+    twitter_token, 15,
+    query=list(q=q, page=page,count=count,include_entities="false"),
+    ...
+  )
+  
+  # Checking if everything went fine
+  if (is.null(req)) return(NULL)
+  else if (class(req)=='response')
+    if (status_code(req)!=200) return(NULL)
+  
+  # If it works, then process the data
+  req <- content(req)
+#   followers <- unlist(req$ids, TRUE)
+#   
+#   cursor <- req$next_cursor
+#   count <- count - length(followers)
+#   
+#   if (cursor & count) {
+#     message('Retrieving several pages, to go: ', count, ' (next cursor ',cursor,')')
+#     followers <- c(followers, tw_api_get_followers_ids(screen_name, twitter_token, user_id,
+#                                                        cursor, count, ...))
+#   }
+#   
+#   followers  
+  req
+}
 # x<-tw_api_get_statuses_sample2(key,5)
 # x <- tw_api_get_statuses_sample(5)
 # con <- rawConnection(raw(0),'r+')

@@ -3,9 +3,8 @@ rm(list=ls())
 library(RCurl)
 library(XML)
 library(stringr)
-
-source("R/text_mining.R")
-source("R/verify.R")
+library(twitterreport)
+library(dplyr)
 
 ################################################################################
 # Data base from house.gov
@@ -17,7 +16,7 @@ source("R/verify.R")
 
 # Getting the table
 representatives <- readHTMLTable("http://www.house.gov/representatives/",stringsAsFactors=FALSE)
-representatives <- do.call(rbind, representatives)
+representatives <- bind_rows(representatives)
 
 # Getting the info (URLS)
 house <- getURLContent("http://www.house.gov/representatives/")
@@ -32,11 +31,16 @@ representatives <- cbind(
 states <- str_extract_all(house,"(?<=state\\_[a-z]{2}.{2})([a-zA-Z ]{2,})")[[1]]
 tmp <- str_detect(representatives$District,paste0(states,collapse="|"))
 representatives <- representatives[tmp,]
-representatives$state <- str_match(representatives$District,paste0(states,collapse="|"))
+
+representatives$state <- str_extract(representatives$District,paste0(states,collapse="|"))
+
 representatives$DistrictNum <- as.numeric(str_match(representatives$District,'[0-9]+(?=[a-z]{2} District)'))
 rm(tmp)
 
 row.names(representatives) <- 1:nrow(representatives)
+
+# Making all column names as lowercase
+colnames(representatives) <- tolower(colnames(representatives))
 
 ################################################################################
 # Getting twitter accounts
@@ -45,10 +49,44 @@ row.names(representatives) <- 1:nrow(representatives)
 twitter_accounts_house <- vector("list",nrow(representatives))
 n <- length(twitter_accounts_house)
 for (i in 1:n) {
-  twitter_accounts_house[[i]] <- tw_get_tw_account(representatives$website[i])
-  if (!(i %% 10)) save.image("data/congress_info.RData")
-  message(sprintf("%03d of %03d",i,n)," Congressman ",representatives$Name[i]," done...")
+  twitter_accounts_house[[i]] <- tw_get_tw_account(representatives$website[i],
+                                                   quiet=FALSE)
 }
+
+# Modifying manually 
+tmp <- twitter_accounts_house
+names(tmp) <- paste(1:length(tmp),representatives$name)
+
+# Checking out multiple ones
+tmp[which(sapply(tmp, length) > 1)]
+
+# List of the first account ok
+ok <- c(5,18,30,33,36,59,65,87,97,120,129,151,152,158,161,163,172,
+        184,201,203,205,208,217,222,226,236,238,246,263,270,328,334,
+        349,362,380,387,394,398,431)
+tmp[ok] <- lapply(tmp[ok], "[[", 1)
+
+# Manually fixing accounts
+tmp[[84]]  <- tmp[[84]][5]
+tmp[[130]] <- tmp[[130]][4]
+tmp[[316]] <- tmp[[316]][3]
+tmp[[350]] <- tmp[[350]][2]
+tmp[[432]] <- tmp[[432]][3]
+
+################################################################################
+# Checking out empty ones
+tmp[which(sapply(tmp, length) == 0)]
+
+# Justing Amash has two accounts amasharchive and justinamash
+# for the research we'll use... both!
+tmp[[6]]  <- c("amasharchive","justinamash")
+tmp[[11]] <- "repandybarr"
+tmp[[16]] <- "congressmandan"
+tmp[[17]] <- "repbera"
+tmp[[26]] <- "repblumenauer"
+tmp[[49]] <- "RepLoisCapps"
+
+
 
 # Checking out who I couldn't find (twitter accounts unavailable at the website)
 accounts_werent_found <- sapply(twitter_accounts_house,length)==0

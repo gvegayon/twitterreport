@@ -4,12 +4,16 @@
 \alias{tw_get_tw_account}
 \title{Function to enter the website and get the twitter account}
 \usage{
-tw_get_tw_account(uri, redirect = TRUE)
+tw_get_tw_account(uri, redirect = TRUE, normalize = TRUE, quiet = TRUE)
 }
 \arguments{
 \item{uri}{Web address of the website from which to extract twitter accounts}
 
 \item{redirect}{Whether to follow up the link or not (redirection)}
+
+\item{normalize}{When \code{TRUE} returns the accounts as lower-case.}
+
+\item{quiet}{When \code{FALSE} suppress the message}
 }
 \description{
 Function to enter the website and get the twitter account
