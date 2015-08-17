@@ -14,6 +14,16 @@ tw_api_get_statuses_sample(twitter_token, Timeout = 60, ...)
 \item{...}{Additional parameters to be passed to \code{\link{GET}}}
 }
 \description{
-Gets a sample through the sample API
+ON DEVELOPMENT
+}
+\details{
+\subsection{From Twitter}{Returns a small random sample of all
+public statuses. The Tweets returned by the default access level are the
+same, so if two different clients connect to this endpoint, they will see the
+same Tweets.}
+}
+\references{
+Twitter Streaming API (GET statuses/sample)
+\url{https://dev.twitter.com/streaming/reference/get/statuses/sample}
 }
 

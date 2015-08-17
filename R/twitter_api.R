@@ -175,7 +175,7 @@ tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
     verified                = req$verified
   )
   
-  if (!quietly) message('Success, info of user ',usr,' correctly retrieved')
+  if (!quietly) message('Success, info of user ',req$screen_name,' correctly retrieved')
   return(req)
 }
 
@@ -819,7 +819,7 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' @param twitter_token key
 #' @param page Page number to retrieve
 #' @param count Number of accounts per page
-#' @param ... 
+#' @param ... Further parameters to be passed to \code{\link{GET}} 
 #'
 #' @details 
 #' \subsection{From Twitter}{Provides a simple, relevance-based search interface to public user 
@@ -829,7 +829,7 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' @return A list of twitter accounts
 #' @export
 #'
-tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,...) {
+tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,quietly=TRUE,...) {
   
   # Encoding the query
   q <- URLencode(q)
@@ -882,7 +882,9 @@ tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,...) {
       stringsAsFactors = FALSE
     )
   })
-  
+
+  if (!quietly) message("Search for user -",URLdecode(q),"- success.")
+
   do.call("rbind",req)
 }
 # x<-tw_api_get_statuses_sample2(key,5)

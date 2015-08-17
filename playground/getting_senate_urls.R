@@ -3,9 +3,8 @@ rm(list=ls())
 library(RCurl)
 library(XML)
 library(stringr)
-
-source("R/text_mining.R")
-source("R/verify.R")
+library(twitterreport)
+library(dplyr)
 
 ################################################################################
 # Data base from senate.gov
@@ -27,15 +26,15 @@ for (i in 1:100) {
 }
 senators <- lapply(tmp, function(x) {
   data.frame(
-    Name=str_extract(x[1,1],'^(.+)(?=\\n)'),
+    name=str_extract(x[1,1],'^(.+)(?=\\n)'),
     party=str_extract(x[1,1],'(R|D|I)(?= - )'),
-    State=str_extract(x[1,1],'(?<=(R|D|I) - )[A-Z]+'),
-    Addr=x[2,1] ,phone=x[3,1],
+    state=str_extract(x[1,1],'(?<=(R|D|I) - )[A-Z]+'),
+    addr=x[2,1] ,phone=x[3,1],
     website=str_extract(x[4,1],'(?<=\\n).*'),
     class=x[1,2],
              stringsAsFactors=FALSE)
 })
-senators <- do.call(rbind,senators)
+senators <- bind_rows(senators)
 
 # Cleanning website
 senators$website <- str_replace(senators$website,"\\s+","")
@@ -49,11 +48,9 @@ senators$website <- str_replace(senators$website,"(?<=\\.gov/).*","")
 twitter_accounts_senate <- vector("list",nrow(senators))
 n <- length(twitter_accounts_senate)
 for (i in 1:n) {
-  twitter_accounts_senate[[i]] <- tw_get_tw_account(senators$website[i])
-  if (!(i %% 10)) save.image("data/senate_info.RData")
-  message(sprintf("%03d of %03d",i,n)," Senator ",senators$Name[i]," done...")
+  twitter_accounts_senate[[i]] <- tw_get_tw_account(senators$website[i],quiet = FALSE)
+  if (!(i %% 10)) save.image("data/senate_info.rdata")
 }
-rm(n,i)
 
 # Checking out who I couldn't find (twitter accounts unavailable at the website)
 accounts_werent_found_senate <- sapply(twitter_accounts_senate,length)==0

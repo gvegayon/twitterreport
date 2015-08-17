@@ -1,6 +1,6 @@
 Package: twitterreport
 Title: Out-of-the-box analysis and reporting tools for twitter
-Version: 0.15.8.14
+Version: 0.15.8.16
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com",
                   role = c("aut", "cre"))
 Description: Set of tools to download, process and analyze 'tweets', including methods

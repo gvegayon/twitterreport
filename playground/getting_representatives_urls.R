@@ -74,60 +74,71 @@ tmp[[350]] <- tmp[[350]][2]
 tmp[[432]] <- tmp[[432]][3]
 
 ################################################################################
-# Checking out empty ones
-tmp[which(sapply(tmp, length) == 0)]
+# Checking out empty ones (we'll use the API to search for them)
+pending_index <- which(sapply(tmp, length) == 0)
+pending_names <- gsub("^[0-9]+\\s+","",names(tmp[pending_index]))
 
-# Justing Amash has two accounts amasharchive and justinamash
-# for the research we'll use... both!
-tmp[[6]]  <- c("amasharchive","justinamash")
-tmp[[11]] <- "repandybarr"
-tmp[[16]] <- "congressmandan"
-tmp[[17]] <- "repbera"
-tmp[[26]] <- "repblumenauer"
-tmp[[49]] <- "RepLoisCapps"
+pending <- vector("list",length(pending_names))
+
+source("R/credentials.R")
+for (i in 1:length(pending)) {
+  x <- tw_api_get_users_search(pending_names[i],key)[,c("name","screen_name","verified","followers_count")]
+  if (!is.null(x)) tmp[[pending_index[i]]] <- x
+}
+
+# The ones that I'm not sure about
+head(lapply(tmp[pending_index], head, 1))
+notok <- c(66,77,78,177,271,291,309,352,365,409,433)
+ok <- pending_index[which(!(pending_index %in% notok))]
+
+tmp[ok] <- lapply(tmp[ok],function(x) {
+  if (length(x))x$screen_name[1]
+  else NULL
+  })
+
+# save.image("data/20150815_working.rdata")
+
+# Doesn't has a twitter account
+tmp[[66]] <- NA
+tmp[[77]] <- tmp[[77]]$screen_name[1]
+tmp[[78]] <- tmp[[78]]$screen_name[3]
+tmp[[177]] <- tmp[[177]]$screen_name[4]
+tmp[[271]] <- "CongressmanRug"
+tmp[[291]] <- "RepRichNugent"
+tmp[[309]] <- "reppittenger"
+tmp[[352]] <- NA
+tmp[[365]] <- tmp[[365]]$screen_name[7]
+tmp[[409]] <- "NydiaVelazquez"
+tmp[[433]] <- "RepRobWoodall"
 
 
+representatives$screen_name <- unlist(tmp)
+representatives$screen_name <- tolower(representatives$screen_name)
 
-# Checking out who I couldn't find (twitter accounts unavailable at the website)
-accounts_werent_found <- sapply(twitter_accounts_house,length)==0
-representatives$website[which(accounts_werent_found)]
-
-save.image("data/congress_info.RData")
-load("data/congress_info.RData")
+save(representatives,file="data/congress_info.rdata")
 
 ################################################################################
 # Getting account info from API
 ################################################################################
 
 # Getting the info
-tmp <- lapply(twitter_accounts_house,"[",1)
-n <- length(twitter_accounts_house)
+n <- nrow(representatives)
 twitter_profiles_congress <- vector("list",n)
 for (s in 1:n) {
-  # Getting the info
-  twitter_profiles_congress[[s]] <- tw_api_get_usr_profile(tmp[[s]])
-  if (!(s %% 10)) save.image("data/congress_info.RData")
-  message(sprintf("%03d of %03d",s,n)," Congressman ",representatives$Name[s]," done...")
-}
-save.image("data/congress_info.RData")
-load("data/congress_info.RData")
+  account <- representatives$screen_name[s]
   
-# Checking those that didn't worked out and filling those with empty rows
-# so that we can rbind and merge it witht the congress dataset
-error <- sapply(twitter_profiles_congress,length)==0
-which(error)
+  if (is.na(account)) next
+  
+  # Getting the info
+  twitter_profiles_congress[[s]] <- tw_api_get_users_show(account,key)
+  
+  if (!(s %% 10)) save(twitter_profiles_congress,file="data/twitter_profiles_congress.rdata")
+}
+tmp <- do.call(rbind, twitter_profiles_congress);nrow(tmp)
 
-emptyvec <- names(twitter_profiles_congress[which(!error)][[1]])
-emptyvec <- sapply(emptyvec, function(x) NA)
-for (i in which(error)) twitter_profiles_congress[[i]] <- emptyvec
+# Before mergin making sure it is going to merge
+tmp$screen_name <- tolower(tmp$screen_name)
+tmp <- dplyr::left_join(representatives, tmp, by="screen_name")
+twitter_profiles_congress<-tmp
 
-# Filling the data.frame. The warning is for the 'entitites' list
-# not relevant for now
-representatives_profile <- as.data.frame(do.call(rbind, twitter_profiles_congress),stringsAsFactors = FALSE)
-colnames(representatives_profile) <- paste0('tw_',colnames(representatives_profile))
-
-# Removing unrelevant objects
-rm(list=ls(pattern = '^tw_'))
-rm(twitter_token,error,i,n,s,myapp,tmp,emptyvec)
-
-save.image("data/congress_info.RData")
+save(twitter_profiles_congress,file="data/twitter_profiles_congress.rdata")

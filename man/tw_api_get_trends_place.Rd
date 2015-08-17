@@ -16,7 +16,7 @@ tw_api_get_trends_place(id, twitter_token, exclude = FALSE, ...)
 \item{...}{Ignored}
 }
 \description{
-Gets the trends for a given place
+Uses the output from \code{\link{tw_api_trends_available}}
 }
 \details{
 \subsection{From Twitter}{Returns the top 10 trending topics for a

@@ -33,4 +33,16 @@ A list
 \description{
 Get Followers list
 }
+\details{
+\subsection{From Twitter}{Returns a cursored collection of user
+objects for users following the specified user.
+
+At this time, results are ordered with the most recent following first --
+however, this ordering is subject to unannounced change and eventual
+consistency issues.}
+}
+\references{
+Twitter REST API (GET followers/list)
+\url{https://dev.twitter.com/rest/reference/get/followers/list}
+}
 
