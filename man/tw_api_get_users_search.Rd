@@ -4,7 +4,8 @@
 \alias{tw_api_get_users_search}
 \title{Search users}
 \usage{
-tw_api_get_users_search(q, twitter_token, page = NULL, count = 20, ...)
+tw_api_get_users_search(q, twitter_token, page = NULL, count = 20,
+  quietly = TRUE, ...)
 }
 \arguments{
 \item{q}{Query}
