@@ -141,4 +141,23 @@ if (requireNamespace("ggvis", quietly=TRUE)) {
 ```
 
 
+## A map using leaflet
+
+The function `tw_leaflet` provides a nice wrapper for the function `leaflet` of\
+the package of the same name. Using D3js, we can visualize the number of tweets
+grouped up geographically as the following example shows:
+
+```{r leaflet}
+# Getting the data
+data(senate_tweets)
+
+# Aggregating until get only 3 big groups
+tw_leaflet(senate_tweets,~coordinates, nclusters=3)
+```
+
+Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4
+different senators that have such information. Using the `nclusters` option, the `tw_leaflet`
+groups the data using the `hclust` function of the stats package. So the user doesn't need to worry about aggregating data.
+
+
 [caltechlogo]: `r system.file(package='twitterreport')`/fig/Caltech_LOGO-Orange_RGB_10pc.png "Caltech"

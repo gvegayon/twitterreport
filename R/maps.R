@@ -1,14 +1,15 @@
-rm(list=ls())
-library(dplyr)
-library(twitterreport)
-library(leaflet)
+# rm(list=ls())
+# library(dplyr)
+# library(twitterreport)
+# library(leaflet)
+# 
+# data("senate_tweets")
 
-data("senate_tweets")
 #' Creates a leaflet map
 #' 
 #' This function works as a wrapper of the \code{leaflet} function, creating a
 #' map with circles which sizes are set by the number of observations in those
-#' coordinates
+#' coordinates.
 #'
 #' @param data A twitter dataset (with coordinates)
 #' @param coordinates Name of the \code{coordinates} variable (see details)
@@ -16,10 +17,23 @@ data("senate_tweets")
 #' @param lat Name of the latitude variable
 #' @param lng Name of the longitude variable
 #' @param weight Thickness of the circles' borders
+#' @param cluster.method Clustering method (see \code{\link{hclust}})
+#' @param nclusters Max number of clusters to include
 #' @param ... Further arguments to be passed to \code{\link{addCircles}}
 #' 
 #' @details The \code{coordinates} must be in the format of longitude:latitude
-#' (as twitter API returns). 
+#' (as the twitter API returns). 
+#' 
+#' In order to improve visualization, the function performs Hierarchical
+#' Clustering via \code{\link{hclust}} (from the stats package), grouping
+#' observations by geo coordinates. For each cluster, the final lat/lng coords
+#' are defined as the mean within the cluster.
+#' 
+#' For performance considerations, it is recommended not to use more than
+#' 1,000 observations (Try using a random sample from your data!) as 
+#' \code{hclust} requires computing square matrices.
+#' 
+#' @author George G. Vega Yon
 #' 
 #' @return A map object (see the \code{\link{leaflet}} package)
 #' @export
@@ -36,6 +50,9 @@ data("senate_tweets")
 #' # Using characters to pass the variables names
 #' tw_leaflet(senate_tweets,'coordinates','screen_name')
 #' tw_leaflet(senate_tweets,'coordinates')
+#' 
+#' # Aggregating until get only 3 big groups
+#' tw_leaflet(senate_tweets,'coordinates', nclusters=3)
 #' }
 tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL, weight=1,
                        cluster.method='centroid', nclusters=50,...) {
@@ -70,7 +87,7 @@ tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL, weig
 
   # Computing clusters
   clusters <- stats::hclust(d,cluster.method)
-  data$clusters <- cutree(clusters, min(c(nclusters,nrow(data))))
+  data$clusters <- stats::cutree(clusters, min(c(nclusters,nrow(data))))
   
   # Checking popup
   if (inherits(popup, 'formula'))
@@ -86,7 +103,7 @@ tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL, weig
   geo <-  summarise(geo, n=n(), mean_lat=mean(lat), mean_lng=mean(lng))
 
   if (!length(popup)) geo$popup <- prettyNum(geo$n, ',')
-  print(geo)
+  
   geo <- leaflet(geo)
   geo <- addTiles(geo)
   

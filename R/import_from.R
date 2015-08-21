@@ -22,6 +22,9 @@ NULL
 NULL
 #' @importFrom RCurl getURL
 NULL
+#' @importFrom stats hclust cutree
+NULL
+#' @importFrom leaflet leaflet addTiles addCircles
 
 ################################################################################
 # knitr!
