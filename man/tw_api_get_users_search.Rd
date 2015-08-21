@@ -16,6 +16,8 @@ tw_api_get_users_search(q, twitter_token, page = NULL, count = 20,
 
 \item{count}{Number of accounts per page}
 
+\item{quietly}{Whether or not to show the 'success' message}
+
 \item{...}{Further parameters to be passed to \code{\link{GET}}}
 }
 \value{

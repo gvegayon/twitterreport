@@ -8,9 +8,27 @@ Description: Set of tools to download, process and analyze 'tweets', including m
 URL: http://github.com/gvegayon/twitterreport
 BugReports: http://github.com/gvegayon/twitterreport/issues
 Depends: R (>= 3.1.0)
-Imports: stringr, dplyr, dygraphs, DT, networkD3, wordcloud, tm, httr, RColorBrewer, RCurl, knitr, Rcpp
+Imports: 
+  stringr, 
+  dplyr, 
+  dygraphs,
+  DT, 
+  networkD3, 
+  leaflet,
+  wordcloud, 
+  tm, 
+  httr, 
+  RColorBrewer, 
+  RCurl, 
+  knitr, 
+  Rcpp
 LinkingTo: Rcpp
-Suggests: rmarkdown, twitteR, streamR, rgexf, ggvis
+Suggests: 
+  rmarkdown, 
+  twitteR, 
+  streamR, 
+  rgexf, 
+  ggvis
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 LazyData: false

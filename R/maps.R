@@ -16,6 +16,7 @@
 #' @param popup Name of the grouping variable (for example, \code{screen_name})
 #' @param lat Name of the latitude variable
 #' @param lng Name of the longitude variable
+#' @param mts Formula to compute the radious of the circles
 #' @param weight Thickness of the circles' borders
 #' @param cluster.method Clustering method (see \code{\link{hclust}})
 #' @param nclusters Max number of clusters to include
@@ -28,6 +29,9 @@
 #' Clustering via \code{\link{hclust}} (from the stats package), grouping
 #' observations by geo coordinates. For each cluster, the final lat/lng coords
 #' are defined as the mean within the cluster.
+#' 
+#' In the case of \code{radii}, it is measured in meters (in the map). The
+#' \code{n} is the number of observations in that cluster.
 #' 
 #' For performance considerations, it is recommended not to use more than
 #' 1,000 observations (Try using a random sample from your data!) as 
@@ -54,8 +58,9 @@
 #' # Aggregating until get only 3 big groups
 #' tw_leaflet(senate_tweets,'coordinates', nclusters=3)
 #' }
-tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL, weight=1,
-                       cluster.method='centroid', nclusters=50,...) {
+tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
+                       radii=~sqrt(n)*1000, weight=1, cluster.method='centroid',
+                       nclusters=min(c(50,nrow(data) %/% 3)) ,...) {
   # Checking latitude and longitude
   if (!length(coordinates) && !length(lat) && !length(lng))
     stop('At least -coordinates- should be provided')
@@ -107,8 +112,8 @@ tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL, weig
   geo <- leaflet(geo)
   geo <- addTiles(geo)
   
-  addCircles(geo, lng = ~mean_lng, lat = ~mean_lat, weight = weight,
-             radius = ~sqrt(n) * 100000, popup =~popup,...)
+  addCircles(geo,radius = radii, lng = ~mean_lng, lat = ~mean_lat,
+             weight = weight, popup =~popup,...)
 }
 
 # tw_leaflet(senate_tweets,~coordinates,~screen_name)

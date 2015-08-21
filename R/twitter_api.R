@@ -819,6 +819,7 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' @param twitter_token key
 #' @param page Page number to retrieve
 #' @param count Number of accounts per page
+#' @param quietly Whether or not to show the 'success' message
 #' @param ... Further parameters to be passed to \code{\link{GET}} 
 #'
 #' @details 

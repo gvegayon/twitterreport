@@ -15,6 +15,7 @@ While there are some (very neat) R packages focused on twitter (namely `twitteR`
 -   Sentiment analysis (basic, but useful) using lexicons included in the package (again, **es** and **en**)
 -   Creating time series charts of hashtags/users/etc. and visualizing them using D3js
 -   Create wordclouds (after removing stop words and processing the text)
+-   Map visualization using the leaflet package
 
 You can take a look at a live example at <http://www.its.caltech.edu/~gvegayon/twitter/report_example.html>, and at the source code of that example at <https://github.com/gvegayon/twitterreport/blob/master/vignettes/report_example.Rmd>
 
@@ -60,6 +61,9 @@ contents <- tw_extract(tweets$text)
 graph <- tw_network(tweets$screen_name, contents$mentions, minInteract=3)
 plot(graph)
 ```
+
+![](README_files/figure-markdown_github/network.png?raw=true)
+(This is just for ilustration, the real output is a D3js interactive)
 
 In the following examples we will use data on US senators extracted from twitter using the REST API (you can find it in the package)
 
@@ -125,7 +129,22 @@ hist(irandeal$sentiment, col = 'lightblue',
      xlab ='Valence (strength of sentiment)')
 ```
 
-<img src="README_files/figure-markdown_github/Sentiments-1.png?raw=true" title="" alt="" width="350px" height="350px" />
+![](README_files/figure-markdown_github/Sentiments-1.png?raw=true)
+
+A map using leaflet
+-------------------
+
+The function `tw_leaflet` provides a nice wrapper for the function `leaflet` of
+the package of the same name. Using D3js, we can visualize the number of tweets grouped up geographically as the following example shows:
+
+``` r
+tw_leaflet(senate_tweets,~coordinates, nclusters=3)
+```
+
+![](README_files/figure-markdown_github/leaflet_map.png?raw=true)
+(This is just for ilustration, the real output is a D3js interactive)
+
+Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4 different senators that have such information. Using the `nclusters` option, the `tw_leaflet` groups the data using the `hclust` function of the stats package. So the user doesn't need to worry about aggregating data.
 
 Author
 ------
