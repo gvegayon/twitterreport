@@ -48,7 +48,7 @@ hashtags <- tw_timeseries(elements$hashtag,senate_tweets$created_at)
 plot(hashtags)
 ```
 
-```{r Hashtag table}
+```{r Hashtag table, eval=FALSE}
 # Table (default using hashtags)
 twtab <- tw_table(elements)
 plot(twtab,caption='Most popular hashtags')
@@ -58,7 +58,7 @@ plot(twtab,caption='Most popular hashtags')
 
 This graph shows the set of 5 of the most popular users. Just like the previous stats, while the graph shows the number of mentions through time, the table shows the total number of mentions.
 
-```{r Users}
+```{r Users, eval=FALSE}
 # Graph
 mentions <- tw_timeseries(elements$mention,created_at = senate_tweets$created_at)
 plot(mentions)
@@ -75,7 +75,7 @@ This is the graph of conversations between US senators. Colored by party (light 
 
 In this case I consider two senators connected iff there one of them appears at least 3 times in the other senator's status timeline.
 
-```{r Network, out.width = '600px', out.height = '600px'}
+```{r Network, out.width = '600px', out.height = '600px', eval=FALSE}
 tweets_components <- tw_extract(senate_tweets$text)
 groups <- data.frame(
   name      = senators_profile$tw_screen_name,
@@ -96,7 +96,7 @@ plot(senate_network, nodelabel='real_name')
 
 The function `tw_words` takes a character vector (of tweets for example) and extracts all the stopwords+symbols. And the `plot` method for its output creates a wordcloud
 
-```{r WordCloud,dev='svg',out.width='350px', out.height='350px'}
+```{r WordCloud,dev='svg',out.width='350px', out.height='350px', warning=FALSE}
 plot(tw_words(senate_tweets$text), max.n.words = 50)
 ```
 
@@ -152,7 +152,7 @@ grouped up geographically as the following example shows:
 data(senate_tweets)
 
 # Aggregating until get only 3 big groups
-tw_leaflet(senate_tweets,~coordinates, nclusters=3)
+tw_leaflet(senate_tweets,~coordinates, nclusters=3,radii = ~sqrt(n)*3e5)
 ```
 
 Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4

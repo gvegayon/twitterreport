@@ -81,3 +81,111 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
   
   txt
 }
+
+#' Compute the Jaccard coefficient
+#' @aliases Words similarities
+#' @param x Character vector with the phrases (tweets) to be analyzed
+#' @param max.size Max number of words to analyze
+#' @param stopwds Character vector of stopwords
+#' @param ignore.case When true converts all to lower
+#' @param dist When true computes one minus Jaccard coef
+#' @details The Jaccard index is used as a measure of similarity between two
+#' elements. In particular for a given pair of elements \eqn{x,y} it is calculated as
+#' \deqn{J(S,T) = \frac{|S\cap T|}{|S\cup T|}}{J(S,T) = |S intersection T|/|S U T|}
+#' Where \eqn{S} is the set of groups where \eqn{x} is present and 
+#' \eqn{T} is the set of groups where \eqn{y}. The resulting value is defined
+#' between 0 and 1, where 0 corresponds to no similarity at all (the elements
+#' don't have a group in common) and 1 represents perfect similarity (both elements
+#' are present in the same groups).
+#' @export
+#' @return A list including a \code{dgCMatrix} matrix
+jaccard_coef <- function(x,max.size=1000,
+                         stopwds=unique(c(tm::stopwords(),letters)), 
+                         ignore.case=TRUE, 
+                         dist=FALSE) {
+  # Parsing text
+  if (ignore.case) x <- tolower(x)
+  
+  # Removing URL and punctuation
+  x <- gsub('https?[:]\\/\\/[[:graph:]]+|&amp','',x)
+  x <- gsub("[^[:alnum:][:space:]']", "", x)
+  
+  # Creating ids
+  x <- sapply(x, strsplit, split='\\s+')
+  
+  x <- sapply(x, function(y) {
+    y[which(!(y %in% stopwds))]
+  })
+  
+  x <- cpp_char_list_as_df(x)
+  colnames(x) <- c("wrd","id")
+  
+  # We dont want to use all of them
+  if (nrow(x)>max.size) {
+    y <- group_by_(x,~wrd)
+    y <- as.data.frame(summarise_(y, .dots=setNames(list(~n),"n")))
+    y <- y[order(-y[,c('n')]),]
+    y <- y[y[,c('n')]>1,]
+    x <- semi_join(x,y[1:max.size,],by="wrd")
+  }
+  
+  # Computing Jaccards index
+  x$wrd <- factor(x$wrd, ordered = FALSE)
+  jaccard <- with(x,cpp_jaccard_coef(as.numeric(wrd),as.numeric(id), dist))
+  
+  # Preparing output
+  wrd_names <- unique(x$wrd)
+  wrd_names <- wrd_names[order(wrd_names)]
+  colnames(jaccard) <- wrd_names
+  rownames(jaccard) <- colnames(jaccard)
+  
+  # Wrapping result
+  jaccard <- list(mat=jaccard, nwords=attr(jaccard,"Dim")[1], words=attr(jaccard,"Dimnames")[[1]],
+                  ntexts=length(unique(x$id)))
+  
+  class(jaccard) <- c('tw_Class_jaccard', class(jaccard))
+  
+  return(jaccard)
+}
+
+#' Retrieves a set of words related to a particular word
+#'
+#' @param word A character word to analyze
+#' @param jaccard A \code{tw_Class_jaccard} class object
+#' @param criter Minimun number in the index to show
+#' @param exact When \code{FALSE} shearch via regular expression
+#' @return A data frame containing the list of words that are related
+#' to the specified \code{word}
+#' @details After applying the \code{\link{jaccard_coef}} function, the 
+#' resulting object can be analyzed with this function.
+#' @example 
+#' \dontrun{
+#' # Computing the jaccard coefficient
+#' jaccard <- jaccard_coef(tweets$text)
+#' 
+#' # See what words are related with abortion
+#' words_closeness('abortion',jaccard,.001)
+#' }
+words_closeness <- function(word,jaccard,criter=0.01,exact=FALSE) {
+  
+  # Checking if we have a jaccard object
+  if (!inherits(jaccard,"tw_Class_jaccard")) 
+    stop('A -tw_Class_jaccard- class object must be provided')
+  
+  # Tabulating the data  
+  tab <- data.frame(freq=diag(jaccard$mat),wrd=jaccard$words, stringsAsFactors = FALSE)
+  
+  if (exact) index <- which(jaccard$words==word)
+  else {
+    index <- which(grepl(word,tab$wrd))
+    index <- index[order(-tab$freq[index])][1]
+  }
+  
+  if (!length(index)) return(NULL)
+  set <- which(jaccard$mat[index,]>=criter)
+  set <- data.frame(word=jaccard$words[set],coef=jaccard$mat[index,set],
+                    stringsAsFactors = FALSE)
+  set[order(-set$coef),]
+}
+
+# words_closeness('abortion',jaccard,.001)

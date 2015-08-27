@@ -4,7 +4,7 @@
 
 #' @importFrom stringr str_extract str_detect str_extract_all str_replace
 NULL
-#' @importFrom dplyr summarise left_join group_by bind_rows
+#' @importFrom dplyr summarise_ left_join group_by_ bind_rows semi_join
 NULL
 #' @importFrom DT datatable
 NULL
@@ -39,4 +39,7 @@ NULL
 NULL
 
 #' @import Rcpp
+NULL
+
+#' @import Matrix
 NULL

@@ -16,7 +16,7 @@
 #' @param popup Name of the grouping variable (for example, \code{screen_name})
 #' @param lat Name of the latitude variable
 #' @param lng Name of the longitude variable
-#' @param mts Formula to compute the radious of the circles
+#' @param radii Formula to compute the radious of the circles
 #' @param weight Thickness of the circles' borders
 #' @param cluster.method Clustering method (see \code{\link{hclust}})
 #' @param nclusters Max number of clusters to include
@@ -101,11 +101,12 @@ tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
   
   # Computing the aggregation, for this we use cluster analysis
   
-  if (length(popup)) geo <- group_by(data, clusters,popup)
-  else geo <- group_by(data, clusters)
+  if (length(popup)) geo <- group_by_(data, "clusters","popup")
+  else geo <- group_by_(data, "clusters")
   
   # Tabulating the data
-  geo <-  summarise(geo, n=n(), mean_lat=mean(lat), mean_lng=mean(lng))
+  dots <- list(~n(),~mean(lat),~mean(lng))
+  geo <-  summarise_(geo, .dots=setNames(dots,c('n','mean_lat','mean_lng'))) # "n=n()", "mean_lat=mean(lat)", "mean_lng=mean(lng)")
 
   if (!length(popup)) geo$popup <- prettyNum(geo$n, ',')
   

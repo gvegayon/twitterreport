@@ -5,6 +5,14 @@ cpp_tw_gender <- function(x, male, female) {
     .Call('twitterreport_cpp_tw_gender', PACKAGE = 'twitterreport', x, male, female)
 }
 
+cpp_jaccard_coef <- function(wrds_id, wrds_grp, dist = FALSE) {
+    .Call('twitterreport_cpp_jaccard_coef', PACKAGE = 'twitterreport', wrds_id, wrds_grp, dist)
+}
+
+cpp_char_list_as_df <- function(X) {
+    .Call('twitterreport_cpp_char_list_as_df', PACKAGE = 'twitterreport', X)
+}
+
 cpp_tw_sentiment <- function(x, pos, neg = as.character( c()), pos_score = as.numeric( c()), neg_score = as.numeric( c()), neu = as.character( c()), neu_score = as.numeric( c()), normalize = TRUE) {
     .Call('twitterreport_cpp_tw_sentiment', PACKAGE = 'twitterreport', x, pos, neg, pos_score, neg_score, neu, neu_score, normalize)
 }

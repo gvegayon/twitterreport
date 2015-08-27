@@ -1,13 +1,13 @@
 Package: twitterreport
-Title: Out-of-the-box analysis and reporting tools for twitter
-Version: 0.15.8.20
+Title: Out-of-the-Box Analysis and Reporting Tools for Twitter
+Version: 0.15.8.26
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com",
                   role = c("aut", "cre"))
 Description: Set of tools to download, process and analyze 'tweets', including methods
   for exporting the outputs through 'D3js'.
 URL: http://github.com/gvegayon/twitterreport
 BugReports: http://github.com/gvegayon/twitterreport/issues
-Depends: R (>= 3.1.0)
+Depends: R (>= 3.1.0), Matrix
 Imports: 
   stringr, 
   dplyr, 
@@ -22,7 +22,7 @@ Imports:
   RCurl, 
   knitr, 
   Rcpp
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo
 Suggests: 
   rmarkdown, 
   twitteR, 

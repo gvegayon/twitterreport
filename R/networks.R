@@ -55,8 +55,8 @@ tw_network <- function(
   if (exclude.self) tmp <- subset(tmp,source!=target)
   
   # Frequency
-  tmp <- group_by(tmp, source, target)
-  tmp <- as.data.frame(summarise(tmp,'value'=n()))
+  tmp <- group_by_(tmp, ~source, ~target)
+  tmp <- as.data.frame(summarise_(tmp,.dots=setNames(list(~n()),'value')))
   
   # Filtering interactions
   tmp <- tmp[tmp$value>=min.interact,]

@@ -100,3 +100,13 @@ plot.tw_Class_graph <- function(
     opacity = opacity,
     opacityNoHover = opacityNoHover, legend = legend,...)
 }
+
+#' @export
+#' @method print tw_Class_jaccard
+print.tw_Class_jaccard <- function(x, ...) {
+  n <- x$nwords
+  cat("Jaccard index Matrix (Sparse) of ",n,"x",n,"\n",sep="")
+  cat("contains the following words:\n")
+  print(head(x$words))
+  invisible(x)
+}

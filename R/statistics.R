@@ -27,13 +27,13 @@ tw_timeseries <- function(
       obj        = obj[[i]])
     })))
   
-  grp <- dplyr::group_by(data, created_at, obj)
-  tmp <- summarise(grp, n=n())
+  grp <- group_by_(data, ~created_at, ~obj)
+  tmp <- summarise_(grp, .dots=setNames(list(~n()),'n'))
   tmp <- tmp[order(-tmp$n),]
   
   # Getting the top k elements
-  grp <- dplyr::group_by(tmp, obj)
-  who <- summarise(grp, n=sum(n))
+  grp <- group_by_(tmp, ~obj)
+  who <- as.data.frame(summarise_(grp, .dots=setNames(list(~sum(n)),'n')))
   who <- who[order(-who$n),]$obj[1:nseries]
   
   # series <- unique(tmp$obj)[1:nseries]
