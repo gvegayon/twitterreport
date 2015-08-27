@@ -9,9 +9,8 @@ IntegerVector cpp_tw_gender(CharacterVector x, CharacterVector male, CharacterVe
   
   // Creating space for the output
   IntegerVector out(n,-1);
-  LogicalVector isna(n);
-  isna = is_na(x);
-  
+  LogicalVector isna = is_na(x);
+
   for(int j=0;j<n;++j) {
     bool found=false;
 
