@@ -26,4 +26,13 @@ Retrieves a set of words related to a particular word
 After applying the \code{\link{jaccard_coef}} function, the
 resulting object can be analyzed with this function.
 }
+\examples{
+\dontrun{
+# Computing the jaccard coefficient
+jaccard <- jaccard_coef(tweets$text)
+
+# See what words are related with abortion
+words_closeness('abortion',jaccard,.001)
+}
+}
 

@@ -16,6 +16,7 @@ While there are some (very neat) R packages focused on twitter (namely `twitteR`
 -   Creating time series charts of hashtags/users/etc. and visualizing them using D3js
 -   Create wordclouds (after removing stop words and processing the text)
 -   Map visualization using the leaflet package
+-   Topics identification through the Jaccard coeff (words similarity)
 
 You can take a look at a live example at <http://www.its.caltech.edu/~gvegayon/twitter/report_example.html>, and at the source code of that example at <https://github.com/gvegayon/twitterreport/blob/master/vignettes/report_example.Rmd>
 
@@ -34,6 +35,8 @@ Examples
 --------
 
 ### Getting tweets from a set of users
+
+    ## Loading required package: Matrix
 
 ``` r
 # Firts, load the package!
@@ -61,9 +64,10 @@ contents <- tw_extract(tweets$text)
 graph <- tw_network(tweets$screen_name, contents$mentions, minInteract=3)
 plot(graph)
 ```
-
 ![](README_files/figure-markdown_github/network.png?raw=true)
+
 (This is just for ilustration, the real output is a D3js interactive)
+
 
 In the following examples we will use data on US senators extracted from twitter using the REST API (you can find it in the package)
 
@@ -142,9 +146,77 @@ tw_leaflet(senate_tweets,~coordinates, nclusters=3)
 ```
 
 ![](README_files/figure-markdown_github/leaflet_map.png?raw=true)
+
 (This is just for ilustration, the real output is a D3js interactive)
 
 Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4 different senators that have such information. Using the `nclusters` option, the `tw_leaflet` groups the data using the `hclust` function of the stats package. So the user doesn't need to worry about aggregating data.
+
+Words closeness
+---------------
+
+An interesting issue to review is how are words related to each other. Using the Jaccard coefficient we are able to estimate a measure of distance between two words. The `jaccard_coef` function implements such algorithm, and it allows us to get a better understanding of topics, as the following example
+
+``` r
+# Computing the jaccard coefficient
+jaccard <- jaccard_coef(senate_tweets$text,max.size = 1000)
+
+# See what words are related with abortion
+words_closeness('veterans',jaccard,.025)
+```
+
+    ##        word         coef
+    ## 1  veterans 318.00000000
+    ## 2        va   0.08982036
+    ## 3      care   0.08510638
+    ## 4     honor   0.04389313
+    ## 5    access   0.04201681
+    ## 6   deserve   0.04176334
+    ## 7    health   0.04022989
+    ## 8  benefits   0.03827751
+    ## 9    mental   0.03733333
+    ## 10  honored   0.03505155
+    ## 11     home   0.03440860
+    ## 12  service   0.03266788
+    ## 13     july   0.03108808
+    ## 14   combat   0.02964960
+    ## 15 services   0.02857143
+    ## 16   choice   0.02549575
+    ## 17    thank   0.02529960
+
+We can also do this using the output from `tw_extract`, this is, by passing a list of character vectors (this is much fasters)
+
+``` r
+hashtags <- tw_extract(senate_tweets$text, obj = 'hashtag')$hashtag
+
+# Again, but using a list
+jaccard <- jaccard_coef(hashtags,max.size = 15000)
+jaccard
+```
+
+    ## Jaccard index Matrix (Sparse) of 3283x3283 elements
+    ## Contains the following words (access via $freq):
+    ##          wrd   n
+    ## 1   irandeal 202
+    ## 2       iran 179
+    ## 3     scotus 141
+    ## 4        tpa 132
+    ## 5      netde 119
+    ## 6 mepolitics 117
+
+``` r
+# See what words are related with abortion
+words_closeness('veterans',jaccard,.025)
+```
+
+    ##          word        coef
+    ## 1    veterans 78.00000000
+    ## 2 honorflight  0.06382979
+    ## 3          va  0.05154639
+    ## 4  miasalutes  0.05000000
+    ## 5     4profit  0.04166667
+    ## 6   choiceact  0.03658537
+    ## 7 40mileissue  0.02564103
+    ## 8        hepc  0.02531646
 
 Author
 ------

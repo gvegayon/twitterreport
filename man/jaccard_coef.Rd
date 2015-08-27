@@ -3,22 +3,29 @@
 \name{jaccard_coef}
 \alias{Words}
 \alias{jaccard_coef}
+\alias{jaccard_coef.character}
+\alias{jaccard_coef.list}
 \alias{similarities}
 \title{Compute the Jaccard coefficient}
 \usage{
-jaccard_coef(x, max.size = 1000, stopwds = unique(c(tm::stopwords(),
-  letters)), ignore.case = TRUE, dist = FALSE)
+jaccard_coef(x, ...)
+
+\method{jaccard_coef}{list}(x, max.size = 1000, dist = FALSE)
+
+\method{jaccard_coef}{character}(x, max.size = 1000,
+  stopwds = unique(c(tm::stopwords(), letters)), ignore.case = TRUE,
+  dist = FALSE)
 }
 \arguments{
 \item{x}{Character vector with the phrases (tweets) to be analyzed}
 
 \item{max.size}{Max number of words to analyze}
 
+\item{dist}{When true computes one minus Jaccard coef}
+
 \item{stopwds}{Character vector of stopwords}
 
 \item{ignore.case}{When true converts all to lower}
-
-\item{dist}{When true computes one minus Jaccard coef}
 }
 \value{
 A list including a \code{dgCMatrix} matrix
@@ -29,11 +36,19 @@ Compute the Jaccard coefficient
 \details{
 The Jaccard index is used as a measure of similarity between two
 elements. In particular for a given pair of elements \eqn{x,y} it is calculated as
-\deqn{J(S,T) = \frac{\|S\cap T\|}{\|S\cup T\|}}{J(S,T) = |S intersection T|/|S U T|}
+\deqn{J(S,T) = \frac{|S\cap T|}{|S\cup T|}}{J(S,T) = |S intersection T|/|S U T|}
 Where \eqn{S} is the set of groups where \eqn{x} is present and
 \eqn{T} is the set of groups where \eqn{y}. The resulting value is defined
 between 0 and 1, where 0 corresponds to no similarity at all (the elements
 don't have a group in common) and 1 represents perfect similarity (both elements
 are present in the same groups).
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{list}: Method Processes a list of character vectors such as
+the one obtained from \code{\link{tw_extract}}
+
+\item \code{character}: Computes the coef from a vector of characters
+(splits the text)
+}}
 

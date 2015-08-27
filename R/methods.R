@@ -105,8 +105,8 @@ plot.tw_Class_graph <- function(
 #' @method print tw_Class_jaccard
 print.tw_Class_jaccard <- function(x, ...) {
   n <- x$nwords
-  cat("Jaccard index Matrix (Sparse) of ",n,"x",n,"\n",sep="")
-  cat("contains the following words:\n")
-  print(head(x$words))
+  cat("Jaccard index Matrix (Sparse) of ",n,"x",n," elements\n",sep="")
+  cat("Contains the following words (access via $freq):\n")
+  print(head(x$freq))
   invisible(x)
 }

@@ -99,7 +99,57 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
 #' are present in the same groups).
 #' @export
 #' @return A list including a \code{dgCMatrix} matrix
-jaccard_coef <- function(x,max.size=1000,
+jaccard_coef <- function(x,...) UseMethod("jaccard_coef")
+
+#' @describeIn jaccard_coef Method Processes a list of character vectors such as
+#' the one obtained from \code{\link{tw_extract}}
+#' @export
+jaccard_coef.list <- function(x, max.size=1000, dist=FALSE) {
+  
+  # Cohersing the list as a data.frame
+  x <- cpp_char_list_as_df(x)
+  colnames(x) <- c("wrd","id")
+  x <- x[which(!grepl('^\\s+$',x$wrd)),]
+  
+  # We dont want to use all of them
+  if (nrow(x)>max.size) {
+    y <- group_by_(x,~wrd)
+    y <- as.data.frame(dplyr::summarise_(y, "n()"))
+    colnames(y) <- c('wrd','n')
+    y <- y[order(-y[,c('n')]),]
+    y <- y[y[,c('n')]>1,]
+    x <- semi_join(x,y[1:max.size,],by="wrd")
+  }
+  
+  # Computing Jaccards index
+  x$wrd <- factor(x$wrd, ordered = FALSE)
+  jaccard <- with(x,cpp_jaccard_coef(as.numeric(wrd),as.numeric(id), dist))
+  
+  # Preparing output
+  wrd_names <- unique(x$wrd)
+  wrd_names <- wrd_names[order(wrd_names)]
+  colnames(jaccard) <- wrd_names
+  rownames(jaccard) <- colnames(jaccard)
+  
+  # Freq table to show for the print class
+  tab <- data.frame(wrd=attr(jaccard,"Dimnames")[[1]],n=diag(jaccard), 
+                    stringsAsFactors = FALSE)
+  tab <- tab[order(-tab$n),]
+  row.names(tab) <- 1:nrow(tab)
+  
+  # Wrapping result
+  jaccard <- list(mat=jaccard, nwords=attr(jaccard,"Dim")[1], words=attr(jaccard,"Dimnames")[[1]],
+                  ntexts=length(unique(x$id)), freq=tab)
+  
+  class(jaccard) <- c('tw_Class_jaccard', class(jaccard))
+  
+  return(jaccard)
+}
+
+#' @describeIn jaccard_coef Computes the coef from a vector of characters
+#' (splits the text)
+#' @export
+jaccard_coef.character <- function(x,max.size=1000,
                          stopwds=unique(c(tm::stopwords(),letters)), 
                          ignore.case=TRUE, 
                          dist=FALSE) {
@@ -117,35 +167,7 @@ jaccard_coef <- function(x,max.size=1000,
     y[which(!(y %in% stopwds))]
   })
   
-  x <- cpp_char_list_as_df(x)
-  colnames(x) <- c("wrd","id")
-  
-  # We dont want to use all of them
-  if (nrow(x)>max.size) {
-    y <- group_by_(x,~wrd)
-    y <- as.data.frame(summarise_(y, .dots=setNames(list(~n),"n")))
-    y <- y[order(-y[,c('n')]),]
-    y <- y[y[,c('n')]>1,]
-    x <- semi_join(x,y[1:max.size,],by="wrd")
-  }
-  
-  # Computing Jaccards index
-  x$wrd <- factor(x$wrd, ordered = FALSE)
-  jaccard <- with(x,cpp_jaccard_coef(as.numeric(wrd),as.numeric(id), dist))
-  
-  # Preparing output
-  wrd_names <- unique(x$wrd)
-  wrd_names <- wrd_names[order(wrd_names)]
-  colnames(jaccard) <- wrd_names
-  rownames(jaccard) <- colnames(jaccard)
-  
-  # Wrapping result
-  jaccard <- list(mat=jaccard, nwords=attr(jaccard,"Dim")[1], words=attr(jaccard,"Dimnames")[[1]],
-                  ntexts=length(unique(x$id)))
-  
-  class(jaccard) <- c('tw_Class_jaccard', class(jaccard))
-  
-  return(jaccard)
+  jaccard_coef.list(x, max.size=1000, dist=dist)
 }
 
 #' Retrieves a set of words related to a particular word
@@ -158,7 +180,8 @@ jaccard_coef <- function(x,max.size=1000,
 #' to the specified \code{word}
 #' @details After applying the \code{\link{jaccard_coef}} function, the 
 #' resulting object can be analyzed with this function.
-#' @example 
+#' @export
+#' @examples 
 #' \dontrun{
 #' # Computing the jaccard coefficient
 #' jaccard <- jaccard_coef(tweets$text)
@@ -185,7 +208,10 @@ words_closeness <- function(word,jaccard,criter=0.01,exact=FALSE) {
   set <- which(jaccard$mat[index,]>=criter)
   set <- data.frame(word=jaccard$words[set],coef=jaccard$mat[index,set],
                     stringsAsFactors = FALSE)
-  set[order(-set$coef),]
+  set <- set[order(-set$coef),]
+  rownames(set) <- 1:nrow(set)
+  
+  set
 }
 
 # words_closeness('abortion',jaccard,.001)

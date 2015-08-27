@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h> /* This already includes Rcpp */
+
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -13,13 +14,14 @@ arma::sp_mat cpp_jaccard_coef(IntegerVector wrds_id, IntegerVector wrds_grp, boo
   arma::sp_mat X = arma::sp_mat(n,n);
   
   /* Counting number of group intersections */
-  for(int i=0;i<w;++i)
+  for(int i=0;i<w;++i) {
     for(int j=i;j<w;++j) 
       if (wrds_grp[i]==wrds_grp[j]) {
         /* In order to generate a lower triangular matrix */
         if (wrds_id[i]>wrds_id[j]) X(wrds_id[i]-1,wrds_id[j]-1)+=1;
         else X(wrds_id[j]-1,wrds_id[i]-1)+=1;
       }
+  }
   
   /* Computing the index, in particular, each cell represents the cardinality of
     the intersection, while diagonal represents the number of sets in which each
@@ -129,7 +131,7 @@ plot.TR_Class_jaccard <- function(x, ...) {
 }
 
 
-num<-which(colnames(u$mat)=="whitehouse");as.data.frame(u$mat[num,which(u$mat[num,]>0.025)])
+# num<-which(colnames(u$mat)=="whitehouse");as.data.frame(u$mat[num,which(u$mat[num,]>0.025)])
 
 z <- jaccard_coef(x,dist = TRUE)
 z
@@ -141,9 +143,11 @@ plot(clust)
 
 # Test with data from twitter
 load('/home/george/Documents/projects/twitterreport/data/senate_tweets.rdata')
-tweets <- senate_tweets$text
+tweets <- senate_tweets$text[1:1000]
 
-u <- jaccard_coef(unique(tweets),max.size = 1000)
+microbenchmark::microbenchmark(
+  jaccard_coef(unique(tweets),max.size = 50)
+)
 
 clust <- hclust(1-z)
 
