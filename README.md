@@ -31,6 +31,8 @@ While the package is still in development, you can always use `devtools` to inst
 devtools::install_git('gvegayon/twitterreport')
 ```
 
+Please have in mind that the package is still in an early stage (so there it might be a little buggy). Furthermore, function names and classes will change for sure (to more intuitive names of course).
+
 Examples
 --------
 
