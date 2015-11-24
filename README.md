@@ -28,8 +28,10 @@ Installation
 While the package is still in development, you can always use `devtools` to install the most recent version.
 
 ``` r
-devtools::install_git('gvegayon/twitterreport')
+devtools::install_github('gvegayon/twitterreport')
 ```
+
+Please have in mind that the package is still in an early stage (so there it might be a little buggy). Furthermore, function names and classes will change for sure (to more intuitive names of course).
 
 Examples
 --------
