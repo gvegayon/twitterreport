@@ -1,8 +1,7 @@
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h> /* This already includes Rcpp */
 
 using namespace Rcpp;
-
-// [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export]]
 arma::sp_mat cpp_jaccard_coef(IntegerVector wrds_id, IntegerVector wrds_grp, bool dist=false) {
@@ -46,7 +45,7 @@ arma::sp_mat cpp_jaccard_coef(IntegerVector wrds_id, IntegerVector wrds_grp, boo
 }
 
 
-/* This function takes a list of characte and coherses it into a dataframe with
+/* This function takes a list of characte and coerses it into a dataframe with
 two column, -wrd- and -id-. It is twice as fast as applying a apply method */
 // [[Rcpp::export]]
 DataFrame cpp_char_list_as_df(List & X) {
