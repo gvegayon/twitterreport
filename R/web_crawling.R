@@ -9,6 +9,7 @@
 #' tw_get_tw_account('http://caltech.edu')
 #' }
 #' @author George G. Vega Yon
+#' @family text processors
 #' @export
 tw_get_tw_account <- function(uri, redirect=TRUE, normalize=TRUE, quiet=TRUE) {
   

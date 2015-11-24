@@ -21,8 +21,8 @@
 #' @param cluster.method Clustering method (see \code{\link{hclust}})
 #' @param nclusters Max number of clusters to include
 #' @param ... Further arguments to be passed to \code{\link{addCircles}}
-#' 
-#' @details The \code{coordinates} must be in the format of longitude:latitude
+#' @details 
+#' The \code{coordinates} must be in the format of longitude:latitude
 #' (as the twitter API returns). 
 #' 
 #' In order to improve visualization, the function performs Hierarchical
@@ -36,12 +36,9 @@
 #' For performance considerations, it is recommended not to use more than
 #' 1,000 observations (Try using a random sample from your data!) as 
 #' \code{hclust} requires computing square matrices.
-#' 
 #' @author George G. Vega Yon
-#' 
 #' @return A map object (see the \code{\link{leaflet}} package)
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' # Getting the data

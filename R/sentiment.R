@@ -9,7 +9,6 @@
 #' @param neg_s Numeric vector of scores for each word in the neg vec
 #' @param lan Languaje of the lexicon (can be either 'en' or 'es')
 #' @param normalize Whether or not to normalize the values of each words' score.
-#'
 #' @details By default uses an english lexicon downloaded from 
 #' \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html}. In particular
 #' if no list of words is provided, the function loads the dataset 
@@ -32,9 +31,7 @@
 #' well since it is a result of the addition of the scores.
 #' 
 #' @seealso \code{\link{sentiment_lexicon_pos_en}} \code{\link{sentiment_lexicon_neg_en}}
-#'
 #' @return Numeric Vector with scores
-#' 
 #' @examples 
 #'  # Example data
 #'  text <- c(
@@ -48,9 +45,8 @@
 #'  # Getting the scores
 #'  tw_sentiment(text)
 #'  tw_sentiment(text, normalize=FALSE)
-#' 
+#' @family statistics
 #' @export
-#'
 tw_sentiment <- function(
   text, pos=NULL, neg=NULL, pos_s=NULL, neg_s=NULL, lan='en', normalize=TRUE) {
   

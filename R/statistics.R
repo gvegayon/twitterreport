@@ -6,6 +6,7 @@
 #' @param units Time unit
 #' @return xts class 
 #' @author George G. Vega Yon
+#' @family statistics
 #' @export
 tw_timeseries <- function(
   obj,created_at, units=c('secs','mins','hours','days'),
@@ -96,6 +97,7 @@ tw_timeseries <- function(
 #' x <- tw_extract(senate_tweets$text)
 #' 
 #' head(tw_table(x,'mention'))
+#' @family statistics
 #' @export
 tw_table <- function(x,...) UseMethod('tw_table')
 

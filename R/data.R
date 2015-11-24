@@ -4,12 +4,16 @@
 #' Negative Lexicon (en)
 #' @name sentiment_lexicon_neg_en
 #' @format A Character vector
+#' @family example datasets
+#' @family lexicon datasets
 #' @source \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
 NULL
 
 #' Positive Lexicon (en)
 #' @name sentiment_lexicon_pos_en
 #' @format A Character vector
+#' @family example datasets
+#' @family lexicon datasets
 #' @source \url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
 NULL
 
@@ -18,11 +22,15 @@ NULL
 #' @format A data.frame with scores (Valence)
 #' @details Spanish version translated by Daniel Gayo-Avello based on Warriner, et al.
 #' @source \url{http://crr.ugent.be/archives/1003}
+#' @family lexicon datasets
+#' @family example datasets
 NULL
 
 #' Warriner et al. Lexicon (es)
 #' @name warriner_et_al_es
 #' @format A data.frame with scores (Valence)
+#' @family example datasets
+#' @family lexicon datasets
 #' @details Based on \emph{Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.}
 #' @source \url{http://danigayo.info/blog/index.php?entry=entry130117-183114}
 NULL
@@ -32,24 +40,32 @@ NULL
 ################################################################################
 #' Spanish male names
 #' @name names_male_es
+#' @family example datasets
+#' @family names datasets
 #' @format A character vector with 25,442 elements
 #' @source \url{https://github.com/apalancat/spanish-names}
 NULL
 
 #' Spanish female names
 #' @name names_female_es
+#' @family example datasets
+#' @family names datasets
 #' @format A character vector with 24,494 elements
 #' @source \url{https://github.com/apalancat/spanish-names}
 NULL
 
 #' English male names
 #' @name names_male_en
+#' @family example datasets
+#' @family names datasets
 #' @format A character vector with 51,212 elements
 #' @source OpenGenderTracking project \url{https://github.com/OpenGenderTracking/globalnamedata}
 NULL
 
 #' English female names
 #' @name names_female_en
+#' @family example datasets
+#' @family names datasets
 #' @format A character vector with 80,148 elements
 #' @source OpenGenderTracking project \url{https://github.com/OpenGenderTracking/globalnamedata}
 NULL
@@ -81,6 +97,7 @@ NULL
 #' }
 #' 
 #' @name senate_tweets
+#' @family example datasets
 #' @format A data.frame with 19,786 rows and 14 variables
 #' @source \url{http://dev.twitter.com}
 NULL
@@ -100,6 +117,7 @@ NULL
 #' }
 #' 
 #' @name senators
+#' @family example datasets
 #' @format A data.frame with 100 rows and 7 variables
 #' @source \url{http://www.senate.gov/senators/contact/}
 NULL
@@ -136,6 +154,7 @@ NULL
 #' }
 #' 
 #' @name senators_profile
+#' @family example datasets
 #' @format A data.frame with 100 rows and 23 columns
 #' @source \url{https://dev.twitter.com}
 NULL

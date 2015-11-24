@@ -23,7 +23,7 @@
 #' 
 #' @details The \code{value} column in the \code{links} dataframe (see \strong{Value})
 #' is computed as the number of connexions between the source and the target.
-#' 
+#' @family network functions
 #' @export
 tw_network <- function(
   source,target,only.from=FALSE,exclude.self=TRUE,min.interact=1, group=NULL,

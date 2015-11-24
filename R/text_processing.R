@@ -9,6 +9,7 @@
 #' head(tw_extract(tweets$text))
 #' }
 #' @author George G. Vega Yon
+#' @family text processors
 #' @export
 tw_extract <- function(txt,...) UseMethod('tw_extract')
 
@@ -59,6 +60,7 @@ tw_extract.character <- function(txt, obj = c("email", "mention", "hashtag", "ur
 #' @param stopw Set of stop words
 #' @param cleanfun A function to pass to lapply
 #' @author George G. Vega Yon
+#' @family text processors
 #' @export
 tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
   # Removing URL and punctuation

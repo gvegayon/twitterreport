@@ -1,35 +1,39 @@
 Package: twitterreport
 Title: Out-of-the-Box Analysis and Reporting Tools for Twitter
-Version: 0.15.8.26
+Version: 0.15.11
+Date: 2015-11-23
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com",
                   role = c("aut", "cre"))
-Description: Set of tools to download, process and analyze 'tweets', including methods
-  for exporting the outputs through 'D3js'.
+Description: Set of tools to download, process and analyze 'tweets', including
+    methods for exporting the outputs through 'D3js'.
 URL: http://github.com/gvegayon/twitterreport
 BugReports: http://github.com/gvegayon/twitterreport/issues
-Depends: R (>= 3.1.0), Matrix
-Imports: 
-  stringr, 
-  dplyr, 
-  dygraphs,
-  DT, 
-  networkD3, 
-  leaflet,
-  wordcloud, 
-  tm, 
-  httr, 
-  RColorBrewer, 
-  RCurl, 
-  knitr, 
-  Rcpp
+Depends:
+    R (>= 3.1.0)
+Imports:
+    stringr,
+    dplyr,
+    dygraphs,
+    DT,
+    networkD3,
+    leaflet,
+    wordcloud,
+    tm,
+    httr,
+    RColorBrewer,
+    RCurl,
+    knitr,
+    Rcpp,
+    Matrix
 LinkingTo: Rcpp, RcppArmadillo
-Suggests: 
-  rmarkdown, 
-  twitteR, 
-  streamR, 
-  rgexf, 
-  ggvis
+Suggests:
+    rmarkdown,
+    twitteR,
+    streamR,
+    rgexf,
+    ggvis
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 LazyData: false
 Encoding: UTF-8
+RoxygenNote: 5.0.0

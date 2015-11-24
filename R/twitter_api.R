@@ -8,6 +8,7 @@
 #' tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
 #' tw_api_get_usr_profile('gvegayon',tokens)
 #' }
+#' @family API functions
 #' @export
 tw_gen_token <- function(appname,key,secret=NULL) {
   myapp <- oauth_app(appname,key,secret)
@@ -115,6 +116,7 @@ tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
 #' @references Twitter REST API (GET users/show)
 #' \url{https://dev.twitter.com/rest/reference/get/users/show}
 #' @export
+#' @family API functions
 tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
                                   user_id=NULL,include_entities="false",...) {
   
@@ -235,6 +237,7 @@ tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
 #' @references Twitter REST API (GET statuses/user_timeline)
 #' \url{https://dev.twitter.com/rest/reference/get/statuses/user_timeline}
 #' @export
+#' @family API functions
 tw_api_get_statuses_user_timeline <- function(
   screen_name=NULL,twitter_token, user_id=NULL, since_id=NULL, count=100,
   max_id=NULL, exclude_replies=NULL, include_rts=NULL,
@@ -376,6 +379,7 @@ tw_api_get_statuses_user_timeline <- function(
 #' @references Twitter REST API (GET search/tweets)
 #' \url{https://dev.twitter.com/rest/reference/get/search/tweets}
 #' @export
+#' @family API functions
 tw_api_get_search_tweets <- function(q, twitter_token,
   geocode=NULL, lang=NULL, locale=NULL, result_type=c('mixed','recent','popular'),
   count=100, until='9999-99-99', since_id=NULL, max_id=NULL,quietly=FALSE,...) {
@@ -458,6 +462,7 @@ tw_api_get_search_tweets <- function(q, twitter_token,
 #' @references Twitter REST API (GET search/tweets) 
 #' \url{https://dev.twitter.com/rest/reference/get/friends/ids}
 #' @export
+#' @family API functions
 tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
                                    cursor=NULL, count=1000, ...) {
   
@@ -510,6 +515,7 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 #' @references Twitter REST API (GET followers/ids)
 #' \url{https://dev.twitter.com/rest/reference/get/followers/ids}
 #' @export
+#' @family API functions
 tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
                                    cursor=NULL, count=1000, ...) {
   
@@ -583,6 +589,7 @@ tw_write_json_network <- function(graph) {
 #' @references Twitter REST API (GET trends/available)
 #' \url{https://dev.twitter.com/rest/reference/get/trends/available}
 #' @export
+#' @family API functions
 tw_api_trends_available <- function(twitter_token,...) {
   req <- tw_api_get('https://api.twitter.com/1.1/trends/available.json',
                      twitter_token,minutes = 15,...)
@@ -635,6 +642,7 @@ tw_api_trends_available <- function(twitter_token,...) {
 #' @references Twitter REST API (GET trends/place)
 #' \url{https://dev.twitter.com/rest/reference/get/trends/place}
 #' @export
+#' @family API functions
 tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
   
   # Making the request
@@ -687,7 +695,7 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' \url{https://dev.twitter.com/rest/reference/get/followers/list}
 #' @return A list
 #' @export
-#'
+#' @family API functions
 tw_api_get_followers_list <- function(screen_name=NULL,
   twitter_token, user_id=NULL, cursor=NULL, count=200,
   skip_status=NULL, include_user_entities='false',max.n=NULL,...) {
@@ -787,6 +795,7 @@ tw_api_get_followers_list <- function(screen_name=NULL,
 #' @references Twitter Streaming API (GET statuses/sample)
 #' \url{https://dev.twitter.com/streaming/reference/get/statuses/sample}
 #' @export
+#' @family API functions
 tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
   
   # Parameters
@@ -829,7 +838,7 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' @references Twitter REST API (GET users/search) \url{https://dev.twitter.com/rest/reference/get/users/search}
 #' @return A list of twitter accounts
 #' @export
-#'
+#' @family API functions
 tw_api_get_users_search <- function(q, twitter_token, page=NULL, count=20,quietly=TRUE,...) {
   
   # Encoding the query
