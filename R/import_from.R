@@ -19,7 +19,7 @@ NULL
 #' @importFrom tm stopwords
 NULL
 #' @importFrom RColorBrewer brewer.pal
-NULL
+NULL 
 #' @importFrom RCurl getURL
 NULL
 #' @importFrom stats hclust cutree
