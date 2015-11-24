@@ -84,7 +84,10 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
   txt
 }
 
-#' Compute the Jaccard coefficient
+#' Jaccard coefficient
+#' 
+#' Calculate the Jaccard (similarity) coefficient between words.
+#' 
 #' @aliases Words similarities
 #' @param x Character vector with the phrases (tweets) to be analyzed
 #' @param max.size Max number of words to analyze
@@ -100,6 +103,9 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
 #' don't have a group in common) and 1 represents perfect similarity (both elements
 #' are present in the same groups).
 #' @export
+#' @references 
+#' Conover, M., Ratkiewicz, J., & Francisco, M. (2011). "Political polarization
+#' on twitter". Icwsm, 133(26), 89–96. \url{http://doi.org/10.1021/ja202932e}
 #' @return A list including a \code{dgCMatrix} matrix
 jaccard_coef <- function(x,...) UseMethod("jaccard_coef")
 

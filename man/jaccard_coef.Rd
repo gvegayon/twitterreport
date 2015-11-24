@@ -6,7 +6,7 @@
 \alias{jaccard_coef.character}
 \alias{jaccard_coef.list}
 \alias{similarities}
-\title{Compute the Jaccard coefficient}
+\title{Jaccard coefficient}
 \usage{
 jaccard_coef(x, ...)
 
@@ -31,7 +31,7 @@ jaccard_coef(x, ...)
 A list including a \code{dgCMatrix} matrix
 }
 \description{
-Compute the Jaccard coefficient
+Calculate the Jaccard (similarity) coefficient between words.
 }
 \details{
 The Jaccard index is used as a measure of similarity between two
@@ -51,4 +51,8 @@ the one obtained from \code{\link{tw_extract}}
 \item \code{character}: Computes the coef from a vector of characters
 (splits the text)
 }}
+\references{
+Conover, M., Ratkiewicz, J., & Francisco, M. (2011). "Political polarization
+on twitter". Icwsm, 133(26), 89–96. \url{http://doi.org/10.1021/ja202932e}
+}
 
