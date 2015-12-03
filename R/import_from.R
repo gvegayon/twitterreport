@@ -42,5 +42,4 @@ NULL
 NULL
 
 #' @importClassesFrom Matrix dgCMatrix
-#' @import methods
 NULL
