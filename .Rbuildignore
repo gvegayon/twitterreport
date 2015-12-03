@@ -17,6 +17,7 @@
 ^twitterreport_.+$
 ^data-raw$
 ^imports\.R$
-.travis.yml
+[.]travis[.]yml
 
 ^dictionary\_index\.cpp$
+
