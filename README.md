@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport)
+
 
 twitterreport
 =============
