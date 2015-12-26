@@ -11,7 +11,7 @@
 #' map with circles which sizes are set by the number of observations in those
 #' coordinates.
 #'
-#' @param data A twitter dataset (with coordinates)
+#' @param dat A twitter dataset (with coordinates)
 #' @param coordinates Name of the \code{coordinates} variable (see details)
 #' @param popup Name of the grouping variable (for example, \code{screen_name})
 #' @param lat Name of the latitude variable
@@ -55,9 +55,9 @@
 #' # Aggregating until get only 3 big groups
 #' tw_leaflet(senate_tweets,'coordinates', nclusters=3)
 #' }
-tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
+tw_leaflet <- function(dat,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
                        radii=~sqrt(n)*1000, weight=1, cluster.method='centroid',
-                       nclusters=min(c(50,nrow(data) %/% 3)) ,...) {
+                       nclusters=min(c(50,nrow(dat) %/% 3)) ,...) {
   # Checking latitude and longitude
   if (!length(coordinates) && !length(lat) && !length(lng))
     stop('At least -coordinates- should be provided')
@@ -66,40 +66,41 @@ tw_leaflet <- function(data,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
   if (inherits(coordinates,'formula')) 
     coordinates <- attr(terms(coordinates),'term.labels')
   if (length(coordinates))
-    colnames(data)[which(colnames(data)==coordinates)] <- 'coordinates'
+    colnames(dat)[which(colnames(dat)==coordinates)] <- 'coordinates'
   
   # If lat/lng was provided as a formula
   if (inherits(lat,'formula')) lat <- attr(terms(lat),'term.labels')
-  if (length(lat)) colnames(data)[which(colnames(data)==lat)] <- 'lat'
+  if (length(lat)) colnames(dat)[which(colnames(dat)==lat)] <- 'lat'
   
   if (inherits(lng,'formula')) lng <- attr(terms(lng),'term.labels')
-  if (length(lng)) colnames(data)[which(colnames(data)==lng)] <- 'lng'
+  if (length(lng)) colnames(dat)[which(colnames(dat)==lng)] <- 'lng'
   
   # If no lat/lng was provided, we need to create these for the cluster analysis
   # Here we get the distance between all the points
-  if (!length(lat)) data[,c('lng','lat')] <- do.call(rbind,strsplit(data$coordinates,':'))
+  if (!length(lat)) dat[,c('lng','lat')] <- 
+      do.call(rbind,strsplit(dat$coordinates,":", fixed = TRUE))
   
-  data$lat <-as.numeric(data$lat)
-  data$lng <-as.numeric(data$lng)
+  dat$lat <-as.numeric(dat$lat)
+  dat$lng <-as.numeric(dat$lng)
   
   # Subset of the data that has a coordinate or lat/lng
-  data <- subset(data,!is.na(lat))
+  dat <- subset(dat,!is.na(lat))
   
-  d <- dist(data[,c('lng','lat')])
+  d <- dist(dat[,c('lng','lat')])
 
   # Computing clusters
   clusters <- stats::hclust(d,cluster.method)
-  data$clusters <- stats::cutree(clusters, min(c(nclusters,nrow(data))))
+  dat$clusters <- stats::cutree(clusters, min(c(nclusters,nrow(dat))))
   
   # Checking popup
   if (inherits(popup, 'formula'))
     popup <- attr(terms(popup),'term.labels')
-  if (length(popup)) colnames(data)[which(colnames(data)==popup)] <- 'popup'
+  if (length(popup)) colnames(dat)[which(colnames(dat)==popup)] <- 'popup'
   
   # Computing the aggregation, for this we use cluster analysis
   
-  if (length(popup)) geo <- group_by_(data, "clusters","popup")
-  else geo <- group_by_(data, "clusters")
+  if (length(popup)) geo <- group_by_(dat, "clusters","popup")
+  else geo <- group_by_(dat, "clusters")
   
   # Tabulating the data
   dots <- list(~n(),~mean(lat),~mean(lng))

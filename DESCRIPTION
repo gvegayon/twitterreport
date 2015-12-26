@@ -24,6 +24,7 @@ Imports:
     RCurl,
     knitr,
     Rcpp,
+    methods,
     Matrix
 LinkingTo: Rcpp, RcppArmadillo
 Suggests:
@@ -36,4 +37,4 @@ License: MIT + file LICENSE
 VignetteBuilder: knitr
 LazyData: false
 Encoding: UTF-8
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

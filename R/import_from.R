@@ -41,5 +41,7 @@ NULL
 #' @import Rcpp
 NULL
 
+#' @import methods
 #' @importClassesFrom Matrix dgCMatrix
+#' @importFrom Matrix Matrix diag
 NULL

@@ -4,13 +4,12 @@
 \alias{tw_leaflet}
 \title{Creates a leaflet map}
 \usage{
-tw_leaflet(data, coordinates = NULL, popup = NULL, lat = NULL,
+tw_leaflet(dat, coordinates = NULL, popup = NULL, lat = NULL,
   lng = NULL, radii = ~sqrt(n) * 1000, weight = 1,
-  cluster.method = "centroid", nclusters = min(c(50, nrow(data)\%/\%3)),
-  ...)
+  cluster.method = "centroid", nclusters = min(c(50, nrow(dat)\%/\%3)), ...)
 }
 \arguments{
-\item{data}{A twitter dataset (with coordinates)}
+\item{dat}{A twitter dataset (with coordinates)}
 
 \item{coordinates}{Name of the \code{coordinates} variable (see details)}
 
