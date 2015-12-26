@@ -1,7 +1,7 @@
-
-
 twitterreport
 =============
+
+[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport)[![Build status](https://ci.appveyor.com/api/projects/status/a7ki7jlc5qht4dmn?svg=true)](https://ci.appveyor.com/project/gvegayon/twitterreport)
 
 Out-of-the-box analysis and reporting tools for twitter
 
@@ -30,17 +30,13 @@ Installation
 While the package is still in development, you can always use `devtools` to install the most recent version.
 
 ``` r
-devtools::install_github('gvegayon/twitterreport')
+devtools::install_git('gvegayon/twitterreport')
 ```
-
-Please have in mind that the package is still in an early stage (so there it might be a little buggy). Furthermore, function names and classes will change for sure (to more intuitive names of course).
 
 Examples
 --------
 
 ### Getting tweets from a set of users
-
-    ## Loading required package: Matrix
 
 ``` r
 # Firts, load the package!
@@ -68,10 +64,8 @@ contents <- tw_extract(tweets$text)
 graph <- tw_network(tweets$screen_name, contents$mentions, minInteract=3)
 plot(graph)
 ```
-![](README_files/figure-markdown_github/network.png?raw=true)
 
-(This is just for ilustration, the real output is a D3js interactive)
-
+![](README_files/figure-markdown_github/network.png)
 
 In the following examples we will use data on US senators extracted from twitter using the REST API (you can find it in the package)
 
@@ -104,7 +98,7 @@ senate_tweets$text[1:2];tab[1:2]
 plot(tab, max.n.words = 40)
 ```
 
-![](README_files/figure-markdown_github/wordcloud-1.png?raw=true)
+![](README_files/figure-markdown_github/wordcloud-1.png)
 
 ### Identifying individuals gender
 
@@ -122,7 +116,7 @@ tab <- table(tw_gender(sen))
 barplot(tab)
 ```
 
-![](README_files/figure-markdown_github/gender-1.png?raw=true)
+![](README_files/figure-markdown_github/gender-1.png)
 
 Sentiment analysis
 ------------------
@@ -137,7 +131,7 @@ hist(irandeal$sentiment, col = 'lightblue',
      xlab ='Valence (strength of sentiment)')
 ```
 
-![](README_files/figure-markdown_github/Sentiments-1.png?raw=true)
+![](README_files/figure-markdown_github/Sentiments-1.png)
 
 A map using leaflet
 -------------------
@@ -149,9 +143,7 @@ the package of the same name. Using D3js, we can visualize the number of tweets 
 tw_leaflet(senate_tweets,~coordinates, nclusters=3)
 ```
 
-![](README_files/figure-markdown_github/leaflet_map.png?raw=true)
-
-(This is just for ilustration, the real output is a D3js interactive)
+![](README_files/figure-markdown_github/leaflet_map.png)
 
 Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4 different senators that have such information. Using the `nclusters` option, the `tw_leaflet` groups the data using the `hclust` function of the stats package. So the user doesn't need to worry about aggregating data.
 
