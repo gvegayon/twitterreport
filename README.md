@@ -1,7 +1,7 @@
 twitterreport
 =============
 
-[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport)[![Build status](https://ci.appveyor.com/api/projects/status/a7ki7jlc5qht4dmn?svg=true)](https://ci.appveyor.com/project/gvegayon/twitterreport)
+[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport) [![Build status](https://ci.appveyor.com/api/projects/status/a7ki7jlc5qht4dmn?svg=true)](https://ci.appveyor.com/project/gvegayon/twitterreport)
 
 Out-of-the-box analysis and reporting tools for twitter
 
@@ -54,15 +54,28 @@ tweets <- do.call(rbind, tweets)
 head(tweets)
 ```
 
-### Creating a network of mentions
+### Creating a (fancy) network of mentions
 
 ``` r
-# First, we need to extract the mentions from the message
-contents <- tw_extract(tweets$text)
+# Loading data
+data("senators")
+data("senators_profile")
+data("senate_tweets")
 
-# Building the network and visualizing it as a D3js graph!
-graph <- tw_network(tweets$screen_name, contents$mentions, minInteract=3)
-plot(graph)
+tweets_components <- tw_extract(senate_tweets$text)
+groups <- data.frame(
+  name      = senators_profile$tw_screen_name,
+  group     = factor(senators$party),
+  real_name = senators$Name,
+  stringsAsFactors = FALSE)
+groups$name <- tolower(groups$name)
+
+senate_network <- tw_network(
+  tolower(senate_tweets$screen_name),
+  lapply(tweets_components$mention,unique),only.from = TRUE,
+  group=groups, min.interact = 3)
+
+plot(senate_network, nodelabel='real_name')
 ```
 
 ![](README_files/figure-markdown_github/network.png)
@@ -95,6 +108,7 @@ senate_tweets$text[1:2];tab[1:2]
 
 ``` r
 # Plot
+set.seed(123) # (so the wordcloud looks the same always)
 plot(tab, max.n.words = 40)
 ```
 
@@ -140,7 +154,7 @@ The function `tw_leaflet` provides a nice wrapper for the function `leaflet` of
 the package of the same name. Using D3js, we can visualize the number of tweets grouped up geographically as the following example shows:
 
 ``` r
-tw_leaflet(senate_tweets,~coordinates, nclusters=3)
+tw_leaflet(senate_tweets,~coordinates, nclusters=4,radii = ~sqrt(n)*3e5)
 ```
 
 ![](README_files/figure-markdown_github/leaflet_map.png)

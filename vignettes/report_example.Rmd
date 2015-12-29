@@ -152,7 +152,7 @@ grouped up geographically as the following example shows:
 data(senate_tweets)
 
 # Aggregating until get only 3 big groups
-tw_leaflet(senate_tweets,~coordinates, nclusters=3,radii = ~sqrt(n)*3e5)
+tw_leaflet(senate_tweets,~coordinates, nclusters=4,radii = ~sqrt(n)*3e5)
 ```
 
 Note that in this case there are 14 tweets with the `coordinates` column non-empty, leading to 4
