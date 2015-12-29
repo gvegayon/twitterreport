@@ -11,7 +11,7 @@
 #' @param min.interact Minimun number of interactions to consider (links
 #' below this number will be excluded)
 #' @param group Data frame with two columns: name & group
-#' @param size Character name of the size variable
+#' @param size A data frame with two columns: name & size
 #' @param ignore.case When \code{TRUE} converts all of \code{source} and \code{target}
 #' to lower-case.
 #' @author George G. Vega Yon
@@ -25,9 +25,33 @@
 #' is computed as the number of connexions between the source and the target.
 #' @family network functions
 #' @export
+#' @examples 
+#' \dontrun{
+#' # Loading sample data and retrieving mentions
+#' data(senate_tweets)
+#' mentions <- tw_extract(senate_tweets$text, obj="mention")$mention
+#' 
+#' # Preparing data for size. Here we are just setting a random size for
+#' # each vertex.
+#' usrs<- tolower(senate_tweets$screen_name)
+#' size <- data.frame(name=unique(usrs),
+#'                    size=exp(runif(length(unique(usrs)))*5))
+#' 
+#' # Creating the graph
+#' graph <- tw_network(
+#'   usrs, mentions, min.interact = 5, size=size)
+#' 
+#' # Visualizing the graph
+#' plot(graph)
+#' }
+
 tw_network <- function(
   source,target,only.from=FALSE,exclude.self=TRUE,min.interact=1, group=NULL,
   size=NULL, ignore.case=TRUE) {
+  
+  # Analyzing vertex size
+#   if (nrow(size) && nrow(size) != length(unique(source)))
+#     stop("-source- and -size- differ in lengths.")
   
   # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors
@@ -68,6 +92,20 @@ tw_network <- function(
   nodes <- unique(unlist(links[,-3]))
   
   nodes <- data.frame(id=as.numeric(nodes)-1,name=as.character(nodes))
+  
+  # Merging with vertices sizes
+  if (length(size)) {
+    suppressMessages(nodes <- left_join(nodes, size))
+    test <- is.na(nodes$size)
+    if (any(test)) {
+      warning("Some vertices where not in the -size- data.frame\n",
+              "The minimum size has been inputted.")
+      nodes$size[test] <- min(nodes$size, na.rm=TRUE)
+    }
+  }
+  else 
+    nodes$size <- 1
+    
   nodes <- nodes[order(nodes$id),]
   
   # If there is grouping

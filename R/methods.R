@@ -98,7 +98,9 @@ plot.tw_Class_graph <- function(
     Source="source", Target="target",
     Value="value",NodeID=nodelabel, Group="group",
     opacity = opacity,
-    opacityNoHover = opacityNoHover, legend = legend,...)
+    opacityNoHover = opacityNoHover, legend = legend,
+    Nodesize="size",
+    ...)
 }
 
 #' @export

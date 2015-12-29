@@ -22,7 +22,7 @@ below this number will be excluded)}
 
 \item{group}{Data frame with two columns: name & group}
 
-\item{size}{Character name of the size variable}
+\item{size}{A data frame with two columns: name & size}
 
 \item{ignore.case}{When \code{TRUE} converts all of \code{source} and \code{target}
 to lower-case.}
@@ -41,6 +41,26 @@ creates a graph
 \details{
 The \code{value} column in the \code{links} dataframe (see \strong{Value})
 is computed as the number of connexions between the source and the target.
+}
+\examples{
+\dontrun{
+# Loading sample data and retrieving mentions
+data(senate_tweets)
+mentions <- tw_extract(senate_tweets$text, obj="mention")$mention
+
+# Preparing data for size. Here we are just setting a random size for
+# each vertex.
+usrs<- tolower(senate_tweets$screen_name)
+size <- data.frame(name=unique(usrs),
+                   size=exp(runif(length(unique(usrs)))*5))
+
+# Creating the graph
+graph <- tw_network(
+  usrs, mentions, min.interact = 5, size=size)
+
+# Visualizing the graph
+plot(graph)
+}
 }
 \author{
 George G. Vega Yon
