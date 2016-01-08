@@ -1,7 +1,7 @@
 twitterreport
 =============
 
-[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport) [![Build status](https://ci.appveyor.com/api/projects/status/a7ki7jlc5qht4dmn?svg=true)](https://ci.appveyor.com/project/gvegayon/twitterreport)
+[![Build Status](https://travis-ci.org/gvegayon/twitterreport.svg?branch=master)](https://travis-ci.org/gvegayon/twitterreport) [![Build status](https://ci.appveyor.com/api/projects/status/a7ki7jlc5qht4dmn?svg=true)](https://ci.appveyor.com/project/gvegayon/twitterreport) [![DOI](https://zenodo.org/badge/19832/gvegayon/twitterreport.svg)](https://zenodo.org/badge/latestdoi/19832/gvegayon/twitterreport)
 
 Out-of-the-box analysis and reporting tools for twitter
 
