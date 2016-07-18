@@ -30,7 +30,7 @@ jaccard_coef(x, ...)
 \item{ignore.case}{When true converts all to lower.}
 }
 \value{
-A list including a \code{dgCMatrix} matrix
+A list including a lower triangular \code{dgCMatrix} matrix.
 }
 \description{
 Calculate the Jaccard (similarity) coefficient between words.

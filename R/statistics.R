@@ -49,7 +49,8 @@ tw_timeseries <- function(
   # Fixing names and filtering
   row.names(series) <- series$created_at
   colnames(series)  <- gsub('^n[.]','',colnames(series))
-  series            <- series[(nrow(series)-span):nrow(series),-1]
+  series            <- series[
+    ifelse( (nrow(series)-span)<1,1,nrow(series)-span):nrow(series),-1]
   
   options(stringsAsFactors = oldstasf)
   
