@@ -89,11 +89,12 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
 #' Calculate the Jaccard (similarity) coefficient between words.
 #' 
 #' @aliases Words similarities
-#' @param x Character vector with the phrases (tweets) to be analyzed
-#' @param max.size Max number of words to analyze
-#' @param stopwds Character vector of stopwords
-#' @param ignore.case When true converts all to lower
-#' @param dist When true computes one minus Jaccard coef
+#' @param x Character vector with the phrases (tweets) to be analyzed.
+#' @param max.size Max number of words to analyze.
+#' @param stopwds Character vector of stopwords.
+#' @param ignore.case When true converts all to lower.
+#' @param dist When true computes one minus Jaccard coef.
+#' @param ... Further arguments to be passed to the method.
 #' @details The Jaccard index is used as a measure of similarity between two
 #' elements. In particular for a given pair of elements \eqn{x,y} it is calculated as
 #' \deqn{J(S,T) = \frac{|S\cap T|}{|S\cup T|}}{J(S,T) = |S intersection T|/|S U T|}
@@ -106,13 +107,13 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
 #' @references 
 #' Conover, M., Ratkiewicz, J., & Francisco, M. (2011). "Political polarization
 #' on twitter". Icwsm, 133(26), 89–96. \url{http://doi.org/10.1021/ja202932e}
-#' @return A list including a \code{dgCMatrix} matrix
+#' @return A list including a lower triangular \code{dgCMatrix} matrix.
 jaccard_coef <- function(x,...) UseMethod("jaccard_coef")
 
 #' @describeIn jaccard_coef Method Processes a list of character vectors such as
 #' the one obtained from \code{\link{tw_extract}}
 #' @export
-jaccard_coef.list <- function(x, max.size=1000, dist=FALSE) {
+jaccard_coef.list <- function(x, max.size=1000, dist=FALSE, ...) {
   
   # Cohersing the list as a data.frame
   x <- cpp_char_list_as_df(x)
@@ -160,7 +161,7 @@ jaccard_coef.list <- function(x, max.size=1000, dist=FALSE) {
 jaccard_coef.character <- function(x,max.size=1000,
                          stopwds=unique(c(tm::stopwords(),letters)), 
                          ignore.case=TRUE, 
-                         dist=FALSE) {
+                         dist=FALSE, ...) {
   # Parsing text
   if (ignore.case) x <- tolower(x)
   

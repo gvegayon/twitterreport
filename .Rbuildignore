@@ -18,6 +18,7 @@
 ^data-raw$
 ^imports\.R$
 [.]travis[.]yml
+appveyor[.]yml
 
 ^dictionary\_index\.cpp$
 

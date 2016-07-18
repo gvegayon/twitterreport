@@ -10,22 +10,24 @@
 \usage{
 jaccard_coef(x, ...)
 
-\method{jaccard_coef}{list}(x, max.size = 1000, dist = FALSE)
+\method{jaccard_coef}{list}(x, max.size = 1000, dist = FALSE, ...)
 
 \method{jaccard_coef}{character}(x, max.size = 1000,
   stopwds = unique(c(tm::stopwords(), letters)), ignore.case = TRUE,
-  dist = FALSE)
+  dist = FALSE, ...)
 }
 \arguments{
-\item{x}{Character vector with the phrases (tweets) to be analyzed}
+\item{x}{Character vector with the phrases (tweets) to be analyzed.}
 
-\item{max.size}{Max number of words to analyze}
+\item{...}{Further arguments to be passed to the method.}
 
-\item{dist}{When true computes one minus Jaccard coef}
+\item{max.size}{Max number of words to analyze.}
 
-\item{stopwds}{Character vector of stopwords}
+\item{dist}{When true computes one minus Jaccard coef.}
 
-\item{ignore.case}{When true converts all to lower}
+\item{stopwds}{Character vector of stopwords.}
+
+\item{ignore.case}{When true converts all to lower.}
 }
 \value{
 A list including a \code{dgCMatrix} matrix

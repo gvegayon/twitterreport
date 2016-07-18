@@ -26,6 +26,10 @@ NULL
 NULL
 #' @importFrom leaflet leaflet addTiles addCircles
 
+#' @importFrom stats dist reshape setNames terms
+#' @importFrom utils URLdecode URLencode head read.csv read.table
+NULL
+
 ################################################################################
 # knitr!
 ################################################################################
@@ -38,7 +42,7 @@ NULL
 #' @useDynLib twitterreport
 NULL
 
-#' @import Rcpp
+#' @importFrom Rcpp sourceCpp
 NULL
 
 #' @import methods
