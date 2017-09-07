@@ -32,9 +32,10 @@ Suggests:
     twitteR,
     streamR,
     rgexf,
-    ggvis
+    ggvis,
+    testthat
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 LazyData: false
 Encoding: UTF-8
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

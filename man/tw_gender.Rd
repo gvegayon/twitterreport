@@ -46,4 +46,3 @@ mix <- c('pedro','peter','mariano','maria jose','pablo','paul','jenny')
 tw_gender(mix)
 
 }
-

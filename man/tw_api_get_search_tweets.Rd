@@ -78,9 +78,6 @@ key <- tw_gen_token('myapp','key', 'secret')
 x <- tw_api_get_search_tweets('lovewins', key)
 }
 }
-\author{
-George G. Vega Yon
-}
 \references{
 Twitter REST API (GET search/tweets)
 \url{https://dev.twitter.com/rest/reference/get/search/tweets}
@@ -99,4 +96,6 @@ Other API functions: \code{\link{tw_api_get_followers_ids}},
   \code{\link{tw_api_trends_available}},
   \code{\link{tw_gen_token}}
 }
-
+\author{
+George G. Vega Yon
+}

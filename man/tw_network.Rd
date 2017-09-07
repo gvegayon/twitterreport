@@ -65,4 +65,3 @@ plot(graph)
 \author{
 George G. Vega Yon
 }
-

@@ -5,7 +5,7 @@
 \title{Creates a leaflet map}
 \usage{
 tw_leaflet(dat, coordinates = NULL, popup = NULL, lat = NULL,
-  lng = NULL, radii = ~sqrt(n) * 1000, weight = 1,
+  lng = NULL, radii = ~sqrt(n) * 5000, weight = 1,
   cluster.method = "centroid", nclusters = min(c(50, nrow(dat)\%/\%3)), ...)
 }
 \arguments{
@@ -73,4 +73,3 @@ tw_leaflet(senate_tweets,'coordinates', nclusters=3)
 \author{
 George G. Vega Yon
 }
-

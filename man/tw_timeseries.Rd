@@ -24,11 +24,10 @@ xts class
 \description{
 Creates a time series object with frecuencies
 }
-\author{
-George G. Vega Yon
-}
 \seealso{
 Other statistics: \code{\link{tw_sentiment}},
   \code{\link{tw_table}}
 }
-
+\author{
+George G. Vega Yon
+}

@@ -26,4 +26,3 @@
 \description{
 Plot words
 }
-

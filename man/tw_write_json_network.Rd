@@ -12,4 +12,3 @@ tw_write_json_network(graph)
 \description{
 Writes a JSON graph to be used with d3js
 }
-

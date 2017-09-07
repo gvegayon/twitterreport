@@ -23,4 +23,3 @@ Other example datasets: \code{\link{names_female_en}},
 Other names datasets: \code{\link{names_female_en}},
   \code{\link{names_male_en}}, \code{\link{names_male_es}}
 }
-

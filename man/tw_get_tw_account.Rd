@@ -24,11 +24,10 @@ tw_get_tw_account('http://twitter.pbworks.com/w/page/1779986/USGovernment')
 tw_get_tw_account('http://caltech.edu')
 }
 }
-\author{
-George G. Vega Yon
-}
 \seealso{
 Other text processors: \code{\link{tw_extract}},
   \code{\link{tw_words}}
 }
-
+\author{
+George G. Vega Yon
+}

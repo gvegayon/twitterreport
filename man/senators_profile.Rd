@@ -48,4 +48,3 @@ Other example datasets: \code{\link{names_female_en}},
   \code{\link{warriner_et_al_en}},
   \code{\link{warriner_et_al_es}}
 }
-

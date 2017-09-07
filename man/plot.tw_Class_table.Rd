@@ -23,4 +23,3 @@
 \description{
 Plot a table
 }
-

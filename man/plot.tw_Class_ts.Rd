@@ -33,4 +33,3 @@ Plot time series
 \author{
 George G. Vega Yon
 }
-

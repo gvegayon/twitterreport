@@ -2,8 +2,8 @@
 % Please edit documentation in R/text_processing.R
 \name{tw_extract}
 \alias{tw_extract}
-\alias{tw_extract.character}
 \alias{tw_extract.tw_Class_api_timeline}
+\alias{tw_extract.character}
 \title{Extract info from tweets}
 \usage{
 tw_extract(txt, ...)
@@ -34,17 +34,17 @@ Extract info from tweets
 
 \item \code{character}: Applies for a character vector
 }}
+
 \examples{
  
 \dontrun{
 head(tw_extract(tweets$text))
 }
 }
-\author{
-George G. Vega Yon
-}
 \seealso{
 Other text processors: \code{\link{tw_get_tw_account}},
   \code{\link{tw_words}}
 }
-
+\author{
+George G. Vega Yon
+}

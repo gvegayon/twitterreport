@@ -28,4 +28,3 @@ A D3js graph
 \description{
 Plots a network using D3js
 }
-

@@ -56,7 +56,7 @@
 #' tw_leaflet(senate_tweets,'coordinates', nclusters=3)
 #' }
 tw_leaflet <- function(dat,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
-                       radii=~sqrt(n)*1000, weight=1, cluster.method='centroid',
+                       radii=~sqrt(n)*5000, weight=1, cluster.method='centroid',
                        nclusters=min(c(50,nrow(dat) %/% 3)) ,...) {
   # Checking latitude and longitude
   if (!length(coordinates) && !length(lat) && !length(lng))
@@ -108,10 +108,10 @@ tw_leaflet <- function(dat,coordinates=NULL,popup=NULL ,lat=NULL,lng=NULL,
 
   if (!length(popup)) geo$popup <- prettyNum(geo$n, ',')
   
-  geo <- leaflet(geo)
-  geo <- addTiles(geo)
+  geo <- leaflet::leaflet(geo)
+  geo <- leaflet::addTiles(geo)
   
-  addCircles(geo,radius = radii, lng = ~mean_lng, lat = ~mean_lat,
+  leaflet::addCircles(geo,radius = radii, lng = ~mean_lng, lat = ~mean_lat,
              weight = weight, popup =~popup,...)
 }
 

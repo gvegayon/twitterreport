@@ -74,9 +74,6 @@ tweets <- do.call(rbind, tweets)
 head(tweets)
 }
 }
-\author{
-George G. Vega Yon
-}
 \references{
 Twitter REST API (GET statuses/user_timeline)
 \url{https://dev.twitter.com/rest/reference/get/statuses/user_timeline}
@@ -95,4 +92,6 @@ Other API functions: \code{\link{tw_api_get_followers_ids}},
   \code{\link{tw_api_trends_available}},
   \code{\link{tw_gen_token}}
 }
-
+\author{
+George G. Vega Yon
+}

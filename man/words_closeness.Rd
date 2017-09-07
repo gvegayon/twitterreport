@@ -35,4 +35,3 @@ jaccard <- jaccard_coef(tweets$text)
 words_closeness('abortion',jaccard,.001)
 }
 }
-

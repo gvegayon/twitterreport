@@ -11,4 +11,3 @@ Out-of-the-Box Analysis and Reporting Tools for Twitter
 \author{
 George G. Vega Yon
 }
-

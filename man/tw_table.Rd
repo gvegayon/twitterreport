@@ -24,6 +24,7 @@ See \code{\link{tw_extract}}
 \itemize{
 \item \code{tw_Class_extract}: Makes a table out of the output of \code{\link{tw_extract}}
 }}
+
 \examples{
 # Loading tweets
 data(senate_tweets)
@@ -34,11 +35,10 @@ x <- tw_extract(senate_tweets$text)
 
 head(tw_table(x,'mention'))
 }
-\author{
-George G. Vega Yon
-}
 \seealso{
 Other statistics: \code{\link{tw_sentiment}},
   \code{\link{tw_timeseries}}
 }
-
+\author{
+George G. Vega Yon
+}

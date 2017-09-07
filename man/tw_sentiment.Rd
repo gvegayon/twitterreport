@@ -70,4 +70,3 @@ well since it is a result of the addition of the scores.
 Other statistics: \code{\link{tw_table}},
   \code{\link{tw_timeseries}}
 }
-

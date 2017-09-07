@@ -40,4 +40,3 @@ Other API functions: \code{\link{tw_api_get_followers_ids}},
   \code{\link{tw_api_get_users_show}},
   \code{\link{tw_gen_token}}
 }
-

@@ -18,11 +18,10 @@ tw_words(txt, stopw = stopwords("en"), cleanfun = NULL)
 Process txt extracting relevant words, i.e. rm stop words and
  symbols.
 }
-\author{
-George G. Vega Yon
-}
 \seealso{
 Other text processors: \code{\link{tw_extract}},
   \code{\link{tw_get_tw_account}}
 }
-
+\author{
+George G. Vega Yon
+}

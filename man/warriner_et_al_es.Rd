@@ -27,4 +27,3 @@ Other lexicon datasets: \code{\link{sentiment_lexicon_neg_en}},
   \code{\link{sentiment_lexicon_pos_en}},
   \code{\link{warriner_et_al_en}}
 }
-

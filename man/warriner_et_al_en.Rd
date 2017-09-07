@@ -14,6 +14,10 @@ Warriner et al. Lexicon (en)
 Spanish version translated by Daniel Gayo-Avello based on Warriner, et al.
 }
 \seealso{
+Other lexicon datasets: \code{\link{sentiment_lexicon_neg_en}},
+  \code{\link{sentiment_lexicon_pos_en}},
+  \code{\link{warriner_et_al_es}}
+
 Other example datasets: \code{\link{names_female_en}},
   \code{\link{names_female_es}},
   \code{\link{names_male_en}}, \code{\link{names_male_es}},
@@ -22,9 +26,4 @@ Other example datasets: \code{\link{names_female_en}},
   \code{\link{sentiment_lexicon_neg_en}},
   \code{\link{sentiment_lexicon_pos_en}},
   \code{\link{warriner_et_al_es}}
-
-Other lexicon datasets: \code{\link{sentiment_lexicon_neg_en}},
-  \code{\link{sentiment_lexicon_pos_en}},
-  \code{\link{warriner_et_al_es}}
 }
-
