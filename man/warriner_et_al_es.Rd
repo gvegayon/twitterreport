@@ -5,7 +5,7 @@
 \title{Warriner et al. Lexicon (es)}
 \format{A data.frame with scores (Valence)}
 \source{
-\url{http://danigayo.info/blog/index.php?entry=entry130117-183114}
+http://danigayo.info/blog/index.php?entry=entry130117-183114
 }
 \description{
 Warriner et al. Lexicon (es)
@@ -27,3 +27,5 @@ Other lexicon datasets: \code{\link{sentiment_lexicon_neg_en}},
   \code{\link{sentiment_lexicon_pos_en}},
   \code{\link{warriner_et_al_en}}
 }
+\concept{example datasets}
+\concept{lexicon datasets}

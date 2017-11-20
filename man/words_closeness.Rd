@@ -23,7 +23,7 @@ to the specified \code{word}
 Retrieves a set of words related to a particular word
 }
 \details{
-After applying the \code{\link{jaccard_coef}} function, the 
+After applying the \code{\link[=jaccard_coef]{jaccard_coef()}} function, the
 resulting object can be analyzed with this function.
 }
 \examples{

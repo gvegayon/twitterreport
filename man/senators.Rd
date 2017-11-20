@@ -5,20 +5,20 @@
 \title{US senators info from senate.gov}
 \format{A data.frame with 100 rows and 7 variables}
 \source{
-\url{http://www.senate.gov/senators/contact/}
+http://www.senate.gov/senators/contact/
 }
 \description{
 Extracted using webcrawling, the dataset contains the following columns:
 }
 \details{
 \itemize{
- \item \code{Name}
- \item \code{party}
- \item \code{State}
- \item \code{Addr}
- \item \code{phone}
- \item \code{website}
- \item \code{class}
+\item \code{Name}
+\item \code{party}
+\item \code{State}
+\item \code{Addr}
+\item \code{phone}
+\item \code{website}
+\item \code{class}
 }
 }
 \seealso{
@@ -32,3 +32,4 @@ Other example datasets: \code{\link{names_female_en}},
   \code{\link{warriner_et_al_en}},
   \code{\link{warriner_et_al_es}}
 }
+\concept{example datasets}

@@ -13,7 +13,6 @@
 ^README\_files$
 ^makefile$
 ^ddata$
-^playground$
 ^twitterreport_.+$
 ^data-raw$
 ^imports\.R$
@@ -21,4 +20,4 @@
 appveyor[.]yml
 
 ^dictionary\_index\.cpp$
-
+^man-roxygen$

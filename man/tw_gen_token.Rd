@@ -7,11 +7,11 @@
 tw_gen_token(appname, key, secret = NULL)
 }
 \arguments{
-\item{appname}{See \code{\link{oauth_app}}}
+\item{appname}{Character scalar. The name of your twitter app.}
 
-\item{key}{See \code{\link{oauth_app}}.}
+\item{key}{Character scalar. Your API key provided by twitter.}
 
-\item{secret}{See \code{\link{oauth_app}}}
+\item{secret}{Character scalar. Your API secret provided by twitter.}
 }
 \value{
 A Token1.0 reference class (RC) object.
@@ -19,10 +19,15 @@ A Token1.0 reference class (RC) object.
 \description{
 Generate twitter tokens
 }
+\details{
+This function is a wrapper of \code{\link[httr:oauth_app]{httr::oauth_app()}}. To be able to use most of
+twitter's API service you need to sign-in with your twitter account at
+https://apps.twitter.com/]
+}
 \examples{
 \dontrun{
-tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
-tw_api_get_usr_profile('gvegayon',tokens)
+  tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
+  tw_api_get_usr_profile('gvegayon',tokens)
 }
 }
 \seealso{
@@ -37,3 +42,4 @@ Other API functions: \code{\link{tw_api_get_followers_ids}},
   \code{\link{tw_api_get_users_show}},
   \code{\link{tw_api_trends_available}}
 }
+\concept{API functions}

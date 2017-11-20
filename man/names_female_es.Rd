@@ -5,7 +5,7 @@
 \title{Spanish female names}
 \format{A character vector with 24,494 elements}
 \source{
-\url{https://github.com/apalancat/spanish-names}
+https://github.com/apalancat/spanish-names
 }
 \description{
 Spanish female names
@@ -23,3 +23,5 @@ Other example datasets: \code{\link{names_female_en}},
 Other names datasets: \code{\link{names_female_en}},
   \code{\link{names_male_en}}, \code{\link{names_male_es}}
 }
+\concept{example datasets}
+\concept{names datasets}

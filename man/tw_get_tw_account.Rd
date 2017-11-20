@@ -2,12 +2,13 @@
 % Please edit documentation in R/web_crawling.R
 \name{tw_get_tw_account}
 \alias{tw_get_tw_account}
-\title{Function to enter the website and get the twitter account}
+\title{Retrieve twitter accounts from a website}
 \usage{
 tw_get_tw_account(uri, redirect = TRUE, normalize = TRUE, quiet = TRUE)
 }
 \arguments{
-\item{uri}{Web address of the website from which to extract twitter accounts}
+\item{uri}{Character scalar. Web address of the website from which to extract
+twitter accounts.}
 
 \item{redirect}{Whether to follow up the link or not (redirection)}
 
@@ -15,14 +16,22 @@ tw_get_tw_account(uri, redirect = TRUE, normalize = TRUE, quiet = TRUE)
 
 \item{quiet}{When \code{FALSE} suppress the message}
 }
+\value{
+A character vector with twitter accounts' screen name found if any.
+}
 \description{
-Function to enter the website and get the twitter account
+Retrieve twitter accounts from a website
 }
 \examples{
+
 \dontrun{
+# Twitter accounts from US gov officials (out dated)
 tw_get_tw_account('http://twitter.pbworks.com/w/page/1779986/USGovernment')
+
+# Caltech
 tw_get_tw_account('http://caltech.edu')
 }
+
 }
 \seealso{
 Other text processors: \code{\link{tw_extract}},
@@ -31,3 +40,4 @@ Other text processors: \code{\link{tw_extract}},
 \author{
 George G. Vega Yon
 }
+\concept{text processors}

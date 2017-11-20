@@ -1,18 +1,25 @@
 #' Generate twitter tokens
-#' @param appname See \code{\link{oauth_app}}
-#' @param key See \code{\link{oauth_app}}.
-#' @param secret See \code{\link{oauth_app}}
+#' 
+#' @param appname Character scalar. The name of your twitter app.
+#' @param key Character scalar. Your API key provided by twitter.
+#' @param secret Character scalar. Your API secret provided by twitter.
+#' 
+#' @details 
+#' This function is a wrapper of [httr::oauth_app()]. To be able to use most of
+#' twitter's API service you need to sign-in with your twitter account at
+#' https://apps.twitter.com/]
+#' 
 #' @return A Token1.0 reference class (RC) object.
 #' @examples 
 #' \dontrun{
-#' tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
-#' tw_api_get_usr_profile('gvegayon',tokens)
+#'   tokens <- tw_gen_token('mytwitterapp','xxxxxxxx','yyyyyyyy')
+#'   tw_api_get_usr_profile('gvegayon',tokens)
 #' }
 #' @family API functions
 #' @export
 tw_gen_token <- function(appname,key,secret=NULL) {
   myapp <- oauth_app(appname,key,secret)
-  oauth1.0_token(oauth_endpoints('twitter'),myapp)
+  oauth1.0_token(oauth_endpoints('twitter'), myapp)
 }
 
 # Wait in minutes to reconnect to the API
@@ -73,11 +80,11 @@ tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
 #' Get user information
 #'
 #' @param screen_name User screen name
-#' @param twitter_token Token
+#' @template api
 #' @param quietly Whether to show the 'success' message or not
 #' @param user_id User id
 #' @param include_entities Not used
-#' @param ... Additional arguments passed to \code{\link{GET}}
+#' @param ... Additional arguments passed to [GET()]
 #'
 #' @details Using the twitter api, get information about a twitter account
 #' \subsection{From Twitter}{Returns a \href{https://dev.twitter.com/overview/api/users}{variety of information}
@@ -85,36 +92,36 @@ tw_api_get <- function(q,twitter_token,minutes=15,noisy=FALSE,...) {
 #'  The author’s most recent Tweet will be returned inline when possible.}
 #' @return A data.frame with info of the usr.
 #' \itemize{
-#' \item \code{id}
-#' \item \code{name}
-#' \item \code{screen_name}
-#' \item \code{contributors_enabled}
-#' \item \code{created_at}
-#' \item \code{default_profile}
-#' \item \code{default_profile_image}
-#' \item \code{description}
-#' \item \code{favourites_count}
-#' \item \code{followers_count}
-#' \item \code{friends_count}
-#' \item \code{geo_enabled}
-#' \item \code{is_translator}
-#' \item \code{lang}
-#' \item \code{listed_count}
-#' \item \code{location}
-#' \item \code{profile_image_url}
-#' \item \code{profile_image_url_https}
-#' \item \code{protected}
-#' \item \code{statuses_count}
-#' \item \code{time_zone}
-#' \item \code{utc_offset}
-#' \item \code{verified}
+#' \item `id`
+#' \item `name`
+#' \item `screen_name`
+#' \item `contributors_enabled`
+#' \item `created_at`
+#' \item `default_profile`
+#' \item `default_profile_image`
+#' \item `description`
+#' \item `favourites_count`
+#' \item `followers_count`
+#' \item `friends_count`
+#' \item `geo_enabled`
+#' \item `is_translator`
+#' \item `lang`
+#' \item `listed_count`
+#' \item `location`
+#' \item `profile_image_url`
+#' \item `profile_image_url_https`
+#' \item `protected`
+#' \item `statuses_count`
+#' \item `time_zone`
+#' \item `utc_offset`
+#' \item `verified`
 #' }
 #' @examples
 #' \dontrun{
 #' tw_api_get_users_show('gvegayon', mytoken)
 #' }
 #' @references Twitter REST API (GET users/show)
-#' \url{https://dev.twitter.com/rest/reference/get/users/show}
+#' https://dev.twitter.com/rest/reference/get/users/show
 #' @export
 #' @family API functions
 tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
@@ -186,7 +193,7 @@ tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
 #' Using the twitter API, gets the status updates of a given user (up to 3,200)
 #' 
 #' @param screen_name of the user
-#' @param twitter_token Token
+#' @template api
 #' @param user_id The ID of the user for whom to return results for
 #' @param since_id Returns results with an ID greater than (that is, more recent than) the specified ID
 #' @param count Number of statuses to get 
@@ -194,26 +201,26 @@ tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
 #' @param exclude_replies This parameter will prevent replies from appearing in the returned timeline
 #' @param include_rts When set to false, the timeline will strip any native retweets
 #' @param quietly Whether or not to show the 'success' message
-#' @param ... Additional arguments passed to \code{\link{GET}}
+#' @param ... Additional arguments passed to [GET()]
 #' @return A data.frame with tweets (if success), with the following columns: 
 #' \itemize{
-#' \item \code{screen_name}
-#' \item \code{in_reply_to_screen_name}
-#' \item \code{user_id}
-#' \item \code{created_at}
-#' \item \code{id}
-#' \item \code{text}
-#' \item \code{source}
-#' \item \code{truncated}
-#' \item \code{retweet_count}
-#' \item \code{favourites_count}
-#' \item \code{favorited}
-#' \item \code{retweeted}
-#' \item \code{coordinates}
-#' \item \code{source_name}
+#' \item `screen_name`
+#' \item `in_reply_to_screen_name`
+#' \item `user_id`
+#' \item `created_at`
+#' \item `id`
+#' \item `text`
+#' \item `source`
+#' \item `truncated`
+#' \item `retweet_count`
+#' \item `favourites_count`
+#' \item `favorited`
+#' \item `retweeted`
+#' \item `coordinates`
+#' \item `source_name`
 #' }
 #' 
-#' otherwise returns \code{NULL}.
+#' otherwise returns `NULL`.
 #' @details This function is designed to be applied to a large list of twitter
 #' accounts, see the example below.
 #' \subsection{From twitter}{Returns a collection of the most recent Tweets
@@ -233,9 +240,9 @@ tw_api_get_users_show <- function(screen_name=NULL,twitter_token,quietly=FALSE,
 #' head(tweets)
 #' }
 #' @author George G. Vega Yon
-#' @seealso \code{\link{tw_extract}}
+#' @seealso [tw_extract()]
 #' @references Twitter REST API (GET statuses/user_timeline)
-#' \url{https://dev.twitter.com/rest/reference/get/statuses/user_timeline}
+#' https://dev.twitter.com/rest/reference/get/statuses/user_timeline
 #' @export
 #' @family API functions
 tw_api_get_statuses_user_timeline <- function(
@@ -327,7 +334,7 @@ tw_api_get_statuses_user_timeline <- function(
 #' Using the twitter API, gets the status updates via search
 #' 
 #' @param q Search query
-#' @param twitter_token Token
+#' @template api
 #' @param geocode character with 'latitude,longitude,radius', where radius units must be specified as either 'mi' (miles) or 'km' (kilometers)
 #' @param lang Restricts language
 #' @param locale Specifies the locale of the query
@@ -337,27 +344,27 @@ tw_api_get_statuses_user_timeline <- function(
 #' @param since_id Returns results with an ID greater than (that is, more recent than) the specified ID
 #' @param max_id Returns results with an ID less than (that is, older than) or equal to the specified ID
 #' @param quietly Whether or not to show the 'success' message
-#' @param ... Additional arguments passed to \code{\link{GET}}
+#' @param ... Additional arguments passed to [GET()]
 #' @return A data.frame with tweets (if success), with the following columns: 
 #' \itemize{
-#' \item \code{result_type}
-#' \item \code{screen_name}
-#' \item \code{in_reply_to_screen_name}
-#' \item \code{user_id}
-#' \item \code{created_at}
-#' \item \code{id}
-#' \item \code{text}
-#' \item \code{source}
-#' \item \code{truncated}
-#' \item \code{retweet_count}
-#' \item \code{favorite_count}
-#' \item \code{favorited}
-#' \item \code{retweeted}
-#' \item \code{coordinates}
-#' \item \code{source_name}
+#' \item `result_type`
+#' \item `screen_name`
+#' \item `in_reply_to_screen_name`
+#' \item `user_id`
+#' \item `created_at`
+#' \item `id`
+#' \item `text`
+#' \item `source`
+#' \item `truncated`
+#' \item `retweet_count`
+#' \item `favorite_count`
+#' \item `favorited`
+#' \item `retweeted`
+#' \item `coordinates`
+#' \item `source_name`
 #' }
 #' 
-#' otherwise returns \code{NULL}.
+#' otherwise returns `NULL`.
 #' @details Keep in mind that the search index has a 7-day limit. In other words,
 #' no tweets will be found for a date older than one week.
 #' \subsection{From Twitter}{Returns a collection of relevant Tweets matching a 
@@ -375,9 +382,9 @@ tw_api_get_statuses_user_timeline <- function(
 #' x <- tw_api_get_search_tweets('lovewins', key)
 #' }
 #' @author George G. Vega Yon
-#' @seealso \code{\link{tw_extract}}
+#' @seealso [tw_extract()]
 #' @references Twitter REST API (GET search/tweets)
-#' \url{https://dev.twitter.com/rest/reference/get/search/tweets}
+#' https://dev.twitter.com/rest/reference/get/search/tweets
 #' @export
 #' @family API functions
 tw_api_get_search_tweets <- function(q, twitter_token,
@@ -450,17 +457,17 @@ tw_api_get_search_tweets <- function(q, twitter_token,
 #' Returns a list of friends of a given user (list of who he/she follows)
 #'
 #' @param screen_name Screen name
-#' @param twitter_token Token
+#' @template api
 #' @param user_id User ID number
 #' @param cursor Cursor page
 #' @param count Number of elements to download
-#' @param ... Further arguments to be passed to \code{\link{GET}}
+#' @param ... Further arguments to be passed to [GET()]
 #' @details \subsection{From Twitter}{Returns a cursored collection of user IDs
 #' for every user the specified user is following (otherwise known as their
 #' ``friends'').}
 #' @return A vector
 #' @references Twitter REST API (GET search/tweets) 
-#' \url{https://dev.twitter.com/rest/reference/get/friends/ids}
+#' https://dev.twitter.com/rest/reference/get/friends/ids
 #' @export
 #' @family API functions
 tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
@@ -500,11 +507,11 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 #' Returns a list of followers IDs of a given user.
 #'
 #' @param screen_name User screen name
-#' @param twitter_token Token
+#' @template api
 #' @param user_id User Id number
 #' @param cursor Page number (cursor)
 #' @param count Number of ids by page
-#' @param ... Further arguments to be passed to \code{\link{GET}}
+#' @param ... Further arguments to be passed to [GET()]
 #' @details \subsection{From twitter}{Returns a cursored collection of user IDs
 #' for every user following the specified user.
 #' 
@@ -513,7 +520,7 @@ tw_api_get_friends_ids <- function(screen_name=NULL, twitter_token, user_id=NULL
 #' consistency issues.}
 #' @return A vector
 #' @references Twitter REST API (GET followers/ids)
-#' \url{https://dev.twitter.com/rest/reference/get/followers/ids}
+#' https://dev.twitter.com/rest/reference/get/followers/ids
 #' @export
 #' @family API functions
 tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NULL,
@@ -564,7 +571,7 @@ tw_api_get_followers_ids <- function(screen_name=NULL, twitter_token, user_id=NU
 }
 
 #' Writes a JSON graph to be used with d3js
-#' @param graph A \code{tw_Class_graph} class object (See \code{\link{tw_network}})
+#' @param graph A `tw_Class_graph` class object (See [tw_network()])
 tw_write_json_network <- function(graph) {
   
   if (!inherits(graph, 'tw_Class_graph')) 
@@ -576,7 +583,7 @@ tw_write_json_network <- function(graph) {
 }
 
 #' Get codes from the places where trends are availables
-#' @param twitter_token Token
+#' @template api
 #' @param ... Ignored
 #' @details \subsection{From Twitter}{Returns the locations that Twitter has
 #' trending topic information for. 
@@ -587,7 +594,7 @@ tw_write_json_network <- function(graph) {
 #' 
 #' A WOEID is a \href{http://developer.yahoo.com/geo/geoplanet/}{Yahoo! Where On Earth ID}.}
 #' @references Twitter REST API (GET trends/available)
-#' \url{https://dev.twitter.com/rest/reference/get/trends/available}
+#' https://dev.twitter.com/rest/reference/get/trends/available
 #' @export
 #' @family API functions
 tw_api_trends_available <- function(twitter_token,...) {
@@ -622,10 +629,10 @@ tw_api_trends_available <- function(twitter_token,...) {
 
 #' Gets the trends for a given place
 #' 
-#' Uses the output from \code{\link{tw_api_trends_available}}
+#' Uses the output from [tw_api_trends_available()]
 #' 
 #' @param id Id of the place
-#' @param twitter_token Token
+#' @template api
 #' @param exclude Whether to exclude hashtags or not
 #' @param ... Ignored
 #' @details \subsection{From Twitter}{Returns the top 10 trending topics for a
@@ -640,7 +647,7 @@ tw_api_trends_available <- function(twitter_token,...) {
 #' that will not return any more data, and will count against your rate limit
 #' usage.}
 #' @references Twitter REST API (GET trends/place)
-#' \url{https://dev.twitter.com/rest/reference/get/trends/place}
+#' https://dev.twitter.com/rest/reference/get/trends/place
 #' @export
 #' @family API functions
 tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
@@ -677,14 +684,14 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' Get Followers list
 #'
 #' @param screen_name  Screen name
-#' @param twitter_token Twitter token
+#' @template api
 #' @param user_id User id
 #' @param cursor (advanced)
 #' @param count Number of registries per page (advanced)
 #' @param skip_status It self
 #' @param include_user_entities (advanced)
 #' @param max.n Number of followers to download
-#' @param ... Further arguments to be passed to \code{\link{GET}}
+#' @param ... Further arguments to be passed to [GET()]
 #' @details \subsection{From Twitter}{Returns a cursored collection of user
 #' objects for users following the specified user.
 #' 
@@ -692,7 +699,7 @@ tw_api_get_trends_place <- function(id,twitter_token,exclude=FALSE,...) {
 #' however, this ordering is subject to unannounced change and eventual
 #' consistency issues.}
 #' @references Twitter REST API (GET followers/list)
-#' \url{https://dev.twitter.com/rest/reference/get/followers/list}
+#' https://dev.twitter.com/rest/reference/get/followers/list
 #' @return A list
 #' @export
 #' @family API functions
@@ -785,15 +792,15 @@ tw_api_get_followers_list <- function(screen_name=NULL,
 #' 
 #' ON DEVELOPMENT
 #' 
-#' @param twitter_token Token
+#' @template api
 #' @param Timeout Number of seconds
-#' @param ... Additional parameters to be passed to \code{\link{GET}}
+#' @param ... Additional parameters to be passed to [GET()]
 #' @details \subsection{From Twitter}{Returns a small random sample of all
 #' public statuses. The Tweets returned by the default access level are the
 #' same, so if two different clients connect to this endpoint, they will see the
 #' same Tweets.}
 #' @references Twitter Streaming API (GET statuses/sample)
-#' \url{https://dev.twitter.com/streaming/reference/get/statuses/sample}
+#' https://dev.twitter.com/streaming/reference/get/statuses/sample
 #' @export
 #' @family API functions
 tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
@@ -825,17 +832,17 @@ tw_api_get_statuses_sample <- function(twitter_token,Timeout=60,...) {
 #' Search users via approximate string matching
 #'
 #' @param q Query
-#' @param twitter_token key
+#' @template api
 #' @param page Page number to retrieve
 #' @param count Number of accounts per page
 #' @param quietly Whether or not to show the 'success' message
-#' @param ... Further parameters to be passed to \code{\link{GET}} 
+#' @param ... Further parameters to be passed to [GET()] 
 #'
 #' @details 
 #' \subsection{From Twitter}{Provides a simple, relevance-based search interface to public user 
 #' accounts on Twitter. Try querying by topical interest, full name, company name,
 #' location, or other criteria. Exact match searches are not supported.}
-#' @references Twitter REST API (GET users/search) \url{https://dev.twitter.com/rest/reference/get/users/search}
+#' @references Twitter REST API (GET users/search) https://dev.twitter.com/rest/reference/get/users/search
 #' @return A list of twitter accounts
 #' @export
 #' @family API functions

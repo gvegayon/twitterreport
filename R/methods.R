@@ -1,13 +1,9 @@
-#' Plot time series
-#' @param x a tw_Class_ts class object
-#' @param rangeSelector Wheather or not to include a time range selector
-#' @param main See dygraph
-#' @param xlab See dygraph
-#' @param ylab See dygraph
-#' @param group See dygraph
-#' @param width See dygraph
-#' @param height See dygraph
-#' @param ... Further arguments to be passed to dygraph
+#' @rdname tw_timeseries
+#' @param x An object of class [tw_Class_ts].
+#' @param rangeSelector Logical scalar. Wheather or not to include a time range
+#' selector.
+#' @param main,xlab,ylab,group,width,height Passed to [dygraphs::dygraph()].
+#' @param ... Further arguments to be passed to the [dygraphs::dygraph()].
 #' @author George G. Vega Yon
 #' @export
 plot.tw_Class_ts <- function(
@@ -20,13 +16,15 @@ plot.tw_Class_ts <- function(
   else graph
 }
 
-#' Plot a table
-#' @param x An object of class \code{tw_Class_table}
+
+#' @rdname tw_table
 #' @param y Ignored
 #' @param nentries Number of rows to include in the table
-#' @param caption Title of the table
-#' @param options Options to be passed to \code{\link{datatable}}
-#' @param ... Additional parameters to be passed to \code{\link{datatable}}
+#' @param caption,options Passed to [DT::datatable()].
+#' 
+#' @details 
+#' In the case of `plot.tw_Class_table`, `...` are passed to [DT::datatable()]
+#' 
 #' @export
 plot.tw_Class_table <- function(
   x, y=NULL, nentries=20, caption='Most popular hashtags',
@@ -40,13 +38,13 @@ plot.tw_Class_table <- function(
 # plot(x)
 
 #' Plot words
-#' @param x A \code{tw_Class_words} object
+#' @param x A `tw_Class_words` object
 #' @param y Ignored
-#' @param scale See \code{\link{wordcloud}}
-#' @param min.freq See \code{\link{wordcloud}}
+#' @param scale See [wordcloud()]
+#' @param min.freq See [wordcloud()]
 #' @param max.n.words Max number of words to include
-#' @param colors See \code{\link{wordcloud}}
-#' @param ... Further arguments to be passed to \code{\link{wordcloud}}
+#' @param colors See [wordcloud()]
+#' @param ... Further arguments to be passed to [wordcloud()]
 #' @export
 plot.tw_Class_words <- function(
   x,y=NULL,scale=c(4,.5),min.freq=100,max.n.words=100,
@@ -76,10 +74,10 @@ plot.tw_Class_words <- function(
 # head(tab,20) 
 
 #' Plots a network using D3js
-#' @param x A tw_Class_graph object (see \code{\link{tw_network}})
+#' @param x A tw_Class_graph object (see [tw_network()])
 #' @param y Ignored
 #' @param nodelabel Name of the column that containts the name
-#' @param opacity See \code{\link{forceNetwork}}
+#' @param opacity See [forceNetwork()]
 #' @param opacityNoHover Idem
 #' @param legend Whether to include a legend or not
 #' @param ... Further arguments to pass to forceNetwork

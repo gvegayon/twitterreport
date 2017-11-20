@@ -1,6 +1,6 @@
 #' Matches text with male/female names
 #' 
-#' Using names+gender dataset, matches a list of \code{Names} with a dictionary
+#' Using names+gender dataset, matches a list of `Names` with a dictionary
 #' and sets the gender of the name.
 #' 
 #' @param Names Character vector of names/text to analyze and match
@@ -8,19 +8,19 @@
 #' @param female Character vector of female names
 #' @param lan Languaje of the names
 #' @param rm.no.alpha Whether or not to remove no alpha characters
-#' @return A factor vector assigning gender to each \code{Name} provided.
+#' @return A factor vector assigning gender to each `Name` provided.
 #' @details The char match is written in C++, which is why it should be fast.
 #' 
-#' When no \code{male} or \code{female} names are provided, the function uses
-#' by default the names datasets \code{\link{names_male_en}} and  
-#' \code{\link{names_female_en}} (if \code{lan='en'}).
+#' When no `male` or `female` names are provided, the function uses
+#' by default the names datasets [names_male_en()] and  
+#' [names_female_en()] (if `lan='en'`).
 #' 
-#' If \code{lan='es'} and no list of male or female names is provided, the
-#' function will load the \code{\link{names_male_es}} and  
-#' \code{\link{names_female_es}} datasets. Note that if \code{lan=c('es','en')}
+#' If `lan='es'` and no list of male or female names is provided, the
+#' function will load the [names_male_es()] and  
+#' [names_female_es()] datasets. Note that if `lan=c('es','en')`
 #' the function will use both.
 #' 
-#' The argument \code{rm.no.alpha}, by default in \code{TRUE} set whether or not
+#' The argument `rm.no.alpha`, by default in `TRUE` set whether or not
 #' to remove no letter characters before analyzing the data.
 #' 
 #' @examples 

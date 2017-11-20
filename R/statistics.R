@@ -1,6 +1,6 @@
 #' Creates a time series object with frecuencies 
 #' @param obj Any of the members of the output list from tw_extract()
-#' @param created_at POSIXct class vector
+#' @param created_at [POSIXct] class vector
 #' @param span Number of time units to consider
 #' @param nseries Number of series to include
 #' @param units Time unit
@@ -8,9 +8,14 @@
 #' @author George G. Vega Yon
 #' @family statistics
 #' @export
+#' @aliases tw_Class_ts
 tw_timeseries <- function(
-  obj,created_at, units=c('secs','mins','hours','days'),
-  nseries=5, span=30) {
+  obj,
+  created_at,
+  units   = c('secs','mins','hours','days'),
+  nseries = 5,
+  span    = 30
+  ) {
   
   # Old stringAsFactors
   oldstasf <- options()$stringsAsFactors
@@ -83,9 +88,9 @@ tw_timeseries <- function(
 
 #' Creates a table of frequencies
 #' 
-#' See \code{\link{tw_extract}}
+#' See [tw_extract()]
 #' 
-#' @param x An object of class \code{tw_Class_extract}.
+#' @param x Either an object of class [tw_Class_extract], or [tw_Class_table].
 #' @param obj A character indicating 
 #' @param ... Further arguments to be passed to the method
 #' @author George G. Vega Yon
@@ -99,10 +104,11 @@ tw_timeseries <- function(
 #' 
 #' head(tw_table(x,'mention'))
 #' @family statistics
+#' @aliases tw_Class_table
 #' @export
 tw_table <- function(x,...) UseMethod('tw_table')
 
-#' @describeIn tw_table Makes a table out of the output of \code{\link{tw_extract}}
+#' @describeIn tw_table Makes a table out of the output of [tw_extract()]
 #' @export
 tw_table.tw_Class_extract <- function(x, obj=c("email", "mention", "hashtag", "url"),...) {
   

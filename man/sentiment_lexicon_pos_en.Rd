@@ -5,7 +5,7 @@
 \title{Positive Lexicon (en)}
 \format{A Character vector}
 \source{
-\url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets}
+http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#datasets
 }
 \description{
 Positive Lexicon (en)
@@ -24,3 +24,5 @@ Other lexicon datasets: \code{\link{sentiment_lexicon_neg_en}},
   \code{\link{warriner_et_al_en}},
   \code{\link{warriner_et_al_es}}
 }
+\concept{example datasets}
+\concept{lexicon datasets}

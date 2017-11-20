@@ -10,10 +10,11 @@
 #' }
 #' @author George G. Vega Yon
 #' @family text processors
+#' @aliases tw_Class_extract
 #' @export
 tw_extract <- function(txt,...) UseMethod('tw_extract')
 
-#' @describeIn tw_extract Applies for the output of \code{\link{tw_api_get_statuses_user_timeline}}.
+#' @describeIn tw_extract Applies for the output of [tw_api_get_statuses_user_timeline()].
 #' @export
 tw_extract.tw_Class_api_timeline <- function(txt,...) {
   tw_extract(txt$text,...)
@@ -106,12 +107,12 @@ tw_words <- function(txt, stopw=stopwords('en'), cleanfun=NULL) {
 #' @export
 #' @references 
 #' Conover, M., Ratkiewicz, J., & Francisco, M. (2011). "Political polarization
-#' on twitter". Icwsm, 133(26), 89–96. \url{http://doi.org/10.1021/ja202932e}
-#' @return A list including a lower triangular \code{dgCMatrix} matrix.
+#' on twitter". Icwsm, 133(26), 89–96. http://doi.org/10.1021/ja202932e
+#' @return A list including a lower triangular `dgCMatrix` matrix.
 jaccard_coef <- function(x,...) UseMethod("jaccard_coef")
 
 #' @describeIn jaccard_coef Method Processes a list of character vectors such as
-#' the one obtained from \code{\link{tw_extract}}
+#' the one obtained from [tw_extract()]
 #' @export
 jaccard_coef.list <- function(x, max.size=1000, dist=FALSE, ...) {
   
@@ -182,12 +183,12 @@ jaccard_coef.character <- function(x,max.size=1000,
 #' Retrieves a set of words related to a particular word
 #'
 #' @param word A character word to analyze
-#' @param jaccard A \code{tw_Class_jaccard} class object
+#' @param jaccard A `tw_Class_jaccard` class object
 #' @param criter Minimun number in the index to show
-#' @param exact When \code{FALSE} shearch via regular expression
+#' @param exact When `FALSE` shearch via regular expression
 #' @return A data frame containing the list of words that are related
-#' to the specified \code{word}
-#' @details After applying the \code{\link{jaccard_coef}} function, the 
+#' to the specified `word`
+#' @details After applying the [jaccard_coef()] function, the 
 #' resulting object can be analyzed with this function.
 #' @export
 #' @examples 

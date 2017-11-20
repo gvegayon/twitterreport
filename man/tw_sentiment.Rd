@@ -29,10 +29,10 @@ Numeric Vector with scores
 Computes sentiment score by counting the number of positive and negative terms.
 }
 \details{
-By default uses an english lexicon downloaded from 
-\url{http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html}. In particular
-if no list of words is provided, the function loads the dataset 
-\code{\link{warriner_et_al_en}} or \code{\link{warriner_et_al_es}}, depending
+By default uses an english lexicon downloaded from
+http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html. In particular
+if no list of words is provided, the function loads the dataset
+\code{\link[=warriner_et_al_en]{warriner_et_al_en()}} or \code{\link[=warriner_et_al_es]{warriner_et_al_es()}}, depending
 on the \code{lang} argument, both of which contains a vector of words with
 their respective \emph{valence} (pleasantness of the stimulus).
 
@@ -65,8 +65,9 @@ well since it is a result of the addition of the scores.
  tw_sentiment(text, normalize=FALSE)
 }
 \seealso{
-\code{\link{sentiment_lexicon_pos_en}} \code{\link{sentiment_lexicon_neg_en}}
+\code{\link[=sentiment_lexicon_pos_en]{sentiment_lexicon_pos_en()}} \code{\link[=sentiment_lexicon_neg_en]{sentiment_lexicon_neg_en()}}
 
-Other statistics: \code{\link{tw_table}},
-  \code{\link{tw_timeseries}}
+Other statistics: \code{\link{plot.tw_Class_table}},
+  \code{\link{plot.tw_Class_ts}}
 }
+\concept{statistics}

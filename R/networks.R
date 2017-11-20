@@ -1,27 +1,27 @@
 #' Creates graph (directed)
 #' 
-#' Using the output of \code{\link{tw_extract}} and the author of the message,
+#' Using the output of [tw_extract()] and the author of the message,
 #' creates a graph
 #' 
-#' @param source Vector of \emph{screen_name}
-#' @param target List of vectors of \emph{mentions} (output from \code{tw_extract})
+#' @param source Vector of *screen_name*
+#' @param target List of vectors of *mentions* (output from `tw_extract`)
 #' @param only.from Whether to filter the links to those only where 
-#' source and target are in the \code{source} vector
+#' source and target are in the `source` vector
 #' @param exclude.self Whether to exclude self-links
 #' @param min.interact Minimun number of interactions to consider (links
 #' below this number will be excluded)
 #' @param group Data frame with two columns: name & group
 #' @param size A data frame with two columns: name & size
-#' @param ignore.case When \code{TRUE} converts all of \code{source} and \code{target}
+#' @param ignore.case When `TRUE` converts all of `source` and `target`
 #' to lower-case.
 #' @author George G. Vega Yon
 #' @return A two-element list containing two data.frames, nodes and links of
-#' class \code{tw_Class_graph} (to be used with \code{\link{plot.tw_Class_graph}}.
-#' The nodes data.frame includes two columns, \code{id}, \code{name} and
-#' \code{group}. The links data.frame includes three columns, \code{source},
-#' \code{target} and \code{value}.
+#' class `tw_Class_graph` (to be used with [plot.tw_Class_graph()].
+#' The nodes data.frame includes two columns, `id`, `name` and
+#' `group`. The links data.frame includes three columns, `source`,
+#' `target` and `value`.
 #' 
-#' @details The \code{value} column in the \code{links} dataframe (see \strong{Value})
+#' @details The `value` column in the `links` dataframe (see \strong{Value})
 #' is computed as the number of connexions between the source and the target.
 #' @family network functions
 #' @export

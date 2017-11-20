@@ -7,7 +7,7 @@
 tw_write_json_network(graph)
 }
 \arguments{
-\item{graph}{A \code{tw_Class_graph} class object (See \code{\link{tw_network}})}
+\item{graph}{A \code{tw_Class_graph} class object (See \code{\link[=tw_network]{tw_network()}})}
 }
 \description{
 Writes a JSON graph to be used with d3js

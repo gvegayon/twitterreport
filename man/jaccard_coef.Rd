@@ -39,7 +39,7 @@ Calculate the Jaccard (similarity) coefficient between words.
 The Jaccard index is used as a measure of similarity between two
 elements. In particular for a given pair of elements \eqn{x,y} it is calculated as
 \deqn{J(S,T) = \frac{|S\cap T|}{|S\cup T|}}{J(S,T) = |S intersection T|/|S U T|}
-Where \eqn{S} is the set of groups where \eqn{x} is present and 
+Where \eqn{S} is the set of groups where \eqn{x} is present and
 \eqn{T} is the set of groups where \eqn{y}. The resulting value is defined
 between 0 and 1, where 0 corresponds to no similarity at all (the elements
 don't have a group in common) and 1 represents perfect similarity (both elements
@@ -48,7 +48,7 @@ are present in the same groups).
 \section{Methods (by class)}{
 \itemize{
 \item \code{list}: Method Processes a list of character vectors such as
-the one obtained from \code{\link{tw_extract}}
+the one obtained from \code{\link[=tw_extract]{tw_extract()}}
 
 \item \code{character}: Computes the coef from a vector of characters
 (splits the text)
@@ -56,5 +56,5 @@ the one obtained from \code{\link{tw_extract}}
 
 \references{
 Conover, M., Ratkiewicz, J., & Francisco, M. (2011). "Political polarization
-on twitter". Icwsm, 133(26), 89–96. \url{http://doi.org/10.1021/ja202932e}
+on twitter". Icwsm, 133(26), 89–96. http://doi.org/10.1021/ja202932e
 }

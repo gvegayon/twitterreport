@@ -12,7 +12,7 @@ tw_network(source, target, only.from = FALSE, exclude.self = TRUE,
 
 \item{target}{List of vectors of \emph{mentions} (output from \code{tw_extract})}
 
-\item{only.from}{Whether to filter the links to those only where 
+\item{only.from}{Whether to filter the links to those only where
 source and target are in the \code{source} vector}
 
 \item{exclude.self}{Whether to exclude self-links}
@@ -29,13 +29,13 @@ to lower-case.}
 }
 \value{
 A two-element list containing two data.frames, nodes and links of
-class \code{tw_Class_graph} (to be used with \code{\link{plot.tw_Class_graph}}.
+class \code{tw_Class_graph} (to be used with \code{\link[=plot.tw_Class_graph]{plot.tw_Class_graph()}}.
 The nodes data.frame includes two columns, \code{id}, \code{name} and
 \code{group}. The links data.frame includes three columns, \code{source},
 \code{target} and \code{value}.
 }
 \description{
-Using the output of \code{\link{tw_extract}} and the author of the message,
+Using the output of \code{\link[=tw_extract]{tw_extract()}} and the author of the message,
 creates a graph
 }
 \details{
@@ -65,3 +65,4 @@ plot(graph)
 \author{
 George G. Vega Yon
 }
+\concept{network functions}

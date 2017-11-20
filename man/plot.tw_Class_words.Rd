@@ -13,15 +13,15 @@
 
 \item{y}{Ignored}
 
-\item{scale}{See \code{\link{wordcloud}}}
+\item{scale}{See \code{\link[=wordcloud]{wordcloud()}}}
 
-\item{min.freq}{See \code{\link{wordcloud}}}
+\item{min.freq}{See \code{\link[=wordcloud]{wordcloud()}}}
 
 \item{max.n.words}{Max number of words to include}
 
-\item{colors}{See \code{\link{wordcloud}}}
+\item{colors}{See \code{\link[=wordcloud]{wordcloud()}}}
 
-\item{...}{Further arguments to be passed to \code{\link{wordcloud}}}
+\item{...}{Further arguments to be passed to \code{\link[=wordcloud]{wordcloud()}}}
 }
 \description{
 Plot words

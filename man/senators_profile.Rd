@@ -5,7 +5,7 @@
 \title{US senators twitter profile}
 \format{A data.frame with 100 rows and 23 columns}
 \source{
-\url{https://dev.twitter.com}
+https://dev.twitter.com
 }
 \description{
 Extracted from the web using webcrawling, the dataset contains the following
@@ -13,29 +13,29 @@ columns:
 }
 \details{
 \itemize{
- \item \code{tw_id}
- \item \code{tw_name}
- \item \code{tw_screen_name}
- \item \code{tw_contributors_enabled}
- \item \code{tw_created_at}
- \item \code{tw_default_profile}
- \item \code{tw_default_profile_image}
- \item \code{tw_description}
- \item \code{tw_favourites_count}
- \item \code{tw_followers_count}
- \item \code{tw_friends_count}
- \item \code{tw_geo_enabled}
- \item \code{tw_is_translator}
- \item \code{tw_lang}
- \item \code{tw_listed_count}
- \item \code{tw_location}
- \item \code{tw_profile_image_url}
- \item \code{tw_profile_image_url_https}
- \item \code{tw_protected}
- \item \code{tw_statuses_count}
- \item \code{tw_time_zone}
- \item \code{tw_utc_offset}
- \item \code{tw_verified}
+\item \code{tw_id}
+\item \code{tw_name}
+\item \code{tw_screen_name}
+\item \code{tw_contributors_enabled}
+\item \code{tw_created_at}
+\item \code{tw_default_profile}
+\item \code{tw_default_profile_image}
+\item \code{tw_description}
+\item \code{tw_favourites_count}
+\item \code{tw_followers_count}
+\item \code{tw_friends_count}
+\item \code{tw_geo_enabled}
+\item \code{tw_is_translator}
+\item \code{tw_lang}
+\item \code{tw_listed_count}
+\item \code{tw_location}
+\item \code{tw_profile_image_url}
+\item \code{tw_profile_image_url_https}
+\item \code{tw_protected}
+\item \code{tw_statuses_count}
+\item \code{tw_time_zone}
+\item \code{tw_utc_offset}
+\item \code{tw_verified}
 }
 }
 \seealso{
@@ -48,3 +48,4 @@ Other example datasets: \code{\link{names_female_en}},
   \code{\link{warriner_et_al_en}},
   \code{\link{warriner_et_al_es}}
 }
+\concept{example datasets}

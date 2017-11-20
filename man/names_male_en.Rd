@@ -5,7 +5,7 @@
 \title{English male names}
 \format{A character vector with 51,212 elements}
 \source{
-OpenGenderTracking project \url{https://github.com/OpenGenderTracking/globalnamedata}
+OpenGenderTracking project https://github.com/OpenGenderTracking/globalnamedata
 }
 \description{
 English male names
@@ -24,3 +24,5 @@ Other names datasets: \code{\link{names_female_en}},
   \code{\link{names_female_es}},
   \code{\link{names_male_es}}
 }
+\concept{example datasets}
+\concept{names datasets}

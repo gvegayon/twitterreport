@@ -7,37 +7,37 @@
 
 #' Creates a leaflet map
 #' 
-#' This function works as a wrapper of the \code{leaflet} function, creating a
+#' This function works as a wrapper of the `leaflet` function, creating a
 #' map with circles which sizes are set by the number of observations in those
 #' coordinates.
 #'
 #' @param dat A twitter dataset (with coordinates)
-#' @param coordinates Name of the \code{coordinates} variable (see details)
-#' @param popup Name of the grouping variable (for example, \code{screen_name})
+#' @param coordinates Name of the `coordinates` variable (see details)
+#' @param popup Name of the grouping variable (for example, `screen_name`)
 #' @param lat Name of the latitude variable
 #' @param lng Name of the longitude variable
 #' @param radii Formula to compute the radious of the circles
 #' @param weight Thickness of the circles' borders
-#' @param cluster.method Clustering method (see \code{\link{hclust}})
+#' @param cluster.method Clustering method (see [hclust()])
 #' @param nclusters Max number of clusters to include
-#' @param ... Further arguments to be passed to \code{\link{addCircles}}
+#' @param ... Further arguments to be passed to [addCircles()]
 #' @details 
-#' The \code{coordinates} must be in the format of longitude:latitude
+#' The `coordinates` must be in the format of longitude:latitude
 #' (as the twitter API returns). 
 #' 
 #' In order to improve visualization, the function performs Hierarchical
-#' Clustering via \code{\link{hclust}} (from the stats package), grouping
+#' Clustering via [hclust()] (from the stats package), grouping
 #' observations by geo coordinates. For each cluster, the final lat/lng coords
 #' are defined as the mean within the cluster.
 #' 
-#' In the case of \code{radii}, it is measured in meters (in the map). The
-#' \code{n} is the number of observations in that cluster.
+#' In the case of `radii`, it is measured in meters (in the map). The
+#' `n` is the number of observations in that cluster.
 #' 
 #' For performance considerations, it is recommended not to use more than
 #' 1,000 observations (Try using a random sample from your data!) as 
-#' \code{hclust} requires computing square matrices.
+#' `hclust` requires computing square matrices.
 #' @author George G. Vega Yon
-#' @return A map object (see the \code{\link{leaflet}} package)
+#' @return A map object (see the [leaflet()] package)
 #' @export
 #' @examples
 #' \dontrun{

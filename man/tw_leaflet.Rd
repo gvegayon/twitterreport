@@ -23,14 +23,14 @@ tw_leaflet(dat, coordinates = NULL, popup = NULL, lat = NULL,
 
 \item{weight}{Thickness of the circles' borders}
 
-\item{cluster.method}{Clustering method (see \code{\link{hclust}})}
+\item{cluster.method}{Clustering method (see \code{\link[=hclust]{hclust()}})}
 
 \item{nclusters}{Max number of clusters to include}
 
-\item{...}{Further arguments to be passed to \code{\link{addCircles}}}
+\item{...}{Further arguments to be passed to \code{\link[=addCircles]{addCircles()}}}
 }
 \value{
-A map object (see the \code{\link{leaflet}} package)
+A map object (see the \code{\link[=leaflet]{leaflet()}} package)
 }
 \description{
 This function works as a wrapper of the \code{leaflet} function, creating a
@@ -39,10 +39,10 @@ coordinates.
 }
 \details{
 The \code{coordinates} must be in the format of longitude:latitude
-(as the twitter API returns). 
+(as the twitter API returns).
 
 In order to improve visualization, the function performs Hierarchical
-Clustering via \code{\link{hclust}} (from the stats package), grouping
+Clustering via \code{\link[=hclust]{hclust()}} (from the stats package), grouping
 observations by geo coordinates. For each cluster, the final lat/lng coords
 are defined as the mean within the cluster.
 
@@ -50,7 +50,7 @@ In the case of \code{radii}, it is measured in meters (in the map). The
 \code{n} is the number of observations in that cluster.
 
 For performance considerations, it is recommended not to use more than
-1,000 observations (Try using a random sample from your data!) as 
+1,000 observations (Try using a random sample from your data!) as
 \code{hclust} requires computing square matrices.
 }
 \examples{

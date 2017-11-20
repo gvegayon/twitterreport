@@ -1,22 +1,24 @@
-.httr-oauth
+**/*.o
+**/*.so
+**/*.out
+
+**/*.httr-oauth
 .Rproj.user
 .Rhistory
-
 *.Rcheck
-
 # Data
 *.csv
 *.RData
 *.json
 *.html
 *.htm
-
 # Others
 *.py
 *.pdf
 *.tar
 *.gz
 playground/credentials.R
-
+**/*.log
+**/*.aux
 viz
 README.Rmd

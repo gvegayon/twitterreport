@@ -3,7 +3,7 @@
 \name{tw_words}
 \alias{tw_words}
 \title{Process txt extracting relevant words, i.e. rm stop words and
- symbols.}
+symbols.}
 \usage{
 tw_words(txt, stopw = stopwords("en"), cleanfun = NULL)
 }
@@ -16,7 +16,7 @@ tw_words(txt, stopw = stopwords("en"), cleanfun = NULL)
 }
 \description{
 Process txt extracting relevant words, i.e. rm stop words and
- symbols.
+symbols.
 }
 \seealso{
 Other text processors: \code{\link{tw_extract}},
@@ -25,3 +25,4 @@ Other text processors: \code{\link{tw_extract}},
 \author{
 George G. Vega Yon
 }
+\concept{text processors}

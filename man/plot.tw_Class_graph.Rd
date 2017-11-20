@@ -8,13 +8,13 @@
   opacity = 0.9, opacityNoHover = 0.5, legend = TRUE, ...)
 }
 \arguments{
-\item{x}{A tw_Class_graph object (see \code{\link{tw_network}})}
+\item{x}{A tw_Class_graph object (see \code{\link[=tw_network]{tw_network()}})}
 
 \item{y}{Ignored}
 
 \item{nodelabel}{Name of the column that containts the name}
 
-\item{opacity}{See \code{\link{forceNetwork}}}
+\item{opacity}{See \code{\link[=forceNetwork]{forceNetwork()}}}
 
 \item{opacityNoHover}{Idem}
 

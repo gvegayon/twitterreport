@@ -2,6 +2,7 @@
 % Please edit documentation in R/text_processing.R
 \name{tw_extract}
 \alias{tw_extract}
+\alias{tw_Class_extract}
 \alias{tw_extract.tw_Class_api_timeline}
 \alias{tw_extract.character}
 \title{Extract info from tweets}
@@ -30,7 +31,7 @@ Extract info from tweets
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{tw_Class_api_timeline}: Applies for the output of \code{\link{tw_api_get_statuses_user_timeline}}.
+\item \code{tw_Class_api_timeline}: Applies for the output of \code{\link[=tw_api_get_statuses_user_timeline]{tw_api_get_statuses_user_timeline()}}.
 
 \item \code{character}: Applies for a character vector
 }}
@@ -48,3 +49,4 @@ Other text processors: \code{\link{tw_get_tw_account}},
 \author{
 George G. Vega Yon
 }
+\concept{text processors}
