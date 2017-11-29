@@ -1,2 +1,6 @@
+2017-11-28  George G. Vega Yon <g.vegayon@gmail.com>:
+	* R/twitter_api.R: Fixing bug on tw_api_get_search.
+
+
 2017-11-19  George G. Vega Yon <g.vegayon@gmail.com>:
 	* *:Working on documentation mostly.

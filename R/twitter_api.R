@@ -403,7 +403,7 @@ tw_api_get_search_tweets <- function(q, twitter_token,
     twitter_token, 15,
     query=list(
       q=q,geocode=geocode, lang=lang, locale=locale, result_type=result_type,
-      count=100, until=until, since_id=NULL, max_id=NULL,include_entities='false'),
+      count=count, until=until, since_id=since_id, max_id=max_id,include_entities='false'),
     ...
   )
   
