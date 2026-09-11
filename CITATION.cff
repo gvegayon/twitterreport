@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: 'To cite package "twitterreport" in publications use:'
+type: software
+license: MIT
+title: 'twitterreport: Out-of-the-Box Analysis and Reporting Tools for Twitter'
+version: 0.15.9000
+abstract: Set of tools to download, process and analyze 'tweets', including methods
+  for exporting the outputs through 'D3js'.
+authors:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+repository-code: http://github.com/gvegayon/twitterreport
+url: http://github.com/gvegayon/twitterreport
+date-released: '2017-11-19'
+contact:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+doi: 10.5281/zenodo.44528

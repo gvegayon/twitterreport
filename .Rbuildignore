@@ -21,3 +21,4 @@ appveyor[.]yml
 
 ^dictionary\_index\.cpp$
 ^man-roxygen$
+^CITATION\.cff$
