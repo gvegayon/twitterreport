@@ -1,4 +1,4 @@
-// [[Rcpp::depends(RcppArmadillo)]]
+#include <RcppArmadillo.h> /* This already includes Rcpp */
 #include <RcppArmadillo.h> /* This already includes Rcpp */
 
 using namespace Rcpp;
